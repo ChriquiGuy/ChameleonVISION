@@ -1,11 +1,11 @@
 import cv2
-from  M_Detection import MotionDetector
+from  utils.motion_detection import MotionDetector
 
 #!##########################!#
 ##! Must to have arguments !##
 
 # Insert video full path
-video_path = '../Videos/DJI_0858.MP4'
+video_path = './videos/DJI_0825_Trim.mp4'
 # Insert resize scale precents
 resize_scale_percent = 50
 

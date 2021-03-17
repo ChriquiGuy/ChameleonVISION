@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import random
 
 
 class FieldDetection():
@@ -11,7 +10,7 @@ class FieldDetection():
     RightLine = None
     NetLine = None
 
-    Gamma_Min = 120
+    Gamma_Min = 30
 
     def init_frame(self, frame):
         # Gray
@@ -73,6 +72,7 @@ class FieldDetection():
 
             except NameError:
                 self.Gamma_Min = self.Gamma_Min + 1
+                print("Current Gamma = " + str(self.Gamma_Min))
                 if(self.Gamma_Min > 255) : self.Gamma_Min = 0
 
 
@@ -106,23 +106,3 @@ class FieldDetection():
         x = self.det(d, xdiff) / div
         y = self.det(d, ydiff) / div
         return int(x), int(y)
-
-
-
-# cap = cv2.VideoCapture('/Users/noydori/Desktop/Guy/Project/ChameleonVISION/videos/18.MP4')
-# detector = FieldDetection()
-
-# while cap.isOpened():
-
-#     ret, current_frame = cap.read()
-
-#     Leftup, LeftDown, RightDown, RightUp = detector.detect_field(current_frame)
-#     result_frame = detector.draw_field(current_frame, Leftup, LeftDown, RightDown, RightUp)
-
-#     cv2.imshow('sourceImg', result_frame)
-
-#     if cv2.waitKey(1) & 0xFF == ord('q'):
-#         break
-
-# cap.release()
-# cv2.destroyAllWindows()

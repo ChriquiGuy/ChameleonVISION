@@ -29,18 +29,17 @@ class VideoThread(QThread):
         # Init object detection method
         o_detection = ObjectDetection()
         o_detection.initialize_model()
-        o_detection_frame = None
         detection_boxes = []
         
-
-
         # Init field detection method
         field_detector = FieldDetection()
+        
+        # Init event detecion method
         event_detector = EventDetection()
 
-        # capture from web cam
-        cap = cv2.VideoCapture("/home/chameleonvision/Desktop/Project/videos/818.MP4")
-        pts = []
+        # capture from cam/video
+        cap = cv2.VideoCapture("/home/chameleonvision/Desktop/Project/videos/858.MP4")
+        
         while self._run_flag:
             ret, current_frame = cap.read()
 
@@ -63,7 +62,6 @@ class VideoThread(QThread):
                 # Show to screen
                 self.change_pixmap_signal.emit(result_frame)
                 
-
         # shut down capture system
         cap.release()
 

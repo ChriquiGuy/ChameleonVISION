@@ -1,5 +1,6 @@
 import cv2
-import time
+from .helper import *
+
 
 CONFIDENCE_THRESHOLD = 0.1
 NMS_THRESHOLD = 0.1
@@ -43,7 +44,3 @@ class ObjectDetection():
 
         return frame
 
-
-
-def get_box_center(box):
-    return (box[0] - box[2]/2, box[1]- box[3]/2)

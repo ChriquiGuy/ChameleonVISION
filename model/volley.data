@@ -1,0 +1,8 @@
+classes = 2
+train  = /Users/guy/Desktop/Dataset/train.txt
+valid  = /Users/guy/Desktop/Dataset/val.txt
+names = /Users/guy/Desktop/Dataset/volley.names
+backup = /Users/guy/Desktop/Dataset/backup/
+
+
+scp -i  /Users/guy/Documents/GuyGPU.pem  /Users/guy/Desktop/Dataset/yolov4.conv.137 ubuntu@ec2-3-21-27-148.us-east-2.compute.amazonaws.com:~/Volley/Dataset/

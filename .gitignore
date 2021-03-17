@@ -1,6 +1,6 @@
 __pycache__/
 utils/__pycache__/
-model/*.weights
-*/*MP4
+*.weights
+*MP4
 *mp4
 .DS_Store

@@ -1,6 +1,6 @@
 __pycache__/
 utils/__pycache__/
-utils/yolov5/weights/*.pt
-videos/*MP4
-videos/*mp4
+model/*.weights
+*/*MP4
+*mp4
 .DS_Store

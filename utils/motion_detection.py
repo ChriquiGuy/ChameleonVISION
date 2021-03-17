@@ -76,9 +76,6 @@ class MotionDetector :
         # Get bounding boxes 
         boxes = self.get_object_boxes(clean_binary_frame)
 
-        # Draw boxes on result frame
-        cv2.drawContours(result_frame, boxes, -1, (0, 255, 0), 2)
-
         return boxes
 
        

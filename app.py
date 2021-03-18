@@ -1,5 +1,6 @@
 import sys
 import cv2
+import time
 import numpy as np
 
 from PyQt5 import QtGui
@@ -12,6 +13,7 @@ from utils.field_detection import FieldDetection
 from utils.event_detection import EventDetection
 import app_test
 
+from numba import jit, cuda 
 
 
 class VideoThread(QThread):
@@ -40,23 +42,40 @@ class VideoThread(QThread):
         # capture from cam/video
         cap = cv2.VideoCapture("/home/chameleonvision/Desktop/Project/videos/858.MP4")
         
+        check_frame = True
+        
         while self._run_flag:
             ret, current_frame = cap.read()
+            
+            if(not check_frame) :
+                check_frame = not check_frame
+                continue
 
             if ret:
                 # Detect objects
                 classes, scores, detection_boxes = o_detection.detect(current_frame.copy())
                 # Detect field
-                Leftup, LeftDown, RightDown, RightUp = field_detector.detect_field(current_frame.copy())
                 
-                result_frame = None
+                start_time = time.time()
+                Leftup, LeftDown, RightDown, RightUp = field_detector.detect_field(current_frame.copy())
+                end_time = time.time()
+                time_diff = (end_time - start_time)
+                execution_time = time_diff * 1000
+                print('field_detector time in ms : ' + str(execution_time))
+                
+                result_frame = current_frame.copy()
                 # Draw field
-                result_frame = field_detector.draw_field(current_frame.copy(), Leftup, LeftDown, RightDown, RightUp)
+                result_frame = field_detector.draw_field(result_frame, Leftup, LeftDown, RightDown, RightUp)
                 # Draw object 
                 result_frame = o_detection.draw_objects(result_frame, classes, scores, detection_boxes)
 
                 # Detect Events
+                start_time = time.time()
                 isBallOut = event_detector.check_ball_out(result_frame, classes, detection_boxes, Leftup, LeftDown, RightDown, RightUp)
+                end_time = time.time()
+                time_diff = (end_time - start_time)
+                execution_time = time_diff * 1000
+                print('event_detector time in ms : ' + str(execution_time))
                 self.ball_out_signal.emit(isBallOut)
                 
                 # Show to screen
@@ -100,12 +119,17 @@ class App(QMainWindow, app_test.Ui_MainWindow):
         self.VideoHolder.setPixmap(qt_img)
     
     def convert_cv_qt(self, cv_img):
+        start_time = time.time()
         """Convert from an opencv image to QPixmap"""
         rgb_image = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
         h, w, ch = rgb_image.shape
         bytes_per_line = ch * w
         convert_to_Qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
         p = convert_to_Qt_format.scaled(self.VideoHolder.size().width() , self.VideoHolder.size().height()) #, Qt.KeepAspectRatio)
+        end_time = time.time()
+        time_diff = (end_time - start_time)
+        execution_time = time_diff * 1000
+        print('Convert image time in ms : ' + str(execution_time))
         return QPixmap.fromImage(p)
 
     @pyqtSlot(bool)

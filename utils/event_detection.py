@@ -2,8 +2,10 @@ import os
 import cv2
 import numpy as np
 from .helper import *
+from numba import cuda
+import numba 
 
-MAX_MISS_FRAMES = 2
+MAX_MISS_FRAMES = 30
 BALL_ROI_DELTA = 50
 BALL_OUT_DELTA = 5
 
@@ -14,7 +16,6 @@ class EventDetection():
    
    miss_frames_count = 0
 
-    
    def check_ball_out(self,frame,  classes, boxes, Leftup, LeftDown, RightDown, RightUp):
            
       # Get ball indexes in classes list
@@ -44,13 +45,12 @@ class EventDetection():
          return False
 
       
-
    def get_inside_ball(self, frame, balls_boxes, Leftup, LeftDown, RightDown, RightUp):
           
       # Create field contour
       field_contour = np.array([Leftup, LeftDown, RightDown, RightUp])
       # Find all balls inside field
-      ball_inside_field = [ball for ball in balls_boxes if cv2.pointPolygonTest(field_contour, get_box_center(ball), True) > -BALL_OUT_DELTA]
+      ball_inside_field = [ball for ball in balls_boxes if cv2.pointPolygonTest(field_contour, get_box_center(ball), True) > 0]
       
 
       # Search in prev roi incase prev exist

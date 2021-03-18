@@ -1,8 +1,9 @@
 import cv2
 from .helper import *
+import time
+from numba import cuda
 
-
-CONFIDENCE_THRESHOLD = 0.1
+CONFIDENCE_THRESHOLD = 0.5
 NMS_THRESHOLD = 0.1
 COLORS = [(255, 100, 100), (255, 255, 0)]
 
@@ -20,16 +21,21 @@ class ObjectDetection():
 
         net = cv2.dnn.readNet("./model/volley.weights", "./model/volley.cfg")
         net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
-        net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
+        net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA_FP16)
 
         self.model = cv2.dnn_DetectionModel(net)
         self.model.setInputParams(size=(416, 416), scale=1/255)
 
 
     def detect(self, frame):
+        start_time = time.time()
         self.classes, scores, boxes = self.model.detect(frame, CONFIDENCE_THRESHOLD, NMS_THRESHOLD)
-        return self.classes, scores, boxes
+        end_time = time.time()
+        time_diff = (end_time - start_time)
+        execution_time = time_diff * 1000
+        print('Detection time in ms : ' + str(execution_time))
 
+        return self.classes, scores, boxes
 
     def draw_objects(self, frame, classes, scores, boxes):
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'MainWindow.ui'
+# Form implementation generated from reading ui file 'ui/detection_window.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -14,23 +14,23 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1850, 1050)
+        MainWindow.resize(1221, 724)
         font = QtGui.QFont()
         font.setFamily("Helvetica Neue")
         MainWindow.setFont(font)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setStyleSheet("background:black")
-        self.centralwidget.setObjectName("centralwidget")
-        self.VideoHolder = QtWidgets.QLabel(self.centralwidget)
-        self.VideoHolder.setGeometry(QtCore.QRect(10, 110, 1831, 921))
+        self.Result = QtWidgets.QWidget(MainWindow)
+        self.Result.setStyleSheet("background:black")
+        self.Result.setObjectName("Result")
+        self.VideoHolder = QtWidgets.QLabel(self.Result)
+        self.VideoHolder.setGeometry(QtCore.QRect(20, 20, 1181, 681))
         self.VideoHolder.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "border-style:outset;\n"
 "border-radius:10px;\n"
 "")
         self.VideoHolder.setText("")
         self.VideoHolder.setObjectName("VideoHolder")
-        self.AlertTitle = QtWidgets.QLabel(self.centralwidget)
-        self.AlertTitle.setGeometry(QtCore.QRect(9, 20, 1831, 71))
+        self.AlertTitle = QtWidgets.QLabel(self.Result)
+        self.AlertTitle.setGeometry(QtCore.QRect(500, 30, 251, 51))
         font = QtGui.QFont()
         font.setFamily("\"Arial\"")
         font.setPointSize(14)
@@ -45,11 +45,12 @@ class Ui_MainWindow(object):
 "color: rgb(250, 255, 255);\n"
 "font: 14pt \\\"Arial\\\";")
         self.AlertTitle.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.AlertTitle.setText("")
         self.AlertTitle.setTextFormat(QtCore.Qt.AutoText)
         self.AlertTitle.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.AlertTitle.setObjectName("AlertTitle")
-        self.AlertText = QtWidgets.QLabel(self.centralwidget)
-        self.AlertText.setGeometry(QtCore.QRect(140, 40, 1001, 31))
+        self.AlertText = QtWidgets.QLabel(self.Result)
+        self.AlertText.setGeometry(QtCore.QRect(510, 40, 231, 31))
         font = QtGui.QFont()
         font.setFamily("\"Arial\"")
         font.setPointSize(14)
@@ -63,36 +64,11 @@ class Ui_MainWindow(object):
 "color: rgb(0, 0, 0);\n"
 "font: 14pt \\\"Arial\\\";\n"
 "")
+        self.AlertText.setText("")
         self.AlertText.setTextFormat(QtCore.Qt.AutoText)
         self.AlertText.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.AlertText.setObjectName("AlertText")
-        self.VerifiedBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.VerifiedBtn.setGeometry(QtCore.QRect(1160, 40, 91, 32))
-        self.VerifiedBtn.setStyleSheet("background-color: rgb(73, 199, 41);\n"
-"border-style:outset;\n"
-"border-radius:10px;\n"
-"color: rgb(250, 255, 255);\n"
-"font: 14pt \\\"Arial\\\";\n"
-"")
-        self.VerifiedBtn.setObjectName("VerifiedBtn")
-        self.FalseBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.FalseBtn.setGeometry(QtCore.QRect(1270, 40, 91, 32))
-        self.FalseBtn.setStyleSheet("color: rgb(250, 255, 255);\n"
-"background-color: rgb(199, 73, 41);\n"
-"border-style:outset;\n"
-"border-radius:10px;\n"
-"font: 14pt \\\\\"Arial\\\\\";")
-        self.FalseBtn.setObjectName("FalseBtn")
-        self.VerifiedBtn_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.VerifiedBtn_2.setGeometry(QtCore.QRect(1380, 40, 91, 32))
-        self.VerifiedBtn_2.setStyleSheet("background-color: rgb(73, 41, 199);\n"
-"border-style:outset;\n"
-"border-radius:10px;\n"
-"color: rgb(250, 255, 255);\n"
-"font: 14pt \\\"Arial\\\";\n"
-"")
-        self.VerifiedBtn_2.setObjectName("VerifiedBtn_2")
-        MainWindow.setCentralWidget(self.centralwidget)
+        MainWindow.setCentralWidget(self.Result)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -100,8 +76,3 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.AlertTitle.setText(_translate("MainWindow", "        ALERT"))
-        self.AlertText.setText(_translate("MainWindow", " alert text"))
-        self.VerifiedBtn.setText(_translate("MainWindow", "Verified"))
-        self.FalseBtn.setText(_translate("MainWindow", "False"))
-        self.VerifiedBtn_2.setText(_translate("MainWindow", "Replay"))

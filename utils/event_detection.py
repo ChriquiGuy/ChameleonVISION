@@ -2,19 +2,17 @@ import os
 import cv2
 import numpy as np
 from .helper import *
-from numba import cuda
-import numba 
 
 MAX_MISS_FRAMES = 30
 BALL_ROI_DELTA = 50
-BALL_OUT_DELTA = 5
+
 
 class EventDetection():
        
    current_ball = []
    prev_ball = []
-   
    miss_frames_count = 0
+
 
    def check_ball_out(self,frame,  classes, boxes, Leftup, LeftDown, RightDown, RightUp):
            

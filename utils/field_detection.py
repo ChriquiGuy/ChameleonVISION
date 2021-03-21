@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-from numba import cuda
 
 
 class FieldDetection():
@@ -11,7 +10,8 @@ class FieldDetection():
     RightLine = None
     NetLine = None
 
-    Gamma_Min = 30
+    Gamma_Min = 50
+    
     
     def init_frame(self, frame):
         # Gray
@@ -23,6 +23,7 @@ class FieldDetection():
         # Canny algorithm
         edges = cv2.Canny(binary, 1, 255) 
         return edges
+
 
     def detect_lines(self, frame):
         # HoughLinesP
@@ -46,6 +47,7 @@ class FieldDetection():
                 # Right line
                 elif (1500 < x1 < 1850) & (1500 < x2 < 1850):
                     self.RightLine = [(lines[i][0])]
+
 
     def detect_field(self, frame):
 
@@ -71,8 +73,8 @@ class FieldDetection():
 
             except NameError:
                 self.Gamma_Min = self.Gamma_Min + 1
-                print("Current Gamma = " + str(self.Gamma_Min))
                 if(self.Gamma_Min > 255) : self.Gamma_Min = 0
+
 
     def draw_field(self, frame, Leftup, LeftDown, RightDown, RightUp):
 
@@ -81,7 +83,6 @@ class FieldDetection():
         overlay = frame.copy()
         cv2.drawContours(overlay,[pts], 0, (255,0,255), -1)
         cv2.addWeighted(overlay, 0.2, frame, 1, 0, frame)
-
         return frame;
 
 

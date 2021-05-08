@@ -1,18 +1,17 @@
 import sys
 import cv2
-import time
 import numpy as np
+import time
 
 from PyQt5 import QtGui
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QThread
-from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QVBoxLayout , QPushButton, QHBoxLayout, QMainWindow
+from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QVBoxLayout, QPushButton, QHBoxLayout, QMainWindow
 
 from utils.object_detection import ObjectDetection
 from utils.field_detection import FieldDetection
 from utils.event_detection import EventDetection
 import screens.detection_window as detection_window
-
 
 class VideoThread(QThread):
     
@@ -23,22 +22,26 @@ class VideoThread(QThread):
         super().__init__()
         self._run_flag = True
 
-
     def run(self):
 
         # Init object detection method
         o_detection = ObjectDetection()
         o_detection.initialize_model()
-        detection_boxes = []
-        
+
         # Init field detection method
         field_detector = FieldDetection()
         
-        # Init event detecion method
+        # Init event detection method
         event_detector = EventDetection()
 
-        # capture from cam/video
-        cap = cv2.VideoCapture("/home/chameleonvision/Desktop/Project/videos/858.MP4")
+        # Load RTMP
+        # cap = cv2.VideoCapture('rtmp://127.0.0.1:1935/ChameleonVISION/1234')          # checkRTMP server.txt
+        # cap = cv2.VideoCapture("/home/chameleonvision/Desktop/ProjectV5/videos/858.MP4")      # 720/1280
+        cap = cv2.VideoCapture("/home/chameleonvision/Desktop/Project/videos/videos_720p/5.mp4")
+
+        # change the size of video to 1280X720
+        cap.set(3, 1280)
+        cap.set(4, 720)
                 
         while self._run_flag:
             ret, current_frame = cap.read()
@@ -46,23 +49,25 @@ class VideoThread(QThread):
             if ret:
                 
                 # Detect objects
-                classes, scores, detection_boxes = o_detection.detect(current_frame.copy())
+                classes, scores, detection_boxes = o_detection.detect(current_frame)
                 # Detect field
-                Leftup, LeftDown, RightDown, RightUp = field_detector.detect_field(current_frame)
-
+                LeftUp, LeftDown, RightDown, RightUp, field_center = field_detector.detect_field(current_frame)
                 # Debug draw detections
                 result_frame = current_frame.copy()
-                # Draw field
-                result_frame = field_detector.draw_field(result_frame, Leftup, LeftDown, RightDown, RightUp)
-                # Draw object 
-                result_frame = o_detection.draw_objects(result_frame, classes, scores, detection_boxes)
 
+                # Draw field
+                result_frame = field_detector.draw_field(result_frame)
+                # Draw object 
+                result_frame = o_detection.draw_objects(result_frame, classes, scores, detection_boxes , field_center)
                 # Detect Events
-                isBallOut = event_detector.check_ball_out(result_frame, classes, detection_boxes, Leftup, LeftDown, RightDown, RightUp)
-                self.ball_out_signal.emit(isBallOut)
-                
+                isBallOut = event_detector.check_ball_out(result_frame, classes, detection_boxes,
+                                                          LeftUp, LeftDown, RightDown, RightUp)
+                if isBallOut is not None : self.ball_out_signal.emit(isBallOut)
                 # Show to screen
                 self.change_pixmap_signal.emit(result_frame)
+
+            else:
+                print("RTMP IS NOT CONNECTED")
                 
         # shut down capture system
         cap.release()
@@ -77,7 +82,6 @@ class App(QMainWindow, detection_window.Ui_MainWindow):
 
 
     def __init__(self, parent=None):
-        
         super(App, self).__init__(parent)
         self.setupUi(self)
 
@@ -109,15 +113,15 @@ class App(QMainWindow, detection_window.Ui_MainWindow):
         h, w, ch = rgb_image.shape
         bytes_per_line = ch * w
         convert_to_Qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
-        p = convert_to_Qt_format.scaled(self.VideoHolder.size().width() , self.VideoHolder.size().height()) #, Qt.KeepAspectRatio)
+        p = convert_to_Qt_format.scaled(self.VideoHolder.size().width(), self.VideoHolder.size().height()) #, Qt.KeepAspectRatio)
         return QPixmap.fromImage(p)
 
 
     def update_alert(self, isOut):
-        if isOut :
+        if isOut:
             self.AlertText.setText("Ball Out")
             self.AlertTitle.setStyleSheet("background-color: rgb(255, 0, 0);\nborder-style:outset;\nborder-radius:10px;\ncolor: rgb(250, 255, 255);\nfont: 14pt")
-        else :
+        else:
             self.AlertText.setText("Ball In")
             self.AlertTitle.setStyleSheet("background-color: rgb(0, 255, 0);\nborder-style:outset;\nborder-radius:10px;\ncolor: rgb(250, 255, 255);\nfont: 14pt")
         

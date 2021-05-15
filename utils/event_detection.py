@@ -2,6 +2,10 @@ import os
 import cv2
 import numpy as np
 from .helper import *
+from .tracker import *
+
+# Create tracker object
+tracker = ChameleonTracker()
 
 
 class EventDetection:
@@ -25,13 +29,19 @@ class EventDetection:
         player_index = [index for index, object_class in enumerate(classes) if object_class == 0]
         playersBoxes = boxes[player_index]
 
-        for playerBox in playersBoxes:
-            playerLeftUp = (playerBox[0], playerBox[1])
-            playerLeftDown = (playerBox[0], playerBox[1] + playerBox[3])
-            playerRightDown = (playerBox[0] + playerBox[2], playerBox[1] + playerBox[3])
-            playerRightUp = (playerBox[0] + playerBox[2], playerBox[1])
+        playersBoxes_ids = tracker.update(playersBoxes)
+
+        for playerBox in playersBoxes_ids:
+
+            x, y, w, h, playerIndex = playerBox
+
+            playerLeftUp = (x, y)
+            playerLeftDown = (x, y + h)
+            playerRightDown = (x + w, y + h)
+            playerRightUp = (x + w, y)
 
             # See players bounding boxes for debug
+            cv2.putText(frame, str(playerIndex), (x, y - 15), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 2)
             cv2.rectangle(frame, playerLeftUp, playerRightDown, (0, 0, 0), 1)
 
             playerContour = np.array([playerLeftUp, playerLeftDown, playerRightDown, playerRightUp])
@@ -42,9 +52,11 @@ class EventDetection:
 
             # Check if ball inside the boundingBoxes of the players
             if ballInOut_playerBox >= 0:
+                cv2.rectangle(frame, playerLeftUp, playerRightDown, (0, 255, 0), 3)
                 ballBox += 1
 
-            print(ballBox)
+            # for debug
+            # print(ballBox)
 
         # If ball was found
         if len(ball) == 1:

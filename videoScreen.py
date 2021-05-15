@@ -37,7 +37,6 @@ class Controller:
         self.newuser.show()
 
 
-
 def main():
     app = QtWidgets.QApplication(sys.argv)
     controller = Controller()

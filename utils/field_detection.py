@@ -1,10 +1,8 @@
 import cv2
 import numpy as np
 
-
 WEIGHT_OF_SCREEN = 1274
 HEIGHT_OF_SCREEN = 720
-
 
 # Net Line
 NTL = WEIGHT_OF_SCREEN * 0.35  # left threshold of net
@@ -26,8 +24,8 @@ DTT = HEIGHT_OF_SCREEN * 0.35  # down threshold of top line
 UTB = HEIGHT_OF_SCREEN * 0.7  # up threshold of Bottom line
 DTB = HEIGHT_OF_SCREEN * 0.95  # down threshold of Bottom line
 
-class FieldDetection:
 
+class FieldDetection:
     UpLine = None
     LeftLine = None
     DownLine = None
@@ -52,7 +50,7 @@ class FieldDetection:
 
         # get the lines of te field
         lines = cv2.HoughLinesP(edges, 1, np.pi / 180, 7, np.array([]), 200, 100)
-        
+
         if lines is not None:
             slopeLines = self.SlopeCalc(lines)
             self.NetLine = self.LinesFilter(slopeLines, NTL, NTR, 0, 2, True)
@@ -60,51 +58,54 @@ class FieldDetection:
             self.LeftLine = self.LinesFilter(slopeLines, LTL, LTR, 0, 2, True)
             self.DownLine = self.LinesFilter(slopeLines, UTB, DTB, 1, 3, False)
             self.RightLine = self.LinesFilter(slopeLines, RTL, RTR, 0, 2, True)
-            
+
             if self.NetLine is not None:
-                cv2.line(frame, (self.NetLine[0], self.NetLine[1]), (self.NetLine[2], self.NetLine[3]), (0,255,0), 8, cv2.LINE_AA)
-                
+                cv2.line(frame, (self.NetLine[0], self.NetLine[1]), (self.NetLine[2], self.NetLine[3]),
+                         (0, 255, 0), 8, cv2.LINE_AA)
+
             if self.UpLine is not None:
-                cv2.line(frame, (self.UpLine[0], self.UpLine[1]), (self.UpLine[2], self.UpLine[3]), (0,0,255), 8, cv2.LINE_AA)
-        
+                cv2.line(frame, (self.UpLine[0], self.UpLine[1]), (self.UpLine[2], self.UpLine[3]),
+                         (0, 128, 255), 8, cv2.LINE_AA)
+
             if self.LeftLine is not None:
-                cv2.line(frame, (self.LeftLine[0], self.LeftLine[1]), (self.LeftLine[2], self.LeftLine[3]), (255,0,0), 8, cv2.LINE_AA)
-                
+                cv2.line(frame, (self.LeftLine[0], self.LeftLine[1]), (self.LeftLine[2], self.LeftLine[3]),
+                         (0, 255, 255), 8, cv2.LINE_AA)
+
             if self.DownLine is not None:
-                cv2.line(frame, (self.DownLine[0], self.DownLine[1]), (self.DownLine[2], self.DownLine[3]), (255,255,0), 8, cv2.LINE_AA)
-                
+                cv2.line(frame, (self.DownLine[0], self.DownLine[1]), (self.DownLine[2], self.DownLine[3]),
+                         (255, 255, 0), 8, cv2.LINE_AA)
+
             if self.RightLine is not None:
-                cv2.line(frame, (self.RightLine[0], self.RightLine[1]), (self.RightLine[2], self.RightLine[3]), (0,255,255), 8, cv2.LINE_AA)
-            
-            
+                cv2.line(frame, (self.RightLine[0], self.RightLine[1]), (self.RightLine[2], self.RightLine[3]),
+                         (255, 128, 128), 8, cv2.LINE_AA)
 
     def detect_field(self, frame):
-            edges = self.init_frame(frame)
-            self.detect_lines(edges, frame)
-            try:
+        edges = self.init_frame(frame)
+        self.detect_lines(edges, frame)
+        try:
 
-                if self.UpLine is not None and self.LeftLine is not None:
-                    # Left up corner
-                    self.LeftUp = self.line_intersection(self.UpLine, self.LeftLine)
+            if self.UpLine is not None and self.LeftLine is not None:
+                # Left up corner
+                self.LeftUp = self.line_intersection(self.UpLine, self.LeftLine)
 
-                if self.DownLine is not None and self.LeftLine is not None:
-                    # Left down corner
-                    self.LeftDown = self.line_intersection(self.DownLine, self.LeftLine)
+            if self.DownLine is not None and self.LeftLine is not None:
+                # Left down corner
+                self.LeftDown = self.line_intersection(self.DownLine, self.LeftLine)
 
-                if self.DownLine is not None and self.RightLine is not None:
-                    # Right down corner
-                    self.RightDown = self.line_intersection(self.DownLine, self.RightLine)
+            if self.DownLine is not None and self.RightLine is not None:
+                # Right down corner
+                self.RightDown = self.line_intersection(self.DownLine, self.RightLine)
 
-                if self.UpLine is not None and self.RightLine is not None:
-                    # Right up corner
-                    self.RightUp = self.line_intersection(self.UpLine, self.RightLine)
-                    
-                field_center = (self.LeftDown[0] + self.RightDown[0]) /2
-                
-                return self.LeftUp, self.LeftDown, self.RightDown, self.RightUp, field_center
+            if self.UpLine is not None and self.RightLine is not None:
+                # Right up corner
+                self.RightUp = self.line_intersection(self.UpLine, self.RightLine)
 
-            except NameError:
-                print("FieldDetection.detect_field: error occurred")
+            field_center = (self.LeftDown[0] + self.RightDown[0]) / 2
+
+            return self.LeftUp, self.LeftDown, self.RightDown, self.RightUp, field_center
+
+        except NameError:
+            print("FieldDetection.detect_field: error occurred")
 
     def det(self, a, b):
         return a[0] * b[1] - a[1] * b[0]
@@ -120,8 +121,8 @@ class FieldDetection:
         try:
             div = self.det(xdiff, ydiff)
             if div == 0:
-                 print("lines do not intersect")
-                 #raise Exception('lines do not intersect')
+                print("lines do not intersect")
+                # raise Exception('lines do not intersect')
             else:
                 d = (self.det((x1, y1), (x2, y2)), self.det((a1, b1), (a2, b2)))
                 x = self.det(d, xdiff) / div
@@ -129,7 +130,6 @@ class FieldDetection:
                 return int(x), int(y)
         except NameError:
             print("lines do not intersect")
-
 
     def SlopeCalc(self, lines):
         Angle_Sum = np.array([(180 / np.pi) * np.arctan2(lines[:, :, 3] - lines[:, :, 1],
@@ -140,12 +140,11 @@ class FieldDetection:
 
     def LinesFilter(self, slopeLines, threshold1, threshold2, x, y, isVertical):
 
-        # Net filter
         if isVertical:
             slopeLines = slopeLines[slopeLines[..., 4] > 70]  # slope
-        else :
+        else:
             slopeLines = slopeLines[slopeLines[..., 4] < 5]  # slope
-            
+
         if slopeLines is not None:
             slopeLines = slopeLines[slopeLines[..., x] > threshold1]  # x1
         if slopeLines is not None:

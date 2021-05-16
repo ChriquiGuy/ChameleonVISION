@@ -10,8 +10,7 @@ class GUIController:
 
     def __init__(self):
         pass
-    
-    
+
     def show_login_window(self):
         self.login = login_window.Login()
         self.login.switch_window.connect(self.show_newuser_window)
@@ -28,7 +27,8 @@ class GUIController:
         self.newuser.switch_window.connect(self.show_login_window)
         self.login.close()
         self.newuser.show()
-        
+
+
 def main():
     app = QtWidgets.QApplication(sys.argv)
     controller = GUIController()

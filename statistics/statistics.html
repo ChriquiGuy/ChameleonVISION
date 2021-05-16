@@ -46,7 +46,6 @@
     </tbody>
 </table>
 <!--* Card init *-->
-
     <script>
       var input = document.getElementById('inputGroupFile01');
       input.addEventListener('change',function(){
@@ -102,6 +101,12 @@
           $('#number2').jQuerySimpleCounter({end: data[1][8],duration: 3000});
           $('#number3').jQuerySimpleCounter({end: data[1][7],duration: 2000});
           $('#number4').jQuerySimpleCounter({end: data[1][9],duration: 2500});
+          let h1_first_team = document.getElementById("h1_first_team");
+          h1_first_team.innerHTML = data[1][1];
+          h1_first_team.style.display = "block";
+          let h1_second_team = document.getElementById("h1_second_team");
+          h1_second_team.innerHTML = data[1][2];
+          h1_second_team.style.display = "block";
         });
       });
       function generateTableRows(table,data,i){
@@ -121,7 +126,11 @@
           stats.style.display = "block";
           let excel_file_table = document.getElementById("tbl-data")
           excel_file_table.style.display = "block";
-
+          // h1_first_team.innerHTML = "Brazil";
+          // h1_first_team.style.display = "block";
+          // var h1_second_team = document.createElement("h1");                 // Create a <p> element
+          // h1_second_team.innerHTML = "Israel";
+          // h1_second_team.style.display = "block";
         });
       }
       function generateTableHead(table,data){
@@ -137,6 +146,9 @@
       }
     </script>
     <canvas id="mychart" width="400" height="150" style="display:none;"></canvas>
+    <h1 id="h1_first_team" style="display:none; font-size: 4vw; float: left; margin-left: 5em; margin-right: 9.6em;"></h1>
+     <!-- margin-left: 34rem; margin-bottom: -3rem; -->
+    <h1 id = "h1_second_team" style="display:none; font-size:4vw;"></h1>
     <div id="projectFacts" class="sectionClass" style="display:none">
     <div class="fullWidth eight columns">
         <div class="projectFactsWrap ">

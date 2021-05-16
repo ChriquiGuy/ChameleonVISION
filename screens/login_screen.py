@@ -26,7 +26,7 @@ class Login(QtWidgets.QWidget, UI_Login):
         else:
             username = self.txt_username.text()
             password = self.txt_password.text()
-            conn = sqlite3.connect('./Data/Data.db')
+            conn = sqlite3.connect('./database/Data.db')
             cursor = conn.cursor()
             cursor.execute("SELECT username,password FROM credentials")
             val = cursor.fetchall()

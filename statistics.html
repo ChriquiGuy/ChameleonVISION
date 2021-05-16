@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/read-excel-file@4.x/bundle/read-excel-file.min.js"></script>
+    <!-- chart js link -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+    <!-- jquery cdn link -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <!-- chart js css link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.css"/>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script> -->
+    <script src="js/statistics.js"></script>
+    <script type="text/javascript" src="js\jquery-2.1.0.min"></script>
+    <title></title>
+  </head>
+
+  <body>
+  <div class="input-group mb-3">
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="inputGroupFile01">
+        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+      </div>
+  </div>
+
+    <table class="table table-striped" id="tbl-data" style="display: none;">
+    <tr class="bg-info">
+      <th>Game Name</th>
+      <th>Team A</th>
+      <th>Team B</th>
+      <th>Where the Game Played</th>
+      <th>Date Of Game</th>
+      <th>Weather</th>
+      <th>Accuracy percent age Of ball in for team A</th>
+      <th>Accuracy percent age of ball in for Team B</th>
+      <th>Accuracy percent age Of ball out for team A</th>
+      <th>Accuracy percent age of ball out for Team B</th>
+    </tr>
+    <tbody id="myTable">
+
+    </tbody>
+</table>
+<!--* Card init *-->
+
+    <script>
+      var input = document.getElementById('inputGroupFile01');
+      input.addEventListener('change',function(){
+        readXlsxFile(input.files[0]).then(function(data) {
+          console.log(data);
+          var i = 0;
+          data.map((row,index) => {
+            if(i==0){ // is the first row, its the headres
+              var table = document.getElementById('tbl-data')
+              generateTableRows(table,row,i);
+            }
+            if(i>0){
+              var table = document.getElementById('tbl-data')
+              generateTableRows(table,row);
+            }
+            ++i;
+          });
+          let ctx = document.getElementById("mychart");
+          let myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+            labels: ['team A: ball in', 'team B: ball in', 'team A: ball out', 'team B: ball out'],
+            datasets: [{
+                label: 'Game statistics',
+                data: [data[1][6],data[1][7],data[1][8],data[1][9]],
+                backgroundColor: [
+                    'rgba(255, 99, 132,0.9)',
+                    'rgba(54, 162, 235, 0.9)',
+                    'rgba(255, 206, 86, 0.9)',
+                    'rgba(75, 192, 192, 0.9)',
+
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    // 'rgba(153, 102, 255, 0.2)',
+                    // 'rgba(255, 159, 64, 0.2)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+          })
+          $('#number1').jQuerySimpleCounter({end: data[1][6],duration: 3000});
+          $('#number2').jQuerySimpleCounter({end: data[1][8],duration: 3000});
+          $('#number3').jQuerySimpleCounter({end: data[1][7],duration: 2000});
+          $('#number4').jQuerySimpleCounter({end: data[1][9],duration: 2500});
+        });
+      });
+      function generateTableRows(table,data,i){
+        let newRow = table.insertRow(-1);
+        //console.log(newRow);
+        data.map((row,index)=> {
+          if(i !=0){
+          let newcell = newRow.insertCell();
+        //  console.log(newcell);
+          let newText = document.createTextNode(row)
+          console.log(newText);
+          newcell.appendChild(newText);
+          }
+          let canvas = document.getElementById("mychart")
+          canvas.style.display = "block";
+          let stats = document.getElementById("projectFacts")
+          stats.style.display = "block";
+          let excel_file_table = document.getElementById("tbl-data")
+          excel_file_table.style.display = "block";
+
+        });
+      }
+      function generateTableHead(table,data){
+        let thead = table.createTHead();
+        let row = thead.insertRow();
+        for(let key of data){
+          let th = document.createElement('thead');
+          // th.classList.add("table-dark");
+          let text = document.createTextNode(key);
+          th.appendChild(text);
+          row.appendChild(th);
+        }
+      }
+    </script>
+    <canvas id="mychart" width="400" height="150" style="display:none;"></canvas>
+    <div id="projectFacts" class="sectionClass" style="display:none">
+    <div class="fullWidth eight columns">
+        <div class="projectFactsWrap ">
+            <div class="item wow fadeInUpBig animated animated" data-number="12" style="visibility: visible;">
+                <i class="fa fa-briefcase"></i>
+                <p id="number1" class="number">12</p>
+                <span></span>
+                <p>Team A Ball In</p>
+            </div>
+            <div class="item wow fadeInUpBig animated animated" data-number="55" style="visibility: visible;">
+                <i class="fa fa-smile-o"></i>
+                <p id="number2" class="number">55</p>
+                <span></span>
+                <p>Team A Ball Out</p>
+            </div>
+            <div class="item wow fadeInUpBig animated animated" data-number="359" style="visibility: visible;">
+                <i class="fa fa-coffee"></i>
+                <p id="number3" class="number">359</p>
+                <span></span>
+                <p>Team B Ball In</p>
+            </div>
+            <div class="item wow fadeInUpBig animated animated" data-number="246" style="visibility: visible;">
+                <i class="fa fa-camera"></i>
+                <p id="number4" class="number">246</p>
+                <span></span>
+                <p>Team B Ball Out</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

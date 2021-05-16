@@ -5,9 +5,8 @@ from .object_tracker import ObjectTracker
 
 
 class EventDetection:
-    
     tracker = ObjectTracker()
-    
+
     current_ball = None
     prev_ball = None
     pre_prev_ball = None
@@ -81,7 +80,6 @@ class EventDetection:
                 return True
         # No ball event
         return None
-
 
     def claculate_ball_slope(self, pointA, pointB):
         if (pointA[0] - pointB[0]) == 0:

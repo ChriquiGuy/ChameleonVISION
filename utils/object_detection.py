@@ -50,7 +50,7 @@ class ObjectDetection:
             # Draw ball
             if classid[0] == 1:
                 ballMidpoint = (get_box_center(box)[0], get_box_center(box)[1])
-                cv2.circle(overlay, ballMidpoint, int(box[2]/2), COLORS[2], -1)
+                cv2.circle(overlay, ballMidpoint, int(box[2] / 2), COLORS[2], -1)
                 cv2.addWeighted(overlay, 0.5, frame, 0.5, 0, frame)
                 cv2.putText(frame, label, (box[0], box[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
 

@@ -34,7 +34,8 @@ class VideoThread(QThread):
         event_detector = EventDetection()
 
         # Load RTMP
-        # cap = cv2.VideoCapture('rtmp://127.0.0.1:1935/ChameleonVISION/1234')          # checkRTMP server.txt
+        # checkRTMP server.txt
+        # cap = cv2.VideoCapture('rtmp://127.0.0.1:1935/ChameleonVISION/1234')
         
         # Load video
         cap = cv2.VideoCapture("./videos/volley.mp4")

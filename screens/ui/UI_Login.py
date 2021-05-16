@@ -1,10 +1,10 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtCore import QSize
 
 
-class Ui_Outsecure(object):
+class UI_Login(object):
     """
     LOGIN PAGE
     """
@@ -12,7 +12,7 @@ class Ui_Outsecure(object):
         Outsecure.setObjectName("Outsecure")
         Outsecure.resize(1850, 1050)
         Outsecure.setMouseTracking(True)
-        oImage = QImage("i.png")
+        oImage = QImage("../assets/Logo.png")
         sImage = oImage.scaled(QSize(1850, 1050))
         palette = QPalette()
         palette.setBrush(10, QBrush(sImage))

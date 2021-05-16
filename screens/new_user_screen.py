@@ -1,11 +1,8 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from screens.ui.UI_NewUser import UI_NewUser
+from PyQt5 import QtCore, QtWidgets
 import sqlite3
-from PyQt5 import QtWidgets
-import screens.Ui_NewUser as newUser_window
 
-
-newUser_window_gui = newUser_window.Ui_NewUser
-class Newuser(QtWidgets.QWidget, newUser_window_gui):
+class Newuser(QtWidgets.QWidget, UI_NewUser):
     switch_window = QtCore.pyqtSignal()
     def __init__(self):
         QtWidgets.QWidget.__init__(self)

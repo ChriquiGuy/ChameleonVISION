@@ -4,7 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import QSize
 
 
-class Ui_NewUser(object):
+class UI_NewUser(object):
     """
     NEW USERS
     """
@@ -12,7 +12,7 @@ class Ui_NewUser(object):
     def setupUi(self, NewUser):
         NewUser.setObjectName("NewUser")
         NewUser.resize(1850, 1050)
-        oImage = QImage("i.png")
+        oImage = QImage("../assets/Logo.png")
         sImage = oImage.scaled(QSize(1850, 1050))
         palette = QPalette()
         palette.setBrush(10, QBrush(sImage))

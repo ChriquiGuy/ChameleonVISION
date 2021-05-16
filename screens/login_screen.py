@@ -1,12 +1,9 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from screens.ui.UI_Login import UI_Login
 import sqlite3
-from PyQt5 import QtWidgets
-import screens.Ui_Outsecure as u_OS
-
-Ui_Outsecure = u_OS.Ui_Outsecure
+from PyQt5 import QtCore, QtWidgets
 
 
-class Login(QtWidgets.QWidget, Ui_Outsecure):
+class Login(QtWidgets.QWidget, UI_Login):
 
     switch_window = QtCore.pyqtSignal()
     switch_window1 = QtCore.pyqtSignal()
@@ -29,7 +26,7 @@ class Login(QtWidgets.QWidget, Ui_Outsecure):
         else:
             username = self.txt_username.text()
             password = self.txt_password.text()
-            conn = sqlite3.connect('Data.db')
+            conn = sqlite3.connect('./Data/Data.db')
             cursor = conn.cursor()
             cursor.execute("SELECT username,password FROM credentials")
             val = cursor.fetchall()

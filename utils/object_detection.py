@@ -3,7 +3,7 @@ from .helper import *
 
 CONFIDENCE_THRESHOLD = 0.6
 NMS_THRESHOLD = 0.1
-COLORS = [(255, 0, 0), (0, 0, 255), (0, 0, 255)]
+COLORS = [(255, 0, 0), (0, 0, 255), (0, 255, 0)]
 
 
 class ObjectDetection:
@@ -12,12 +12,9 @@ class ObjectDetection:
 
     def initialize_model(self):
 
-        # with open("/home/chameleonvision/Desktop/Project/model/volley.names", "r") as f:
-        #     self.class_names = [cname.strip() for cname in f.readlines()]
         with open('./model/volley.names', 'r') as f:
             self.class_names = [cname.strip() for cname in f.readlines()]
 
-        # net = cv2.dnn.readNet("/home/chameleonvision/Desktop/Project/model/volley.weights", "/home/chameleonvision/Desktop/Project/model/volley.cfg")
         net = cv2.dnn.readNet('./model/volley.weights',
                               './model/volley.cfg')
 
@@ -41,7 +38,6 @@ class ObjectDetection:
                 else:
                     color = COLORS[1]
 
-            # color = COLORS[int(classid) % len(COLORS)]
             label = "(%d, %d)" % (get_box_center(box)[0], get_box_center(box)[1])
             overlay = frame.copy()
 
@@ -54,8 +50,7 @@ class ObjectDetection:
             # Draw ball
             if classid[0] == 1:
                 ballMidpoint = (get_box_center(box)[0], get_box_center(box)[1])
-
-                cv2.circle(overlay, ballMidpoint, int(box[2]/2),  color, 2)
+                cv2.circle(overlay, ballMidpoint, int(box[2]/2), COLORS[2], -1)
                 cv2.addWeighted(overlay, 0.5, frame, 0.5, 0, frame)
                 cv2.putText(frame, label, (box[0], box[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
 

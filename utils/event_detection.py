@@ -1,14 +1,13 @@
-import os
 import cv2
 import numpy as np
 from .helper import *
-from .tracker import *
-
-# Create tracker object
-tracker = ChameleonTracker()
+from .object_tracker import ObjectTracker
 
 
 class EventDetection:
+    
+    tracker = ObjectTracker()
+    
     current_ball = None
     prev_ball = None
     pre_prev_ball = None
@@ -16,7 +15,7 @@ class EventDetection:
     prev_slop = None
     found_last_frame = False
 
-    def check_ball_out(self, frame, classes, boxes, LeftUp, LeftDown, RightDown, RightUp):
+    def check_ball_event(self, frame, classes, boxes, LeftUp, LeftDown, RightDown, RightUp):
 
         # Variable to check if the ball is inside a player's BOX
         ballBox = 0
@@ -29,7 +28,7 @@ class EventDetection:
         player_index = [index for index, object_class in enumerate(classes) if object_class == 0]
         playersBoxes = boxes[player_index]
 
-        playersBoxes_ids = tracker.update(playersBoxes)
+        playersBoxes_ids = self.tracker.update(playersBoxes)
 
         for playerBox in playersBoxes_ids:
 
@@ -40,23 +39,13 @@ class EventDetection:
             playerRightDown = (x + w, y + h)
             playerRightUp = (x + w, y)
 
-            # See players bounding boxes for debug
-            cv2.putText(frame, str(playerIndex), (x, y - 15), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 2)
-            cv2.rectangle(frame, playerLeftUp, playerRightDown, (0, 0, 0), 1)
-
             playerContour = np.array([playerLeftUp, playerLeftDown, playerRightDown, playerRightUp])
-
             playerContour.reshape((-1, 1, 2))
-
             ballInOut_playerBox = int(cv2.pointPolygonTest(playerContour, self.current_ball, True))
 
             # Check if ball inside the boundingBoxes of the players
             if ballInOut_playerBox >= 0:
-                cv2.rectangle(frame, playerLeftUp, playerRightDown, (0, 255, 0), 3)
                 ballBox += 1
-
-            # for debug
-            # print(ballBox)
 
         # If ball was found
         if len(ball) == 1:
@@ -72,7 +61,7 @@ class EventDetection:
             return None
 
         cv2.line(frame, (self.current_ball[0], self.current_ball[1]), (self.pre_prev_ball[0], self.pre_prev_ball[1]),
-                 (0, 0, 255), 4, cv2.LINE_AA)
+                 (0, 255, 0), 4, cv2.LINE_AA)
 
         self.current_slop = self.claculate_ball_slope(self.prev_ball, self.current_ball)
         self.prev_slop = self.claculate_ball_slope(self.pre_prev_ball, self.prev_ball)
@@ -84,16 +73,15 @@ class EventDetection:
 
             BallInOut = int(cv2.pointPolygonTest(FieldContour, self.current_ball, True))
 
-            # Ball In
             if BallInOut >= 0:
-                cv2.putText(frame, "BALL IN", (25, 25), cv2.FONT_HERSHEY_PLAIN, 1.5, (0, 255, 0), 3)
+                # Ball In
                 return False
             else:
                 # Ball Out
-                cv2.putText(frame, "BALL OUT :" + str(abs(BallInOut)) + "cm", (25, 25),
-                            cv2.FONT_HERSHEY_PLAIN, 1.5, (0, 0, 255), 3)
                 return True
+        # No ball event
         return None
+
 
     def claculate_ball_slope(self, pointA, pointB):
         if (pointA[0] - pointB[0]) == 0:

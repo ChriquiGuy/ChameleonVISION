@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 
 class UI_Game(object):
     def setupUi(self, Game):
@@ -16,6 +16,9 @@ class UI_Game(object):
         Game.setMinimumSize(QtCore.QSize(1920, 1080))
         Game.setMaximumSize(QtCore.QSize(1920, 1080))
         Game.setStyleSheet("background-color: rgb(50, 50, 50);")
+        
+        self.alertPopup = AlertPopup(Game)
+        
         self.game_view = QtWidgets.QLabel(Game)
         self.game_view.setGeometry(QtCore.QRect(490, 200, 1280, 720))
         self.game_view.setStyleSheet("background-color: rgb(250, 250, 250);\n"
@@ -213,69 +216,7 @@ class UI_Game(object):
 "color: rgb(10, 10, 10);\n"
 "font: 10pt;")
         self.debug_btn_2.setObjectName("debug_btn_2")
-        self.alert = QtWidgets.QFrame(Game)
-        self.alert.setGeometry(QtCore.QRect(930, 850, 401, 51))
-        self.alert.setStyleSheet("background-color: rgba(238, 238, 236,0);")
-        self.alert.setObjectName("alert")
-        self.alert_false_btn = QtWidgets.QPushButton(self.alert)
-        self.alert_false_btn.setGeometry(QtCore.QRect(350, 10, 31, 31))
-        self.alert_false_btn.setStyleSheet("background-color: rgb(200, 50, 50);\n"
-"border-style:outset;\n"
-"border-radius:10px;\n"
-"color: rgb(250, 255, 255);\n"
-"font: 14pt;")
-        self.alert_false_btn.setObjectName("alert_false_btn")
-        self.aleret_background = QtWidgets.QLabel(self.alert)
-        self.aleret_background.setGeometry(QtCore.QRect(0, 0, 401, 51))
-        self.aleret_background.setStyleSheet("background-color: rgba(20, 20, 20, 90);\n"
-"border-style:outset;\n"
-"border-radius:10px;\n"
-"color: rgb(10, 10, 10);\n"
-"font: 14pt;")
-        self.aleret_background.setText("")
-        self.aleret_background.setAlignment(QtCore.Qt.AlignCenter)
-        self.aleret_background.setObjectName("aleret_background")
-        self.alert_true_btn = QtWidgets.QPushButton(self.alert)
-        self.alert_true_btn.setGeometry(QtCore.QRect(310, 10, 31, 31))
-        self.alert_true_btn.setStyleSheet("background-color: rgb(50, 200, 50);\n"
-"border-style:outset;\n"
-"border-radius:10px;\n"
-"color: rgb(250, 255, 255);\n"
-"font: 14pt;")
-        self.alert_true_btn.setObjectName("alert_true_btn")
-        self.alert_event_name = QtWidgets.QLabel(self.alert)
-        self.alert_event_name.setGeometry(QtCore.QRect(70, 0, 111, 51))
-        self.alert_event_name.setStyleSheet("background-color: rgba(20, 20, 20,0);\n"
-"border-style:outset;\n"
-"border-radius:10px;\n"
-"color: rgb(250, 255, 255);\n"
-"font: 15pt;")
-        self.alert_event_name.setAlignment(QtCore.Qt.AlignCenter)
-        self.alert_event_name.setObjectName("alert_event_name")
-        self.alert_replay_btn = QtWidgets.QPushButton(self.alert)
-        self.alert_replay_btn.setGeometry(QtCore.QRect(200, 10, 101, 31))
-        self.alert_replay_btn.setStyleSheet("background-color: rgb(100, 100, 100);\n"
-"border-style:outset;\n"
-"border-radius:10px;\n"
-"color: rgb(250, 255, 255);\n"
-"font: 14pt;")
-        self.alert_replay_btn.setObjectName("alert_replay_btn")
-        self.alert_team_color = QtWidgets.QLabel(self.alert)
-        self.alert_team_color.setGeometry(QtCore.QRect(20, 10, 31, 31))
-        self.alert_team_color.setStyleSheet("background-color: rgb(50, 50, 200);\n"
-"border-style:outset;\n"
-"border-radius:10px;\n"
-"color: rgb(250, 255, 255);\n"
-"font: 14pt;")
-        self.alert_team_color.setText("")
-        self.alert_team_color.setAlignment(QtCore.Qt.AlignCenter)
-        self.alert_team_color.setObjectName("alert_team_color")
-        self.aleret_background.raise_()
-        self.alert_false_btn.raise_()
-        self.alert_true_btn.raise_()
-        self.alert_event_name.raise_()
-        self.alert_replay_btn.raise_()
-        self.alert_team_color.raise_()
+
         self.statistics_holder = QtWidgets.QFrame(Game)
         self.statistics_holder.setGeometry(QtCore.QRect(360, 130, 1531, 941))
         self.statistics_holder.setStyleSheet("background-color: rgb(10, 10, 10);\n"
@@ -302,7 +243,6 @@ class UI_Game(object):
         self.verticalLayoutWidget.raise_()
         self.save_btn.raise_()
         self.debug_btn_2.raise_()
-        self.alert.raise_()
 
         self.retranslateUi(Game)
         QtCore.QMetaObject.connectSlotsByName(Game)
@@ -324,7 +264,77 @@ class UI_Game(object):
         self.event_time_5.setText(_translate("MainWindow", "00:09:31"))
         self.save_btn.setText(_translate("MainWindow", "Save"))
         self.debug_btn_2.setText(_translate("MainWindow", "Stat"))
-        self.alert_false_btn.setText(_translate("MainWindow", "X"))
-        self.alert_true_btn.setText(_translate("MainWindow", "V"))
-        self.alert_event_name.setText(_translate("MainWindow", "Ball-In"))
-        self.alert_replay_btn.setText(_translate("MainWindow", "Replay"))
+        # self.alert_false_btn.setText(_translate("MainWindow", "X"))
+        # self.alert_true_btn.setText(_translate("MainWindow", "V"))
+        # self.alert_event_name.setText(_translate("MainWindow", "Ball-In"))
+        # self.alert_replay_btn.setText(_translate("MainWindow", "Replay"))
+
+
+
+
+class AlertPopup:
+        
+        def __init__(self, parent):
+                self.alert = QtWidgets.QFrame(parent)
+                self.alert.setGeometry(QtCore.QRect(930, 850, 401, 51))
+                self.alert.setStyleSheet("background-color: rgba(238, 238, 236,0);")
+                self.alert.setObjectName("alert")
+                self.alert_false_btn = QtWidgets.QPushButton(self.alert)
+                self.alert_false_btn.setGeometry(QtCore.QRect(350, 10, 31, 31))
+                self.alert_false_btn.setStyleSheet("background-color: rgb(200, 50, 50);\n"
+        "border-style:outset;\n"
+        "border-radius:10px;\n"
+        "color: rgb(250, 255, 255);\n"
+        "font: 14pt;")
+                self.alert_false_btn.setObjectName("alert_false_btn")
+                self.aleret_background = QtWidgets.QLabel(self.alert)
+                self.aleret_background.setGeometry(QtCore.QRect(0, 0, 401, 51))
+                self.aleret_background.setStyleSheet("background-color: rgba(20, 20, 20, 90);\n"
+        "border-style:outset;\n"
+        "border-radius:10px;\n"
+        "color: rgb(10, 10, 10);\n"
+        "font: 14pt;")
+                self.aleret_background.setText("")
+                self.aleret_background.setAlignment(QtCore.Qt.AlignCenter)
+                self.aleret_background.setObjectName("aleret_background")
+                self.alert_true_btn = QtWidgets.QPushButton(self.alert)
+                self.alert_true_btn.setGeometry(QtCore.QRect(310, 10, 31, 31))
+                self.alert_true_btn.setStyleSheet("background-color: rgb(50, 200, 50);\n"
+        "border-style:outset;\n"
+        "border-radius:10px;\n"
+        "color: rgb(250, 255, 255);\n"
+        "font: 14pt;")
+                self.alert_true_btn.setObjectName("alert_true_btn")
+                self.alert_event_name = QtWidgets.QLabel(self.alert)
+                self.alert_event_name.setGeometry(QtCore.QRect(70, 0, 111, 51))
+                self.alert_event_name.setStyleSheet("background-color: rgba(20, 20, 20,0);\n"
+        "border-style:outset;\n"
+        "border-radius:10px;\n"
+        "color: rgb(250, 255, 255);\n"
+        "font: 15pt;")
+                self.alert_event_name.setAlignment(QtCore.Qt.AlignCenter)
+                self.alert_event_name.setObjectName("alert_event_name")
+                self.alert_replay_btn = QtWidgets.QPushButton(self.alert)
+                self.alert_replay_btn.setGeometry(QtCore.QRect(200, 10, 101, 31))
+                self.alert_replay_btn.setStyleSheet("background-color: rgb(100, 100, 100);\n"
+        "border-style:outset;\n"
+        "border-radius:10px;\n"
+        "color: rgb(250, 255, 255);\n"
+        "font: 14pt;")
+                self.alert_replay_btn.setObjectName("alert_replay_btn")
+                self.alert_team_color = QtWidgets.QLabel(self.alert)
+                self.alert_team_color.setGeometry(QtCore.QRect(20, 10, 31, 31))
+                self.alert_team_color.setStyleSheet("background-color: rgb(50, 50, 200);\n"
+        "border-style:outset;\n"
+        "border-radius:10px;\n"
+        "color: rgb(250, 255, 255);\n"
+        "font: 14pt;")
+                self.alert_team_color.setText("")
+                self.alert_team_color.setAlignment(QtCore.Qt.AlignCenter)
+                self.alert_team_color.setObjectName("alert_team_color")
+                self.aleret_background.raise_()
+                self.alert_false_btn.raise_()
+                self.alert_true_btn.raise_()
+                self.alert_event_name.raise_()
+                self.alert_replay_btn.raise_()
+                self.alert_team_color.raise_()

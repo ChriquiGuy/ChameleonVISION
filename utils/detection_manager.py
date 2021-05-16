@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from PyQt5.QtCore import pyqtSignal, QThread
+from PyQt5.QtCore import pyqtSignal, QThread, QObject
 
 from utils.object_detection import ObjectDetection
 from utils.field_detection import FieldDetection
@@ -10,13 +10,13 @@ from utils.event_detection import EventDetection
 
 class Detector(QThread):
     
-    # signals
     change_pixmap_signal = pyqtSignal(np.ndarray)
-    ball_out_signal = pyqtSignal(bool)
-
+    ball_event_signal = pyqtSignal(bool)
+        
     def __init__(self):
         super().__init__()
         self._run_flag = True
+        self.debug_flag = True
 
     def run(self):
 
@@ -49,17 +49,20 @@ class Detector(QThread):
                 # Debug draw detections
                 result_frame = current_frame.copy()
 
-                # Draw field
-                result_frame = field_detector.draw_field(result_frame)
-                # Draw object 
-                result_frame = o_detection.draw_objects(result_frame, classes, scores, detection_boxes, field_center)
+                if self.debug_flag :
+                    # Draw field
+                    result_frame = field_detector.draw_field(result_frame)
+                    # Draw object 
+                    result_frame = o_detection.draw_objects(result_frame, classes, scores, detection_boxes, field_center)
+                    
                 # Detect Events
-                isBallOut = event_detector.check_ball_out(result_frame, classes, detection_boxes,
-                                                          LeftUp, LeftDown, RightDown, RightUp)
-                if isBallOut is not None:
-                    self.ball_out_signal.emit(isBallOut)
+                isBallOut = event_detector.check_ball_event(result_frame, classes, detection_boxes, LeftUp, LeftDown, RightDown, RightUp)
+                
+                if isBallOut is not None : self.ball_event_signal.emit(isBallOut)
+                
                 # Show to screen
                 self.change_pixmap_signal.emit(result_frame)
+                
 
             else:
                 print("RTMP IS NOT CONNECTED")

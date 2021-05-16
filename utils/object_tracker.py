@@ -1,64 +1,53 @@
-import cv2
-from math import *
-import numpy as np
-
-class ObjectTracker(object):
-    	
-	# measurements for mu and motions, U
-	measurements = [5., 6., 7., 9., 10.]
-	motions = [1., 1., 2., 1., 1.]
-
-	# initial parameters
-	measurement_sig = 4.
-	motion_sig = 2.
-	mu = 0.
-	sig = 10000.
-    	
-		
-	# gaussian function
-	def f(self, mu, sigma2, x):
-    		
-		''' 
-			f takes in a mean and squared variance, and an input x
-			and returns the gaussian value.
-		'''
-
-		coefficient = 1.0 / sqrt(2.0 * pi *sigma2)
-		exponential = exp(-0.5 * (x-mu) ** 2 / sigma2)
-		return coefficient * exponential
+import math
 
 
+class ObjectTracker:
 
-	# the update function
-	def update(self, mean1, var1, mean2, var2):
-    		
-		''' 
-			This function takes in two means and two squared variance terms,
-			and returns updated gaussian parameters.
-		'''
-		# Calculate the new parameters
-		new_mean = (var2*mean1 + var1*mean2)/(var2+var1)
-		new_var = 1/(1/var2 + 1/var1)
-		
-		return [new_mean, new_var]
+    def __init__(self):
+        # Store the center positions of the objects
+        self.center_points = {}
+        # Keep the count of the IDs
+        # each time a new object id detected, the count will increase by one
+        self.id_count = 0
+
+    def update(self, objects_rect):
+        # Objects boxes and ids
+        objects_bbs_ids = []
+
+        # Get center point of new object
+        for rect in objects_rect:
+            x, y, w, h = rect
+            cx = (x + x + w) // 2
+            cy = (y + y + h) // 2
+
+            # Find out if that object was detected already
+            same_object_detected = False
+            for id, pt in self.center_points.items():
+                dist = math.hypot(cx - pt[0], cy - pt[1])
+
+                if dist < 25:
+                    self.center_points[id] = (cx, cy)
+
+                    objects_bbs_ids.append([x, y, w, h, id])
+                    same_object_detected = True
+                    break
+
+            # New object is detected we assign the ID to that object
+            if same_object_detected is False:
+                self.center_points[self.id_count] = (cx, cy)
+                objects_bbs_ids.append([x, y, w, h, self.id_count])
+                self.id_count += 1
+
+        # Clean the dictionary by center points to remove IDS not used anymore
+        new_center_points = {}
+        for obj_bb_id in objects_bbs_ids:
+            _, _, _, _, object_id = obj_bb_id
+            center = self.center_points[object_id]
+            new_center_points[object_id] = center
+
+        # Update dictionary with IDs not used removed
+        self.center_points = new_center_points.copy()
+        return objects_bbs_ids
 
 
 
-	# the motion update/predict function
-	def predict(self, mean1, var1, mean2, var2):
-		
-		''' 
-			This function takes in two means and two squared variance terms,
-			and returns updated gaussian parameters, after motion.
-		'''
-
-		# Calculate the new parameters
-		new_mean = mean1 + mean2
-		new_var = var1 + var2
-		
-		return [new_mean, new_var]
-    	
-
-
-	def find_tracker_rects(self, current_frame, motion_boxes, result_frame):
-		x = 1

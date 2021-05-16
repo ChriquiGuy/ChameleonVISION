@@ -20,7 +20,7 @@ class GUIController:
 
     def show_game_window(self):
         self.game = game_window.Game()
-        self.login.close()
+        # self.login.close()
         self.game.show()
 
     def show_newuser_window(self):
@@ -32,7 +32,7 @@ class GUIController:
 def main():
     app = QtWidgets.QApplication(sys.argv)
     controller = GUIController()
-    controller.show_login_window()
+    controller.show_game_window()
     sys.exit(app.exec_())
 
 

@@ -1,6 +1,5 @@
 import cv2
 from .helper import *
-import time
 
 CONFIDENCE_THRESHOLD = 0.6
 NMS_THRESHOLD = 0.1
@@ -15,12 +14,12 @@ class ObjectDetection:
 
         # with open("/home/chameleonvision/Desktop/Project/model/volley.names", "r") as f:
         #     self.class_names = [cname.strip() for cname in f.readlines()]
-        with open('volley.names', 'r') as f:
+        with open('./model/volley.names', 'r') as f:
             self.class_names = [cname.strip() for cname in f.readlines()]
 
         # net = cv2.dnn.readNet("/home/chameleonvision/Desktop/Project/model/volley.weights", "/home/chameleonvision/Desktop/Project/model/volley.cfg")
-        net = cv2.dnn.readNet('volley.weights',
-                              'volley.cfg')
+        net = cv2.dnn.readNet('./model/volley.weights',
+                              './model/volley.cfg')
 
         net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
         net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)

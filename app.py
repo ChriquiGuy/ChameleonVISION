@@ -5,13 +5,12 @@ import time
 
 from PyQt5 import QtGui
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QThread
-from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QVBoxLayout, QPushButton, QHBoxLayout, QMainWindow
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread
+from PyQt5.QtWidgets import QApplication, QMainWindow
 
 from utils.object_detection import ObjectDetection
 from utils.field_detection import FieldDetection
 from utils.event_detection import EventDetection
-import screens.detection_window as detection_window
 import screens.game_screen as game_screen
 
 
@@ -38,13 +37,7 @@ class VideoThread(QThread):
 
         # Load RTMP
         # cap = cv2.VideoCapture('rtmp://127.0.0.1:1935/ChameleonVISION/1234')          # checkRTMP server.txt
-        # cap = cv2.VideoCapture("/home/chameleonvision/Desktop/ProjectV5/videos/858.MP4")      # 720/1280
-<<<<<<< HEAD
-        cap = cv2.VideoCapture("/home/chameleonvision/Desktop/ProjectV5/videos/volley.mp4")
-=======
-        # cap = cv2.VideoCapture("/home/chameleonvision/Desktop/Project/videos/videos_720p/5.mp4")
-        cap = cv2.VideoCapture('volley.mp4')
->>>>>>> 3dfe4f16783d332399a1e33ba986f21a98a540c9
+        cap = cv2.VideoCapture("./videos/volley.mp4")
 
         # change the size of video to 1280X720
         # cap.set(3, 1280)
@@ -86,13 +79,9 @@ class VideoThread(QThread):
         self.wait()
 
 
-<<<<<<< HEAD
 class App(QMainWindow, game_screen.Ui_MainWindow):
     
     lastAlertTime = None
-=======
-class App(QMainWindow, detection_window.Ui_MainWindow):
->>>>>>> 3dfe4f16783d332399a1e33ba986f21a98a540c9
 
     def __init__(self, parent=None):
         super(App, self).__init__(parent)
@@ -115,26 +104,16 @@ class App(QMainWindow, detection_window.Ui_MainWindow):
     def update_image(self, cv_img):
         """Updates the image_label with a new opencv image"""
         qt_img = self.convert_cv_qt(cv_img)
-<<<<<<< HEAD
         self.game_view.setPixmap(qt_img)
     
     
-=======
-        self.VideoHolder.setPixmap(qt_img)
-
->>>>>>> 3dfe4f16783d332399a1e33ba986f21a98a540c9
     def convert_cv_qt(self, cv_img):
         """Convert from an opencv image to QPixmap"""
         rgb_image = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
         h, w, ch = rgb_image.shape
         bytes_per_line = ch * w
         convert_to_Qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
-<<<<<<< HEAD
         p = convert_to_Qt_format.scaled(self.game_view.size().width(), self.game_view.size().height()) #, Qt.KeepAspectRatio)
-=======
-        p = convert_to_Qt_format.scaled(self.VideoHolder.size().width(),
-                                        self.VideoHolder.size().height())  # , Qt.KeepAspectRatio)
->>>>>>> 3dfe4f16783d332399a1e33ba986f21a98a540c9
         return QPixmap.fromImage(p)
 
     def update_alert(self, isOut):
@@ -149,7 +128,6 @@ class App(QMainWindow, detection_window.Ui_MainWindow):
                 return
         
         if isOut:
-<<<<<<< HEAD
             self.lastAlertTime = time.time()
             self.alert_event_name.setText("Ball Out")
         else:
@@ -158,18 +136,6 @@ class App(QMainWindow, detection_window.Ui_MainWindow):
         
         
 if __name__=="__main__":
-=======
-            self.AlertText.setText("Ball Out")
-            self.AlertTitle.setStyleSheet(
-                "background-color: rgb(255, 0, 0);\nborder-style:outset;\nborder-radius:10px;\ncolor: rgb(250, 255, 255);\nfont: 14pt")
-        else:
-            self.AlertText.setText("Ball In")
-            self.AlertTitle.setStyleSheet(
-                "background-color: rgb(0, 255, 0);\nborder-style:outset;\nborder-radius:10px;\ncolor: rgb(250, 255, 255);\nfont: 14pt")
-
-
-if __name__ == "__main__":
->>>>>>> 3dfe4f16783d332399a1e33ba986f21a98a540c9
     app = QApplication(sys.argv)
     a = App()
     a.show()

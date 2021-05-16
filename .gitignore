@@ -1,6 +1,8 @@
-__pycache__/
-utils/__pycache__/
+*__pycache__/
 *.weights
 *MP4
 *mp4
 .DS_Store
+.vscode
+.qt_for_python
+.idea

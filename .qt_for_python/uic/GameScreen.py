@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/chameleonvision/Desktop/ProjectV5/NewGui/GameScreen.ui'
+# Form implementation generated from reading ui file '/Users/shirastar/Desktop/Guy/FinalProject/Project/ChameleonVISION/screens/ui/GameScreen.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #

@@ -14,7 +14,7 @@ class ObjectTracker:
         # Objects boxes and ids
         objects_bbs_ids = []
 
-        # Get center point of new object
+        # Get center point of new object\
         for rect in objects_rect:
             x, y, w, h = rect
             cx = (x + x + w) // 2

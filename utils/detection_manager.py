@@ -17,6 +17,7 @@ class Detector(QThread):
         self._run_flag = True
         self.debug_flag = False
         self.calibration_flag = True
+        self.play_flag = False
 
     def run(self):
 
@@ -38,6 +39,9 @@ class Detector(QThread):
         cap = cv2.VideoCapture("./videos/volley.mp4")
 
         while self._run_flag:
+            
+            if not self.play_flag : continue
+            
             ret, current_frame = cap.read()
 
             if ret:

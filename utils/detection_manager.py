@@ -16,7 +16,7 @@ class Detector(QThread):
         super().__init__()
         self._run_flag = True
         self.debug_flag = False
-        self.calibration_flag = True
+        self.calibration_flag = False
         self.play_flag = False
 
     def run(self):

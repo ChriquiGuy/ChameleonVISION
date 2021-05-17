@@ -197,6 +197,14 @@ class UI_Game(object):
         self.event_time_5.setAlignment(QtCore.Qt.AlignCenter)
         self.event_time_5.setObjectName("event_time_5")
         self.events_holder.addWidget(self.event_element)
+        self.game_btn = QtWidgets.QPushButton(Game)
+        self.game_btn.setGeometry(QtCore.QRect(1810, 350, 51, 51))
+        self.game_btn.setStyleSheet("background-color: rgb(150, 120, 200);\n"
+"border-style:outset;\n"
+"border-radius:15px;\n"
+"color: rgb(10, 10, 10);\n"
+"font: 10pt;")
+        self.game_btn.setObjectName("game_btn")
         self.calibration_btn = QtWidgets.QPushButton(Game)
         self.calibration_btn.setGeometry(QtCore.QRect(1810, 280, 51, 51))
         self.calibration_btn.setStyleSheet("background-color: rgb(252, 175, 62);\n"
@@ -292,6 +300,7 @@ class UI_Game(object):
         self.play_btn.raise_()
         self.stop_btn.raise_()
         self.verticalLayoutWidget.raise_()
+        self.game_btn.raise_()
         self.calibration_btn.raise_()
         self.alert.raise_()
 
@@ -311,8 +320,9 @@ class UI_Game(object):
         self.debug_btn.setText(_translate("MainWindow", "Debug"))
         self.play_btn.setText(_translate("MainWindow", "Play"))
         self.stop_btn.setText(_translate("MainWindow", "| |"))
-        self.event_name_5.setText(_translate("MainWindow", "Ball-In"))
-        self.event_time_5.setText(_translate("MainWindow", "00:09:31"))
+        self.event_name_5.setText(_translate("MainWindow", ""))
+        self.event_time_5.setText(_translate("MainWindow", "00:00:00"))
+        self.game_btn.setText(_translate("MainWindow", "Game"))
         self.calibration_btn.setText(_translate("MainWindow", "Calibrate"))
         self.alert_false_btn.setText(_translate("MainWindow", "X"))
         self.alert_true_btn.setText(_translate("MainWindow", "V"))

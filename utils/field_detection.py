@@ -192,7 +192,9 @@ class FieldDetection:
        
         # draw lines
         self.draw_field_lines(frame_copy)
+        
+        field = self.draw_field(frame)
 
-        imgStack = stackImages(0.5, ([frame, frame_copy], [binary, edges]))
+        imgStack = stackImages(0.5, ([field, frame_copy], [binary, edges]))
 
         return imgStack

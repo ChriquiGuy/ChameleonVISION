@@ -1,3 +1,4 @@
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import QTimer
 import time
@@ -5,7 +6,7 @@ from datetime import datetime
 
 from utils.helper import *
 from utils.detection_manager import Detector
-from screens.ui.UI_Game import UI_Game
+from screens.ui.UI_Game import EventElement, UI_Game
 
 
 class Game(QWidget, UI_Game):
@@ -16,6 +17,8 @@ class Game(QWidget, UI_Game):
     lastAlertTime = None
     current_alert_team = None
     current_alert_time = None
+    current_alert_name = None
+    
     
 
     def __init__(self, parent=None):
@@ -88,14 +91,14 @@ class Game(QWidget, UI_Game):
                                             "font: 14pt;")
         if isOut == True:
             self.lastAlertTime = time.time()
-            self.alert_event_name.setText("Ball Out")
+            self.alert_event_name.setText("Ball-Out")
             self.current_alert_team = team
             self.current_alert_time = self.game_time.text()
             self.alert.show()
             
         elif isOut == False:
             self.lastAlertTime = time.time()
-            self.alert_event_name.setText("Ball In")
+            self.alert_event_name.setText("Ball-In")
             self.current_alert_team = team
             self.current_alert_time = self.game_time.text()
             self.alert.show()
@@ -143,6 +146,7 @@ class Game(QWidget, UI_Game):
         
     def on_true_alert_btn_click(self):
         self.update_score()
+        self.update_event_logs()
         self.alert.hide()
         
     def on_false_alert_btn_click(self):
@@ -154,6 +158,11 @@ class Game(QWidget, UI_Game):
             self.red_points.setText(str(int(self.red_points.text()) + 1))
         else:
             self.blue_points.setText(str(int(self.blue_points.text()) + 1))
+            
+    def update_event_logs(self):
+        
+        event_element = EventElement(self.verticalLayoutWidget, self.current_alert_team, self.alert_event_name.text(), self.current_alert_time)
+        self.events_holder.addWidget(event_element)
         
             
         

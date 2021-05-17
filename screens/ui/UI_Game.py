@@ -142,61 +142,20 @@ class UI_Game(object):
 "color: rgb(250, 255, 255);\n"
 "font: 14pt;")
         self.stop_btn.setObjectName("stop_btn")
-        self.verticalLayoutWidget = QtWidgets.QWidget(Game)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(39, 150, 291, 71))
+        
+        self.verticalLayoutWidget = QtWidgets.QScrollArea(Game)
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(39, 150, 291, 900))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-        self.events_holder = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        self.verticalLayoutWidget.setStyleSheet("background-color: rgba(20, 20, 20, 0);")
+        
+        self.verticalLayoutWidget.setWidgetResizable(1)
+        self.content = QtWidgets.QWidget()
+        self.verticalLayoutWidget.setWidget(self.content)
+        
+        self.events_holder = QtWidgets.QVBoxLayout(self.content)
+        self.events_holder.setAlignment(QtCore.Qt.AlignTop)
         self.events_holder.setContentsMargins(0, 2, 0, 2)
         self.events_holder.setObjectName("events_holder")
-        self.event_element = QtWidgets.QGroupBox(self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(1)
-        sizePolicy.setHeightForWidth(self.event_element.sizePolicy().hasHeightForWidth())
-        self.event_element.setSizePolicy(sizePolicy)
-        self.event_element.setMinimumSize(QtCore.QSize(289, 61))
-        self.event_element.setMaximumSize(QtCore.QSize(289, 61))
-        self.event_element.setStyleSheet("background-color: rgba(255, 255, 255,0);")
-        self.event_element.setObjectName("event_element")
-        self.event_background_5 = QtWidgets.QLabel(self.event_element)
-        self.event_background_5.setGeometry(QtCore.QRect(0, 0, 291, 61))
-        self.event_background_5.setStyleSheet("background-color: rgb(20, 20, 20);\n"
-"border-style:outset;\n"
-"border-radius:10px;\n"
-"color: rgb(250, 255, 255);\n"
-"font: 14pt;")
-        self.event_background_5.setText("")
-        self.event_background_5.setAlignment(QtCore.Qt.AlignCenter)
-        self.event_background_5.setObjectName("event_background_5")
-        self.event_team_color_5 = QtWidgets.QLabel(self.event_element)
-        self.event_team_color_5.setGeometry(QtCore.QRect(20, 20, 21, 21))
-        self.event_team_color_5.setStyleSheet("background-color: rgb(200, 50, 50);\n"
-"border-style:outset;\n"
-"border-radius:10px;\n"
-"color: rgb(250, 255, 255);\n"
-"font: 14pt;")
-        self.event_team_color_5.setText("")
-        self.event_team_color_5.setAlignment(QtCore.Qt.AlignCenter)
-        self.event_team_color_5.setObjectName("event_team_color_5")
-        self.event_name_5 = QtWidgets.QLabel(self.event_element)
-        self.event_name_5.setGeometry(QtCore.QRect(70, 20, 71, 21))
-        self.event_name_5.setStyleSheet("background-color: rgb(20, 20, 20);\n"
-"border-style:outset;\n"
-"border-radius:10px;\n"
-"color: rgb(250, 255, 255);\n"
-"font: 10pt;")
-        self.event_name_5.setAlignment(QtCore.Qt.AlignCenter)
-        self.event_name_5.setObjectName("event_name_5")
-        self.event_time_5 = QtWidgets.QLabel(self.event_element)
-        self.event_time_5.setGeometry(QtCore.QRect(180, 20, 71, 21))
-        self.event_time_5.setStyleSheet("background-color: rgb(20, 20, 20);\n"
-"border-style:outset;\n"
-"border-radius:10px;\n"
-"color: rgb(250, 255, 255);\n"
-"font: 10pt;")
-        self.event_time_5.setAlignment(QtCore.Qt.AlignCenter)
-        self.event_time_5.setObjectName("event_time_5")
-        self.events_holder.addWidget(self.event_element)
         self.game_btn = QtWidgets.QPushButton(Game)
         self.game_btn.setGeometry(QtCore.QRect(1810, 350, 51, 51))
         self.game_btn.setStyleSheet("background-color: rgb(150, 120, 200);\n"
@@ -320,11 +279,69 @@ class UI_Game(object):
         self.debug_btn.setText(_translate("MainWindow", "Debug"))
         self.play_btn.setText(_translate("MainWindow", "Play"))
         self.stop_btn.setText(_translate("MainWindow", "| |"))
-        self.event_name_5.setText(_translate("MainWindow", ""))
-        self.event_time_5.setText(_translate("MainWindow", "00:00:00"))
         self.game_btn.setText(_translate("MainWindow", "Game"))
         self.calibration_btn.setText(_translate("MainWindow", "Calibrate"))
         self.alert_false_btn.setText(_translate("MainWindow", "X"))
         self.alert_true_btn.setText(_translate("MainWindow", "V"))
         self.alert_event_name.setText(_translate("MainWindow", "Ball-In"))
         self.alert_replay_btn.setText(_translate("MainWindow", "Replay"))
+
+
+
+class EventElement(QtWidgets.QGroupBox):
+        
+        def __init__(self, parent, team, event_name, time):
+                super(EventElement, self).__init__(parent)
+                sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+                sizePolicy.setHorizontalStretch(0)
+                sizePolicy.setVerticalStretch(1)
+                sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
+                self.setSizePolicy(sizePolicy)
+                self.setMinimumSize(QtCore.QSize(289, 61))
+                self.setMaximumSize(QtCore.QSize(289, 61))
+                self.setStyleSheet("background-color: rgba(255, 255, 255,0);")
+                self.setObjectName("event_element")
+                self.event_background_5 = QtWidgets.QLabel(self)
+                self.event_background_5.setGeometry(QtCore.QRect(0, 0, 291, 61))
+                self.event_background_5.setStyleSheet("background-color: rgb(20, 20, 20);\n"
+                "border-style:outset;\n"
+                "border-radius:10px;\n"
+                "color: rgb(250, 255, 255);\n"
+                "font: 14pt;")
+                self.event_background_5.setText("")
+                self.event_background_5.setAlignment(QtCore.Qt.AlignCenter)
+                self.event_background_5.setObjectName("event_background_5")
+                
+                team_color = "rgb(50, 50, 200)"
+                if team == 1 : team_color = "rgb(200, 50, 50)"
+                
+                self.event_team_color_5 = QtWidgets.QLabel(self)
+                self.event_team_color_5.setGeometry(QtCore.QRect(20, 20, 21, 21))
+                self.event_team_color_5.setStyleSheet(f"background-color:{team_color};\n"
+                "border-style:outset;\n"
+                "border-radius:10px;\n"
+                "color: rgb(250, 255, 255);\n"
+                "font: 14pt;")
+                self.event_team_color_5.setText("")
+                self.event_team_color_5.setAlignment(QtCore.Qt.AlignCenter)
+                self.event_team_color_5.setObjectName("event_team_color_5")
+                self.event_name_5 = QtWidgets.QLabel(self)
+                self.event_name_5.setGeometry(QtCore.QRect(70, 20, 71, 21))
+                self.event_name_5.setStyleSheet("background-color: rgb(20, 20, 20);\n"
+                "border-style:outset;\n"
+                "border-radius:10px;\n"
+                "color: rgb(250, 255, 255);\n"
+                "font: 10pt;")
+                self.event_name_5.setAlignment(QtCore.Qt.AlignCenter)
+                self.event_name_5.setObjectName("event_name_5")
+                self.event_name_5.setText(event_name)
+                self.event_time_5 = QtWidgets.QLabel(self)
+                self.event_time_5.setGeometry(QtCore.QRect(180, 20, 71, 21))
+                self.event_time_5.setStyleSheet("background-color: rgb(20, 20, 20);\n"
+                "border-style:outset;\n"
+                "border-radius:10px;\n"
+                "color: rgb(250, 255, 255);\n"
+                "font: 10pt;")
+                self.event_time_5.setAlignment(QtCore.Qt.AlignCenter)
+                self.event_time_5.setObjectName("event_time_5")
+                self.event_time_5.setText(time)

@@ -43,12 +43,18 @@ class Detector(QThread):
 
         # Load video
         cap = cv2.VideoCapture("./videos/volley.mp4")
+        
+        skip_frames = 350
 
         while self._run_flag:
             
             if not self.play_flag : continue
             
             ret, current_frame = cap.read()
+            
+            if skip_frames != 0:
+                skip_frames = skip_frames -1 
+                continue
 
             if ret:
 

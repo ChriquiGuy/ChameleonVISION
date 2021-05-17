@@ -23,6 +23,7 @@ class Game(QWidget, UI_Game):
         self.detector = Detector()
         # start the thread
         self.detector.start()
+        self.init_gamma_bar()
         self.start_timer()
         self.connect_signals()
 
@@ -31,7 +32,9 @@ class Game(QWidget, UI_Game):
         self.alert.hide()
         self.gamma_slider.hide()
         
-
+    def init_gamma_bar(self):
+        self.gamma_slider.setMinimum(0)
+        self.gamma_slider.setMaximum(255)
         
     def start_timer(self):
         self.start_time = datetime.now()
@@ -47,6 +50,7 @@ class Game(QWidget, UI_Game):
         self.play_btn.clicked.connect(self.on_play_btn_click)
         self.stop_btn.clicked.connect(self.on_stop_btn_click)
         self.game_btn.clicked.connect(self.on_game_btn_click)
+        self.gamma_slider.valueChanged.connect(self.gamma_value_changed)
         
 
 #### SLOTS ####
@@ -57,7 +61,7 @@ class Game(QWidget, UI_Game):
         self.game_view.setPixmap(qt_img)
     
 
-    def update_alert_slot(self, isOut):
+    def update_alert_slot(self, isOut, team):
         
         currentAlertTime = time.time()
                 
@@ -65,17 +69,18 @@ class Game(QWidget, UI_Game):
             if self.lastAlertTime + 5 < currentAlertTime :
                 self.lastAlertTime = None
             else :
-                self.alertPopup.alert_event_name.setText("")
+                self.alert_event_name.setText("")
                 return
         
         if isOut:
             self.lastAlertTime = time.time()
-            self.alertPopup.alert.show()
-            self.alertPopup.alert_event_name.setText("Ball Out")
+            self.alert_event_name.setText("Ball Out")
+            self.alert.show()
+            
         else:
             self.lastAlertTime = time.time()
-            self.alertPopup.alert.show()
-            self.alertPopup.alert_event_name.setText("Ball In")
+            self.alert_event_name.setText("Ball In")
+            self.alert.show()
   
   
               
@@ -94,6 +99,7 @@ class Game(QWidget, UI_Game):
     def on_calibration_btn_click(self):
         self.detector.calibration_flag = True
         self.detector.debug_flag = False
+        self.gamma_slider.setValue(self.detector.field_detector.Gamma_Min)
         self.gamma_slider.show()
         
         
@@ -112,3 +118,6 @@ class Game(QWidget, UI_Game):
         game_time = time.gmtime(delta_time.total_seconds())
         game_time = time.strftime('%H:%M:%S', game_time)
         self.game_time.setText(game_time)
+        
+    def gamma_value_changed(self, value):
+        self.detector.field_detector.Gamma_Min = int(value)

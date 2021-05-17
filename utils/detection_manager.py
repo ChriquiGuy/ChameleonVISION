@@ -10,7 +10,7 @@ from utils.event_detection import EventDetection
 
 class Detector(QThread):
     change_pixmap_signal = pyqtSignal(np.ndarray)
-    ball_event_signal = pyqtSignal(bool)
+    ball_event_signal = pyqtSignal(bool, int)
 
     def __init__(self):
         super().__init__()
@@ -18,18 +18,24 @@ class Detector(QThread):
         self.debug_flag = False
         self.calibration_flag = False
         self.play_flag = False
+        
+        self.field_detector = None
+        self.o_detection = None
+        self.event_detector = None
+        
+        
 
     def run(self):
 
         # Init object detection method
-        o_detection = ObjectDetection()
-        o_detection.initialize_model()
+        self.o_detection = ObjectDetection()
+        self.o_detection.initialize_model()
 
         # Init field detection method
-        field_detector = FieldDetection()
+        self.field_detector = FieldDetection()
 
         # Init event detection method
-        event_detector = EventDetection()
+        self.event_detector = EventDetection()
 
         # Load RTMP
         # checkRTMP server.txt
@@ -47,34 +53,32 @@ class Detector(QThread):
             if ret:
 
                 # Detect objects
-                classes, scores, detection_boxes = o_detection.detect(current_frame)
+                classes, scores, detection_boxes = self.o_detection.detect(current_frame)
 
                 # Detect field
-                LeftUp, LeftDown, RightDown, RightUp, field_center = field_detector.detect_field(current_frame)
+                LeftUp, LeftDown, RightDown, RightUp, field_center = self.field_detector.detect_field(current_frame)
 
                 # Debug draw detections
                 result_frame = current_frame.copy()
 
                 # Detect Events
-                isBallOut = event_detector.check_ball_event(result_frame, classes, detection_boxes, LeftUp, LeftDown,
-                                                            RightDown, RightUp)
+                ball_out_event, team = self.event_detector.check_ball_event(result_frame, classes, detection_boxes, LeftUp, LeftDown, RightDown, RightUp)
 
                 # Main screen
                 if self.debug_flag:
 
                     # Draw field
-                    result_frame = field_detector.draw_field(result_frame)
+                    result_frame = self.field_detector.draw_field(result_frame)
 
                     # Draw object
-                    result_frame = o_detection.draw_objects(result_frame, classes, scores, detection_boxes,
-                                                            field_center)
+                    result_frame = self.o_detection.draw_objects(result_frame, classes, scores, detection_boxes, field_center)
 
                 # Calibration screen
                 if self.calibration_flag:
-                    result_frame = field_detector.calibration(result_frame)
+                    result_frame = self.field_detector.calibration(result_frame)
 
-                if isBallOut is not None:
-                    self.ball_event_signal.emit(isBallOut)
+                if ball_out_event is not None:
+                    self.ball_event_signal.emit(ball_out_event, team)
 
                 # Show to screen
                 self.change_pixmap_signal.emit(result_frame)

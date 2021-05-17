@@ -57,7 +57,7 @@ class EventDetection:
 
         # Check if ball was found before
         if self.current_ball is None or self.prev_ball is None or self.pre_prev_ball is None:
-            return None
+            return None, None
 
         cv2.line(frame, (self.current_ball[0], self.current_ball[1]), (self.pre_prev_ball[0], self.pre_prev_ball[1]),
                  (0, 255, 0), 4, cv2.LINE_AA)
@@ -74,15 +74,23 @@ class EventDetection:
 
             if BallInOut >= 0:
                 # Ball In
-                return False
+                team = self.check_ball_side()
+                return False, team
             else:
                 # Ball Out
-                return True
+                team = self.check_ball_side()
+                return True, team
         # No ball event
-        return None
+        return None, None
 
     def claculate_ball_slope(self, pointA, pointB):
         if (pointA[0] - pointB[0]) == 0:
             return 0
 
         return int((pointA[1] - pointB[1]) / (pointA[0] - pointB[0]))
+    
+    def check_ball_side(self, LeftDown, RightUp):
+        center = (LeftDown[0] + RightUp[0]) / 2
+        if self.current_ball[0] < center: return 0
+        else : return 1
+            

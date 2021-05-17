@@ -61,23 +61,30 @@ class Game(QWidget, UI_Game):
         self.game_view.setPixmap(qt_img)
     
 
-    def update_alert_slot(self, isOut, team):
+    def update_alert_slot(self, isOut= None, team=None):
         
         currentAlertTime = time.time()
                 
         if self.lastAlertTime is not None :
             if self.lastAlertTime + 5 < currentAlertTime :
                 self.lastAlertTime = None
+                self.alert.hide()
             else :
-                self.alert_event_name.setText("")
                 return
         
-        if isOut:
+        team_color = "rgb(50, 50, 200)"
+        if team == 1 : team_color = "rgb(200, 50, 50)"
+        self.alert_team_color.setStyleSheet(f"background-color:{team_color};\n"
+                                            "border-style:outset;\n"
+                                            "border-radius:10px;\n"
+                                            "color: rgb(250, 255, 255);\n"
+                                            "font: 14pt;")
+        if isOut == True:
             self.lastAlertTime = time.time()
             self.alert_event_name.setText("Ball Out")
             self.alert.show()
             
-        else:
+        elif isOut == False:
             self.lastAlertTime = time.time()
             self.alert_event_name.setText("Ball In")
             self.alert.show()
@@ -118,6 +125,7 @@ class Game(QWidget, UI_Game):
         game_time = time.gmtime(delta_time.total_seconds())
         game_time = time.strftime('%H:%M:%S', game_time)
         self.game_time.setText(game_time)
+        self.update_alert_slot()
         
     def gamma_value_changed(self, value):
         self.detector.field_detector.Gamma_Min = int(value)

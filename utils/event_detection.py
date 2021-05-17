@@ -74,11 +74,11 @@ class EventDetection:
 
             if BallInOut >= 0:
                 # Ball In
-                team = self.check_ball_side()
+                team = self.check_ball_side(LeftDown, RightUp)
                 return False, team
             else:
                 # Ball Out
-                team = self.check_ball_side()
+                team = self.check_ball_side(LeftDown, RightUp)
                 return True, team
         # No ball event
         return None, None

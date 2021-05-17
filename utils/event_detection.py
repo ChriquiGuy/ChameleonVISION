@@ -90,7 +90,7 @@ class EventDetection:
         return int((pointA[1] - pointB[1]) / (pointA[0] - pointB[0]))
     
     def check_ball_side(self, LeftDown, RightUp):
-        center = (LeftDown[0] + RightUp[0]) / 2
+        center = int((LeftDown[0] + RightUp[0]) / 2)
         if self.current_ball[0] < center: return 0
         else : return 1
             

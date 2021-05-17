@@ -14,6 +14,9 @@ class Game(QWidget, UI_Game):
     timer = None
     start_time = None
     lastAlertTime = None
+    current_alert_team = None
+    current_alert_time = None
+    
 
     def __init__(self, parent=None):
         super(Game, self).__init__(parent)
@@ -51,6 +54,10 @@ class Game(QWidget, UI_Game):
         self.stop_btn.clicked.connect(self.on_stop_btn_click)
         self.game_btn.clicked.connect(self.on_game_btn_click)
         self.gamma_slider.valueChanged.connect(self.gamma_value_changed)
+        self.alert_true_btn.clicked.connect(self.on_true_alert_btn_click)
+        self.alert_false_btn.clicked.connect(self.on_false_alert_btn_click)
+        
+        
         
 
 #### SLOTS ####
@@ -66,7 +73,7 @@ class Game(QWidget, UI_Game):
         currentAlertTime = time.time()
                 
         if self.lastAlertTime is not None :
-            if self.lastAlertTime + 5 < currentAlertTime :
+            if self.lastAlertTime + 10 < currentAlertTime :
                 self.lastAlertTime = None
                 self.alert.hide()
             else :
@@ -82,11 +89,15 @@ class Game(QWidget, UI_Game):
         if isOut == True:
             self.lastAlertTime = time.time()
             self.alert_event_name.setText("Ball Out")
+            self.current_alert_team = team
+            self.current_alert_time = self.game_time.text()
             self.alert.show()
             
         elif isOut == False:
             self.lastAlertTime = time.time()
             self.alert_event_name.setText("Ball In")
+            self.current_alert_team = team
+            self.current_alert_time = self.game_time.text()
             self.alert.show()
   
   
@@ -129,3 +140,23 @@ class Game(QWidget, UI_Game):
         
     def gamma_value_changed(self, value):
         self.detector.field_detector.Gamma_Min = int(value)
+        
+    def on_true_alert_btn_click(self):
+        self.update_score()
+        self.alert.hide()
+        
+    def on_false_alert_btn_click(self):
+        self.alert.hide()
+        self.lastAlertTime = None
+        
+    def update_score(self):
+        if self.current_alert_team == 1:
+            self.red_points.setText(str(int(self.red_points.text()) + 1))
+        else:
+            self.blue_points.setText(str(int(self.blue_points.text()) + 1))
+        
+            
+        
+        
+        
+        

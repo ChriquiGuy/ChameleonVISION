@@ -1,0 +1,23 @@
+Check:
+service nginx start
+service nginx stop
+service --status-all
+
+Start:
+service nginx start
+service --status-all
+
+Recive:
+rtmp://127.0.0.1:1935/ChameleonVISION/1234
+
+Send:
+In PC CMD check ip - (ifconfig -a)
+(enp5s0)
+
+In drone:
+rtmp://Computer_Ip_adress/ChameleonVISION/1234 
+
+
+
+
+

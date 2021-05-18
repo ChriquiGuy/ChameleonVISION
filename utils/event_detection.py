@@ -13,11 +13,10 @@ class EventDetection:
     current_slop = None
     prev_slop = None
     found_last_frame = False
+    last_player_touch = None
+    current_player_touch = None
 
-    def check_ball_event(self, frame, classes, boxes, LeftUp, LeftDown, RightDown, RightUp):
-
-        # Variable to check if the ball is inside a player's BOX
-        ballBox = 0
+    def check_ball_event(self, frame, classes, boxes, LeftUp, LeftDown, RightDown, RightUp, field_center):
 
         # Ball
         ball_index = [index for index, object_class in enumerate(classes) if object_class == 1]
@@ -29,9 +28,15 @@ class EventDetection:
 
         playersBoxes_ids = self.tracker.update(playersBoxes)
 
+
+
+        # Variable to check if the ball is inside a player's BOX
+        ball_inside_player = False
+        self.current_player_touch = None
+        
         for playerBox in playersBoxes_ids:
 
-            x, y, w, h, playerIndex = playerBox
+            x, y, w, h ,_= playerBox
 
             playerLeftUp = (x, y)
             playerLeftDown = (x, y + h)
@@ -44,7 +49,16 @@ class EventDetection:
 
             # Check if ball inside the boundingBoxes of the players
             if ballInOut_playerBox >= 0:
-                ballBox += 1
+                self.last_player_touch = (x , y , w , h )
+                self.current_player_touch = self.last_player_touch
+                ball_inside_player = True
+                
+                self.current_slop = None
+                self.prev_slop = None
+                self.prev_ball = None
+                self.pre_prev_ball = None
+                
+                return None, None
 
         # If ball was found
         if len(ball) == 1:
@@ -61,40 +75,63 @@ class EventDetection:
 
         self.current_slop = self.claculate_ball_slope(self.prev_ball, self.current_ball)
         self.prev_slop = self.claculate_ball_slope(self.pre_prev_ball, self.prev_ball)
+        
         FieldContour = np.array([LeftUp, LeftDown, RightDown, RightUp])
         FieldContour.reshape((-1, 1, 2))
 
         # Check change direction and if the ball is inside a player's BOX
-        if (self.current_slop != self.prev_slop) and (ballBox == 0):
+        if (abs(self.current_slop) - abs(self.prev_slop) > 30) and  not ball_inside_player:
 
             BallInOut = int(cv2.pointPolygonTest(FieldContour, self.current_ball, True))
 
             if BallInOut >= 0:
                 # Ball In
-                team = self.check_ball_side(LeftDown, RightUp)
+                team = self.check_event_side(field_center, True)
                 return False, team
             else:
                 # Ball Out
-                team = self.check_ball_side(LeftDown, RightUp)
+                team = self.check_event_side(field_center, False)
                 return True, team
         # No ball event
         return None, None
 
-    def claculate_ball_slope(self, pointA, pointB):
-        if (pointA[0] - pointB[0]) == 0:
-            return 0
-
-        return int((pointA[1] - pointB[1]) / (pointA[0] - pointB[0]))
     
-    def check_ball_side(self, LeftDown, RightUp):
-        center = int((LeftDown[0] + RightUp[0]) / 2)
-        if self.current_ball[0] < center: return 0
+    def claculate_ball_slope(self, pointA, pointB):
+        slope_line = (pointA[0], pointA[1], pointB[0], pointB[1])
+        slope = (180 / np.pi) * np.arctan2(slope_line[3]-slope_line[1], slope_line[2] - slope_line[0])
+        print(slope)
+        return slope
+    
+    
+    def check_event_side(self, field_center, is_ball_in):
+        ball_side = self.get_object_side(self.current_ball, field_center)
+        last_player_side = self.get_object_side(self.last_player_touch, field_center)
+        
+        if ball_side == last_player_side :
+            return int(not ball_side)        
+        else:
+            if is_ball_in : return last_player_side
+            else : return ball_side
+        
+    def get_object_side(self, obj_point, field_center):
+        if obj_point[0] < field_center: return 0
         else : return 1
         
-    def draw_slop(self, frame):
         
+    def draw_event(self, frame):
+
         if self.current_ball and self.pre_prev_ball and self.pre_prev_ball:
             cv2.line(frame, (self.current_ball[0], self.current_ball[1]), (self.pre_prev_ball[0], self.pre_prev_ball[1]),
                 (0, 255, 0), 4, cv2.LINE_AA)
+            
+            cv2.putText(frame, f'slop = {abs(self.current_slop) - abs(self.prev_slop)}', (self.current_ball[0], self.current_ball[1]),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+            
+        if self.current_player_touch:
+            x, y, w, h = self.current_player_touch
+            playerLeftUp = (x, y)
+            playerRightDown = (x + w, y + h)
+            cv2.rectangle(frame, playerLeftUp, playerRightDown, (0,255,253), 2)
+            
         return frame
             

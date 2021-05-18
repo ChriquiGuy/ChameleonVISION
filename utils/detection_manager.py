@@ -1,11 +1,13 @@
 import cv2
 import numpy as np
-
+import time
 from PyQt5.QtCore import pyqtSignal, QThread, QObject
 
 from utils.object_detection import ObjectDetection
 from utils.field_detection import FieldDetection
 from utils.event_detection import EventDetection
+from utils.stream_stabilizer import StreamStabilizer
+
 
 
 class Detector(QThread):
@@ -22,10 +24,14 @@ class Detector(QThread):
         self.field_detector = None
         self.o_detection = None
         self.event_detector = None
+        self.stabilizer = None
+        
         
         
 
     def run(self):
+        
+        self.stabilizer = StreamStabilizer()
 
         # Init object detection method
         self.o_detection = ObjectDetection()
@@ -44,7 +50,6 @@ class Detector(QThread):
         # Load video
         cap = cv2.VideoCapture("./videos/volley.mp4")
         
-        skip_frames = 350
 
         while self._run_flag:
             
@@ -52,11 +57,11 @@ class Detector(QThread):
             
             ret, current_frame = cap.read()
             
-            if skip_frames != 0:
-                skip_frames = skip_frames -1 
-                continue
+            # current_frame = self.stabilizer.stabilizer_frame(current_frame)
 
             if ret:
+                
+                # time.sleep(0.1)
 
                 # Detect objects
                 classes, scores, detection_boxes = self.o_detection.detect(current_frame)
@@ -68,7 +73,7 @@ class Detector(QThread):
                 result_frame = current_frame.copy()
 
                 # Detect Events
-                ball_out_event, team = self.event_detector.check_ball_event(result_frame, classes, detection_boxes, LeftUp, LeftDown, RightDown, RightUp)
+                ball_out_event, team = self.event_detector.check_ball_event(result_frame, classes, detection_boxes, LeftUp, LeftDown, RightDown, RightUp, field_center)
 
                 # Main screen
                 if self.debug_flag:
@@ -80,13 +85,13 @@ class Detector(QThread):
                     result_frame = self.o_detection.draw_objects(result_frame, classes, scores, detection_boxes, field_center)
                     
                     #Draw ball slop
-                    result_frame = self.event_detector.draw_slop(result_frame)
+                    result_frame = self.event_detector.draw_event(result_frame)
 
                 # Calibration screen
                 if self.calibration_flag:
                     result_frame = self.field_detector.calibration(result_frame)
 
-                if ball_out_event is not None:
+                if ball_out_event is not None and team is not None:
                     self.ball_event_signal.emit(ball_out_event, team)
 
                 # Show to screen

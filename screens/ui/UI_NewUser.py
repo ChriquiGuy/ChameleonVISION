@@ -12,7 +12,7 @@ class UI_NewUser(object):
     def setupUi(self, NewUser):
         NewUser.setObjectName("NewUser")
         NewUser.resize(1850, 1050)
-        oImage = QImage("../assets/Logo.png")
+        oImage = QImage("./assets/Logo.png")
         sImage = oImage.scaled(QSize(1850, 1050))
         palette = QPalette()
         palette.setBrush(10, QBrush(sImage))

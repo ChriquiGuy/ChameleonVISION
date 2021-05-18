@@ -12,7 +12,7 @@ class UI_Login(object):
         Outsecure.setObjectName("Outsecure")
         Outsecure.resize(1850, 1050)
         Outsecure.setMouseTracking(True)
-        oImage = QImage("../assets/Logo.png")
+        oImage = QImage("./assets/Logo.png")
         sImage = oImage.scaled(QSize(1850, 1050))
         palette = QPalette()
         palette.setBrush(10, QBrush(sImage))

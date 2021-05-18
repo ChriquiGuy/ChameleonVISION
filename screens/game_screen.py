@@ -76,11 +76,11 @@ class Game(QWidget, UI_Game):
         currentAlertTime = time.time()
                 
         if self.lastAlertTime is not None :
-            if self.lastAlertTime + 10 < currentAlertTime :
+            if self.lastAlertTime + 5 < currentAlertTime :
                 self.lastAlertTime = None
                 self.alert.hide()
-            else :
-                return
+            else : return
+                
         
         team_color = "rgb(50, 50, 200)"
         if team == 1 : team_color = "rgb(200, 50, 50)"

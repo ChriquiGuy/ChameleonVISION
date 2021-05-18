@@ -32,6 +32,7 @@ class FieldDetection:
     DownLine = None
     RightLine = None
     NetLine = None
+    field_center = None
 
     LeftUp = None
     LeftDown = None
@@ -80,10 +81,11 @@ class FieldDetection:
             if self.UpLine is not None and self.RightLine is not None:
                 # Right up corner
                 self.RightUp = self.line_intersection(self.UpLine, self.RightLine)
+            
+            if self.NetLine:
+                self.field_center = (self.NetLine[0] + self.NetLine[2]) // 2
 
-            field_center = (self.LeftDown[0] + self.RightDown[0]) / 2
-
-            return self.LeftUp, self.LeftDown, self.RightDown, self.RightUp, field_center
+            return self.LeftUp, self.LeftDown, self.RightDown, self.RightUp, self.field_center
 
         except NameError:
             print("FieldDetection.detect_field: error occurred")

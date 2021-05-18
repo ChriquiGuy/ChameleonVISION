@@ -26,7 +26,41 @@ body, div, dl, dt, dd, ul, ol, li, h2, h3, h4, h5, h6, pre, form, p, blockquote,
   font-size: 13px;
   direction: ltr;
 }
+/* ids */
 
+#tbl-data{
+  display: none;
+}
+
+#save_data{
+  display:none;
+  float: right;
+  margin-top: -1em;
+}
+
+#h1_first_team{
+  display:none;
+  font-size: 4vw;
+  float: left;
+  margin-left: 5em;
+  margin-right: 9.6em;
+}
+
+#h1_second_team{
+  display:none;
+  font-size: 4vw;
+}
+
+#mychart{
+  display:none;
+}
+
+#projectFacts{
+  display: none;
+}
+.item{
+  visibility: visible;
+}
 .sectionClass {
   /* padding: 0px 0px 50px 0px; */
   position: relative;
@@ -215,10 +249,6 @@ footer p strong {
   position: absolute;
 }
 
-
-
-
-
 .trans{
   opacity: 1;
   -webkit-transform: translateX(0px);
@@ -241,4 +271,57 @@ footer p strong {
     footer p{
           font-size: 14px;
     }
+}
+
+/* Popup container */
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.popup .popuptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 116%;
+  left: 19%;
+  margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 80%;
+  padding-left: 15px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
 }

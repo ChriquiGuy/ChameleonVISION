@@ -13,6 +13,7 @@ from utils.stream_stabilizer import StreamStabilizer
 class Detector(QThread):
     change_pixmap_signal = pyqtSignal(np.ndarray)
     ball_event_signal = pyqtSignal(bool, int)
+    in_serve_position = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -20,6 +21,7 @@ class Detector(QThread):
         self.debug_flag = False
         self.calibration_flag = False
         self.play_flag = False
+        self.switch_flag = False
         
         self.field_detector = None
         self.o_detection = None
@@ -74,7 +76,9 @@ class Detector(QThread):
 
                 # Detect Events
                 ball_out_event, team = self.event_detector.check_ball_event(result_frame, classes, detection_boxes, LeftUp, LeftDown, RightDown, RightUp, field_center)
-
+                if self.switch_flag : team = not(team)
+                serve_event = self.event_detector.is_in_serve_position(LeftUp[0], RightUp[0])
+                
                 # Main screen
                 if self.debug_flag:
 
@@ -85,7 +89,7 @@ class Detector(QThread):
                     result_frame = self.o_detection.draw_objects(result_frame, classes, scores, detection_boxes, field_center)
                     
                     #Draw ball slop
-                    result_frame = self.event_detector.draw_event(result_frame)
+                    result_frame = self.event_detector.draw_event(result_frame, field_center)
 
                 # Calibration screen
                 if self.calibration_flag:
@@ -93,6 +97,10 @@ class Detector(QThread):
 
                 if ball_out_event is not None and team is not None:
                     self.ball_event_signal.emit(ball_out_event, team)
+                    
+                if serve_event:
+                    self.in_serve_position.emit()
+                    
 
                 # Show to screen
                 self.change_pixmap_signal.emit(result_frame)

@@ -99,7 +99,6 @@ class EventDetection:
     def claculate_ball_slope(self, pointA, pointB):
         slope_line = (pointA[0], pointA[1], pointB[0], pointB[1])
         slope = (180 / np.pi) * np.arctan2(slope_line[3]-slope_line[1], slope_line[2] - slope_line[0])
-        print(slope)
         return slope
     
     
@@ -118,9 +117,10 @@ class EventDetection:
         else : return 1
         
         
-    def draw_event(self, frame):
+    def draw_event(self, frame, field_center):
 
         if self.current_ball and self.pre_prev_ball and self.pre_prev_ball:
+            
             cv2.line(frame, (self.current_ball[0], self.current_ball[1]), (self.pre_prev_ball[0], self.pre_prev_ball[1]),
                 (0, 255, 0), 4, cv2.LINE_AA)
             
@@ -133,5 +133,36 @@ class EventDetection:
             playerRightDown = (x + w, y + h)
             cv2.rectangle(frame, playerLeftUp, playerRightDown, (0,255,253), 2)
             
+        if self.current_ball and self.last_player_touch:
+            ball_side = self.get_object_side(self.current_ball, field_center)
+            last_player_side = self.get_object_side(self.last_player_touch, field_center)
+            
+            cv2.putText(frame, f'ball_side = {ball_side}', (640, 100),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+            
+            cv2.putText(frame, f'last_player_side = {last_player_side}', (640, 50),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+            
         return frame
+    
+    
+    def is_in_serve_position(self, left, rigth):
+
+            if not self.last_player_touch: return False
+            x, y, w, h = self.last_player_touch
+            playerLeftUp = (x, y)
+            playerLeftDown = (x, y + h)
+            playerRightDown = (x + w, y + h)
+            playerRightUp = (x + w, y)
+
+            playerContour = np.array([playerLeftUp, playerLeftDown, playerRightDown, playerRightUp])
+            playerContour.reshape((-1, 1, 2))
+            ballInOut_playerBox = int(cv2.pointPolygonTest(playerContour, self.current_ball, True))
+            
+            if ballInOut_playerBox >= 0 and (x < left or x > rigth):
+                return True
+            else:
+                return False
+                
+                
             

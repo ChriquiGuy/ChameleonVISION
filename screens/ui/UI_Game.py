@@ -34,7 +34,7 @@ class UI_Game(object):
 "font: 14pt;")
         self.logo.setAlignment(QtCore.Qt.AlignCenter)
         self.logo.setObjectName("logo")
-        self.blue_points = QtWidgets.QLabel(Game)
+        self.blue_points = QtWidgets.QLineEdit(Game)
         self.blue_points.setGeometry(QtCore.QRect(1000, 30, 71, 71))
         self.blue_points.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "border-style:outset;\n"
@@ -43,7 +43,7 @@ class UI_Game(object):
 "font: 14pt;")
         self.blue_points.setAlignment(QtCore.Qt.AlignCenter)
         self.blue_points.setObjectName("blue_points")
-        self.red_points = QtWidgets.QLabel(Game)
+        self.red_points = QtWidgets.QLineEdit(Game)
         self.red_points.setGeometry(QtCore.QRect(1190, 30, 71, 71))
         self.red_points.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "border-style:outset;\n"
@@ -52,7 +52,7 @@ class UI_Game(object):
 "font: 14pt;")
         self.red_points.setAlignment(QtCore.Qt.AlignCenter)
         self.red_points.setObjectName("red_points")
-        self.blue_name = QtWidgets.QLabel(Game)
+        self.blue_name = QtWidgets.QLineEdit(Game)
         self.blue_name.setGeometry(QtCore.QRect(610, 30, 361, 71))
         self.blue_name.setStyleSheet("background-color: rgb(50, 50, 200);\n"
 "border-style:outset;\n"
@@ -61,7 +61,7 @@ class UI_Game(object):
 "font: 14pt;")
         self.blue_name.setAlignment(QtCore.Qt.AlignCenter)
         self.blue_name.setObjectName("blue_name")
-        self.red_name = QtWidgets.QLabel(Game)
+        self.red_name = QtWidgets.QLineEdit(Game)
         self.red_name.setGeometry(QtCore.QRect(1290, 30, 361, 71))
         self.red_name.setStyleSheet("background-color: rgb(200, 50, 50);\n"
 "border-style:outset;\n"
@@ -117,6 +117,17 @@ class UI_Game(object):
 "color: rgb(10, 10, 10);\n"
 "font: 10pt;")
         self.debug_btn.setObjectName("debug_btn")
+        
+        
+        self.switch_btn = QtWidgets.QPushButton(Game)
+        self.switch_btn.setGeometry(QtCore.QRect(1105, 40, 51, 51))
+        self.switch_btn.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"border-style:outset;\n"
+"border-radius:15px;\n"
+"color: rgb(10, 10, 10);\n"
+"font: 10pt;")
+        self.switch_btn.setObjectName("switch_btn")
+        
         self.gamma_slider = QtWidgets.QSlider(Game)
         self.gamma_slider.setGeometry(QtCore.QRect(930, 220, 401, 51))
         self.gamma_slider.setStyleSheet("background-color: rgba(20, 20, 20, 90);\n"
@@ -255,6 +266,7 @@ class UI_Game(object):
         self.play_background.raise_()
         self.game_time.raise_()
         self.debug_btn.raise_()
+        self.switch_btn.raise_()
         self.gamma_slider.raise_()
         self.play_btn.raise_()
         self.stop_btn.raise_()
@@ -277,6 +289,7 @@ class UI_Game(object):
         self.red_name.setText(_translate("MainWindow", "Team Red"))
         self.game_time.setText(_translate("MainWindow", "00:00:00"))
         self.debug_btn.setText(_translate("MainWindow", "Debug"))
+        self.switch_btn.setText(_translate("MainWindow", "←\n→"))
         self.play_btn.setText(_translate("MainWindow", "Play"))
         self.stop_btn.setText(_translate("MainWindow", "| |"))
         self.game_btn.setText(_translate("MainWindow", "Game"))

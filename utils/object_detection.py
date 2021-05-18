@@ -55,3 +55,10 @@ class ObjectDetection:
                 cv2.putText(frame, label, (box[0], box[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
 
         return frame
+    
+    def switch_sides(self):
+        color_0 = COLORS[0]
+        color_1 = COLORS[1]
+        COLORS[1] = color_0
+        COLORS[0] = color_1
+        

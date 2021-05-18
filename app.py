@@ -19,20 +19,24 @@ class GUIController:
 
     def show_game_window(self):
         self.game = game_window.Game()
-        # self.login.close()
+        self.login.close()
         self.game.show()
 
     def show_newuser_window(self):
         self.newuser = new_user_window.Newuser()
-        self.newuser.switch_window.connect(self.show_login_window)
+        self.newuser.switch_window.connect(self.back_to_login)
         self.login.close()
         self.newuser.show()
+        
+    def back_to_login(self):
+        self.newuser.close()
+        self.show_login_window()
 
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
     controller = GUIController()
-    controller.show_game_window()
+    controller.show_login_window()
     sys.exit(app.exec_())
 
 

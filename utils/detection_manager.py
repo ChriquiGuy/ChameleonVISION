@@ -69,7 +69,7 @@ class Detector(QThread):
                 classes, scores, detection_boxes = self.o_detection.detect(current_frame)
 
                 # Detect field
-                LeftUp, LeftDown, RightDown, RightUp, field_center = self.field_detector.detect_field(current_frame)
+                LeftUp, LeftDown, RightDown, RightUp, NetLine,  field_center = self.field_detector.detect_field(current_frame)
 
                 # Debug draw detections
                 result_frame = current_frame.copy()
@@ -100,6 +100,8 @@ class Detector(QThread):
                     
                 if serve_event:
                     self.in_serve_position.emit()
+                    
+                # self.event_detector.check_net_touch(result_frame, NetLine)
                     
 
                 # Show to screen

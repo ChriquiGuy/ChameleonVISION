@@ -16,6 +16,7 @@ class UI_Game(object):
         Game.setMinimumSize(QtCore.QSize(1920, 1080))
         Game.setMaximumSize(QtCore.QSize(1920, 1080))
         Game.setStyleSheet("background-color: rgb(50, 50, 50);")
+        Game.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.game_view = QtWidgets.QLabel(Game)
         self.game_view.setGeometry(QtCore.QRect(490, 200, 1280, 720))
         self.game_view.setStyleSheet("background-color: rgb(250, 250, 250);\n"

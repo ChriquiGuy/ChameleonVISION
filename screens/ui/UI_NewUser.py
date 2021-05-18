@@ -12,6 +12,7 @@ class UI_NewUser(object):
     def setupUi(self, NewUser):
         NewUser.setObjectName("NewUser")
         NewUser.resize(1850, 1050)
+        NewUser.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         oImage = QImage("./assets/Logo.png")
         sImage = oImage.scaled(QSize(1850, 1050))
         palette = QPalette()

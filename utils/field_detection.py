@@ -55,7 +55,7 @@ class FieldDetection:
 
         if lines is not None:
             slopeLines = self.SlopeCalc(lines)
-            self.NetLine = self.LinesFilter(slopeLines, NTL, NTR, 0, 2, True)
+            self.NetLine = self.LinesFilter(slopeLines, NTL, NTR, 0, 2, None)
             self.UpLine = self.LinesFilter(slopeLines, UTT, DTT, 1, 3, False)
             self.LeftLine = self.LinesFilter(slopeLines, LTL, LTR, 0, 2, True)
             self.DownLine = self.LinesFilter(slopeLines, UTB, DTB, 1, 3, False)
@@ -85,7 +85,7 @@ class FieldDetection:
             if self.NetLine:
                 self.field_center = (self.NetLine[0] + self.NetLine[2]) // 2
 
-            return self.LeftUp, self.LeftDown, self.RightDown, self.RightUp, self.field_center
+            return self.LeftUp, self.LeftDown, self.RightDown, self.RightUp, self.NetLine, self.field_center
 
         except NameError:
             print("FieldDetection.detect_field: error occurred")
@@ -125,6 +125,10 @@ class FieldDetection:
 
         if isVertical:
             slopeLines = slopeLines[slopeLines[..., 4] > 70]  # slope
+            
+        elif isVertical is None:
+            slopeLines = slopeLines[slopeLines[..., 4] > 50]  # slope
+            
         else:
             slopeLines = slopeLines[slopeLines[..., 4] < 5]  # slope
 

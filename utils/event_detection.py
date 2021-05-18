@@ -73,8 +73,8 @@ class EventDetection:
         if self.current_ball is None or self.prev_ball is None or self.pre_prev_ball is None:
             return None, None
 
-        self.current_slop = self.claculate_ball_slope(self.prev_ball, self.current_ball)
-        self.prev_slop = self.claculate_ball_slope(self.pre_prev_ball, self.prev_ball)
+        self.current_slop = self.claculate_slope(self.prev_ball, self.current_ball)
+        self.prev_slop = self.claculate_slope(self.pre_prev_ball, self.prev_ball)
         
         FieldContour = np.array([LeftUp, LeftDown, RightDown, RightUp])
         FieldContour.reshape((-1, 1, 2))
@@ -96,7 +96,7 @@ class EventDetection:
         return None, None
 
     
-    def claculate_ball_slope(self, pointA, pointB):
+    def claculate_slope(self, pointA, pointB):
         slope_line = (pointA[0], pointA[1], pointB[0], pointB[1])
         slope = (180 / np.pi) * np.arctan2(slope_line[3]-slope_line[1], slope_line[2] - slope_line[0])
         return slope
@@ -167,6 +167,19 @@ class EventDetection:
                 return True
             else:
                 return False
+        
+            
+    def check_net_touch(self, frame,  NetLine):
+        
+        if NetLine is None : return
+        net_slop = abs(self.claculate_slope((NetLine[0], NetLine[1]), (NetLine[2], NetLine[3])))
+        if net_slop > 80 :
+            cv2.line(frame, (NetLine[0], NetLine[1]), (NetLine[2], NetLine[3]),
+                (0, 255, 0), 8, cv2.LINE_AA)
+        elif net_slop > 75 :  
+            cv2.line(frame, (NetLine[0], NetLine[1]), (NetLine[2], NetLine[3]),
+                (0, 0, 255), 8, cv2.LINE_AA)
+        
                 
                 
             

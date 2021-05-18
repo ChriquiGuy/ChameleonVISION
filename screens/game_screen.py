@@ -74,7 +74,7 @@ class Game(QWidget, UI_Game):
         self.game_view.setPixmap(qt_img)
     
 
-    def update_alert_slot(self, isOut= None, team=None):
+    def update_alert_slot(self, isOut= None, team=None, netTouch= None):
         
         currentAlertTime = time.time()
                 
@@ -107,6 +107,8 @@ class Game(QWidget, UI_Game):
             self.current_alert_team = team
             self.current_alert_time = self.game_time.text()
             self.alert.show()
+
+            
   
   
               

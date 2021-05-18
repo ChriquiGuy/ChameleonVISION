@@ -77,7 +77,10 @@ class Detector(QThread):
                 # Detect Events
                 ball_out_event, team = self.event_detector.check_ball_event(result_frame, classes, detection_boxes, LeftUp, LeftDown, RightDown, RightUp, field_center)
                 if self.switch_flag : team = not(team)
-                serve_event = self.event_detector.is_in_serve_position(LeftUp[0], RightUp[0])
+                
+                serve_event = None
+                if LeftUp and RightUp:
+                    serve_event = self.event_detector.is_in_serve_position(LeftUp[0], RightUp[0])
                 
                 # Main screen
                 if self.debug_flag:

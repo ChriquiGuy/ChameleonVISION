@@ -113,7 +113,8 @@ class EventDetection:
             else : return ball_side
         
     def get_object_side(self, obj_point, field_center):
-        if obj_point[0] < field_center: return 0
+        
+        if field_center and obj_point[0] < field_center: return 0
         else : return 1
         
         
@@ -152,7 +153,7 @@ class EventDetection:
     
     def is_in_serve_position(self, left, rigth):
 
-            if not self.last_player_touch: return False
+            if not self.last_player_touch or left == None or rigth == None: return False
             x, y, w, h = self.last_player_touch
             playerLeftUp = (x, y)
             playerLeftDown = (x, y + h)

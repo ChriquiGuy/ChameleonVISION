@@ -33,7 +33,7 @@ class ObjectDetection:
 
             color = COLORS[2]
             if classid[0] == 0:
-                if get_box_center(box)[0] < field_center:
+                if field_center and get_box_center(box)[0] < field_center:
                     color = COLORS[0]
                 else:
                     color = COLORS[1]

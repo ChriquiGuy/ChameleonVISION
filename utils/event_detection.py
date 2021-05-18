@@ -59,9 +59,6 @@ class EventDetection:
         if self.current_ball is None or self.prev_ball is None or self.pre_prev_ball is None:
             return None, None
 
-        cv2.line(frame, (self.current_ball[0], self.current_ball[1]), (self.pre_prev_ball[0], self.pre_prev_ball[1]),
-                 (0, 255, 0), 4, cv2.LINE_AA)
-
         self.current_slop = self.claculate_ball_slope(self.prev_ball, self.current_ball)
         self.prev_slop = self.claculate_ball_slope(self.pre_prev_ball, self.prev_ball)
         FieldContour = np.array([LeftUp, LeftDown, RightDown, RightUp])
@@ -93,4 +90,11 @@ class EventDetection:
         center = int((LeftDown[0] + RightUp[0]) / 2)
         if self.current_ball[0] < center: return 0
         else : return 1
+        
+    def draw_slop(self, frame):
+        
+        if self.current_ball and self.pre_prev_ball and self.pre_prev_ball:
+            cv2.line(frame, (self.current_ball[0], self.current_ball[1]), (self.pre_prev_ball[0], self.pre_prev_ball[1]),
+                (0, 255, 0), 4, cv2.LINE_AA)
+        return frame
             

@@ -78,6 +78,9 @@ class Detector(QThread):
 
                     # Draw object
                     result_frame = self.o_detection.draw_objects(result_frame, classes, scores, detection_boxes, field_center)
+                    
+                    #Draw ball slop
+                    result_frame = self.event_detector.draw_slop(result_frame)
 
                 # Calibration screen
                 if self.calibration_flag:

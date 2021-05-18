@@ -137,13 +137,17 @@ class EventDetection:
             ball_side = self.get_object_side(self.current_ball, field_center)
             last_player_side = self.get_object_side(self.last_player_touch, field_center)
             
-            cv2.putText(frame, f'ball_side = {ball_side}', (640, 100),
+            cv2.putText(frame, f'ball_side = {self.int_to_side(ball_side)}', (640, 100),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
             
-            cv2.putText(frame, f'last_player_side = {last_player_side}', (640, 50),
+            cv2.putText(frame, f'last_player_side = {self.int_to_side(last_player_side)}', (640, 50),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
             
         return frame
+    
+    def int_to_side(self, _int):
+        if _int == 0 : return "Left"
+        else :return "Rigth"
     
     
     def is_in_serve_position(self, left, rigth):

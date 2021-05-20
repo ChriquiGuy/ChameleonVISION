@@ -329,4 +329,5 @@ footer p strong {
 .custom-select {
     width: 20%;
     display: none;
+    margin-top: -1em;
   }

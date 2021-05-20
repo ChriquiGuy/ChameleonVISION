@@ -45,61 +45,70 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 					readXlsxFile(input.files[0]).then(function(data) {
 					console.log(data);
 					var form = document.createElement("form");
-				 form.setAttribute("method", "post");
-				 form.setAttribute("action", "save.php");
+					 form.setAttribute("method", "post");
+					 form.setAttribute("action", "save.php");
 
-				 // Create an input element for Full Name
-				 var game_name = document.createElement("input");
-				 game_name.setAttribute("type", "text");
-				 game_name.setAttribute("name", "GameName");
-				 game_name.value= data[1][0];
+					 // Create an input element for Full Name
+					 var game_name = document.createElement("input");
+					 game_name.setAttribute("type", "text");
+					 game_name.setAttribute("name", "GameName");
+					 game_name.value= data[1][0];
 
-					// Create an input element for date of birth
-					var team_A = document.createElement("input");
-					team_A.setAttribute("type", "text");
-					team_A.setAttribute("name", "TeamA");
-					team_A.value= data[1][1];
+						// Create an input element for date of birth
+						var team_A = document.createElement("input");
+						team_A.setAttribute("type", "text");
+						team_A.setAttribute("name", "TeamA");
+						team_A.value= data[1][1];
 
-					// Create an input element for emailID
-					var team_B = document.createElement("input");
-					team_B.setAttribute("type", "text");
-					team_B.setAttribute("name", "TeamB");
-					team_B.value= data[1][2];
+						// Create an input element for emailID
+						var team_B = document.createElement("input");
+						team_B.setAttribute("type", "text");
+						team_B.setAttribute("name", "TeamB");
+						team_B.value= data[1][2];
 
-					 // Create an input element for password
-					 var where_gamed_play = document.createElement("input");
-					 where_gamed_play.setAttribute("type", "text");
-					 where_gamed_play.setAttribute("name", "where_gamed_play");
-					 where_gamed_play.value= data[1][3];
+						 // Create an input element for password
+						 var where_gamed_play = document.createElement("input");
+						 where_gamed_play.setAttribute("type", "text");
+						 where_gamed_play.setAttribute("name", "where_gamed_play");
+						 where_gamed_play.value= data[1][3];
 
-						// Create an input element for retype-password
-						var date_of_game = document.createElement("input");
-						date_of_game.setAttribute("type", "text");
-						date_of_game.setAttribute("name", "date_of_game");
-						date_of_game.value= data[1][4];
-
-
-						// Create an input element for retype-password
-						var weather = document.createElement("input");
-						weather.setAttribute("type", "text");
-						weather.setAttribute("name", "Weather");
-						weather.value= data[1][5];
-
-						// Create an input element for retype-password
-						var ball_in_acc_team_a = document.createElement("input");
-						ball_in_acc_team_a.setAttribute("type", "text");
-						ball_in_acc_team_a.setAttribute("name", "ball_in_acc_team_a");
-						ball_in_acc_team_a.value= data[1][6];
-
-						// Create an input element for retype-password
-						var ball_in_acc_team_b = document.createElement("input");
-						ball_in_acc_team_b.setAttribute("type", "text");
-						ball_in_acc_team_b.setAttribute("name", "ball_in_acc_team_b");
-						ball_in_acc_team_b.value= data[1][7];
+							// Create an input element for retype-password
+							var date_of_game = document.createElement("input");
+							date_of_game.setAttribute("type", "text");
+							date_of_game.setAttribute("name", "date_of_game");
+							date_of_game.value= data[1][4];
 
 
+							// Create an input element for retype-password
+							var weather = document.createElement("input");
+							weather.setAttribute("type", "text");
+							weather.setAttribute("name", "Weather");
+							weather.value= data[1][5];
 
-							 // create a submit button
+							// Create an input element for retype-password
+							var ball_in_acc_team_a = document.createElement("input");
+							ball_in_acc_team_a.setAttribute("type", "text");
+							ball_in_acc_team_a.setAttribute("name", "ball_in_acc_team_a");
+							ball_in_acc_team_a.value= data[1][6];
+
+							// Create an input element for retype-password
+							var ball_in_acc_team_b = document.createElement("input");
+							ball_in_acc_team_b.setAttribute("type", "text");
+							ball_in_acc_team_b.setAttribute("name", "ball_in_acc_team_b");
+							ball_in_acc_team_b.value= data[1][7];
+
+							var ball_out_acc_team_a = document.createElement("input");
+							ball_out_acc_team_a.setAttribute("type", "text");
+							ball_out_acc_team_a.setAttribute("name", "ball_out_acc_team_a");
+							ball_out_acc_team_a.value= data[1][8];
+
+	// ball_out_acc_team_b
+
+							var ball_out_acc_team_b = document.createElement("input");
+							ball_out_acc_team_b.setAttribute("type", "text");
+							ball_out_acc_team_b.setAttribute("name", "ball_out_acc_team_b");
+							ball_out_acc_team_b.value= data[1][9];
+								 // create a submit button
 							 var s = document.createElement("input");
 							 s.setAttribute("type", "submit");
 							 s.setAttribute("value", "Submit");
@@ -138,6 +147,14 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							 form.appendChild(ball_in_acc_team_b);
 							 form.appendChild(br.cloneNode());
 
+							 // Append the ReEnterPassword to the form
+							 form.appendChild(ball_out_acc_team_a);
+							 form.appendChild(br.cloneNode());
+
+							 // Append the ReEnterPassword to the form
+							form.appendChild(ball_out_acc_team_b);
+							form.appendChild(br.cloneNode());
+
 							 // Append the submit button to the form
 							 form.appendChild(s);
 
@@ -160,7 +177,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 									generateTableRows(table, row, i ,choose);
 								}
 								if (i > 0) {
-									var table = document.getElementById('tbl-data')
+									var table = document.getElementById('tbl-data');
 									generateTableRows(table, row, i, choose);
 								}
 								++i;
@@ -171,6 +188,8 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 								end: data[1][6],
 								duration: 3000
 							});
+							// var number1 = document.getElementById('number1');
+							// number1.innerHTML = number1.value + "%";
 							$('#number2').jQuerySimpleCounter({
 								end: data[1][8],
 								duration: 3000
@@ -183,6 +202,17 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 								end: data[1][9],
 								duration: 2500
 							});
+							let team_a_ball_in = document.getElementById("team_a_ball_in");
+							team_a_ball_in.innerHTML = data[1][1] + " ball in (%)";
+
+							let team_b_ball_in = document.getElementById("team_b_ball_in");
+							team_b_ball_in.innerHTML = data[1][2] + " ball in (%)";
+
+							let team_a_ball_out = document.getElementById("team_a_ball_out");
+							team_a_ball_out.innerHTML = data[1][1] + " ball out (%)";
+
+							let team_b_ball_out = document.getElementById("team_b_ball_out");
+							team_b_ball_out.innerHTML = data[1][2] + " ball out (%)";
 							// ctx.fillText(data[1][7].value + "%", 100,100, 200);
 							let h1_first_team = document.getElementById("h1_first_team");
 							h1_first_team.innerHTML = data[1][1];
@@ -213,12 +243,14 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							 canvas = document.getElementById("my_donut_chart");
 							}
 							canvas.style.display = "block";
-							let stats = document.getElementById("projectFacts")
+							let stats = document.getElementById("projectFacts");
 							stats.style.display = "block";
-							let excel_file_table = document.getElementById("tbl-data")
+							let excel_file_table = document.getElementById("tbl-data");
 							excel_file_table.style.display = "block";
-							let save_data_button = document.getElementById("save_data")
-							save_data_button.style.display = "block"
+							let save_data_button = document.getElementById("save_data");
+							save_data_button.style.display = "block";
+							let list = document.getElementById("list");
+							list.style.display = "block";
 						});
 					}
 
@@ -258,12 +290,13 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 					// ctx.style.display = 'none';
 					Chart.defaults.global.defaultFontSize = 20;
 					let myChart = new Chart(ctx, {
+
 						title: {
 							verticalAlign: "center"
 						},
 						type: choose,
 						data: {
-							labels: ['team A: ball in', 'team B: ball in', 'team A: ball out', 'team B: ball out'],
+							labels: [data[1][1] +': '+'ball in', data[1][2] +': '+'ball in', data[1][1] +': '+'ball out',data[1][2] +': '+'ball out'],
 							datasets: [{
 								label: 'Game statistics',
 								data: dataArray,
@@ -282,14 +315,23 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 									// 'rgba(255, 159, 64, 0.2)'
 								],
 								borderWidth: 5,
-								font: 30
+
+
 							}]
 						},
 						options: {
+							cutoutPercentage: 60,
 							scales: {
 								y: {
 									beginAtZero: true
 								},
+							},
+							tooltips: {
+							  callbacks: {
+							    label: function(tooltipItem, data) {
+							      return data['labels'][tooltipItem['index']] + ': ' + data['datasets'][0]['data'][tooltipItem['index']] + '%';
+							    }
+							  }
 							},
 						}
 					})

@@ -325,3 +325,8 @@ footer p strong {
   from {opacity: 0;}
   to {opacity:1 ;}
 }
+
+.custom-select {
+    width: 20%;
+    display: none;
+  }

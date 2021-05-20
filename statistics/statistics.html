@@ -49,11 +49,22 @@
     </tbody>
   </table>
 
+
   <!-- create the sava data button -->
   <button id="save_data" type="button" class="btn btn-success popup" onclick="myFunction()" href="#popup1">Save Data <span class="popuptext" id="myPopup">Game Data saved.</span></button>
 
+  <!-- select option -->
+  <select class="custom-select mr-sm-2" id="list" onchange="getChoosenValue()">
+  <option selected>Choose...</option>
+  <option value="donut_chart">donut chart</option>
+  <option value="bar_chart">bar chart</option>
+  </select>
+
   <!-- create the Donut chart of the statistics -->
-  <canvas id="mychart" width="400" height="150"></canvas>
+  <canvas id="my_donut_chart" width="400" height="150"></canvas>
+
+  <!-- create the Bar chart of the statistics -->
+  <canvas id="my_bar_chart" width="400" height="150"></canvas>
 
   <!-- the name of the first team -->
   <h1 id="h1_first_team"></h1>

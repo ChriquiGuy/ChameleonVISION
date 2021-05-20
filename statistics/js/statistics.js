@@ -42,7 +42,6 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 				var br = document.createElement("br");
 				var input = document.getElementById('inputGroupFile01');
 				readXlsxFile(input.files[0]).then(function(data) {
-				console.log(data);
 
 				 if(create_db_form_flag == 0){
 				 var form = document.createElement("form");
@@ -190,7 +189,6 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 				var input = document.getElementById('inputGroupFile01');
 				input.addEventListener('change', function() {
 					readXlsxFile(input.files[0]).then(function(data) {
-						console.log(data);
 						data_global = data;
 						var i = 0;
 						choose = 'doughnut';
@@ -255,7 +253,6 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 						if (i != 0) {
 							let newcell = newRow.insertCell();
 							let newText = document.createTextNode(row)
-							console.log(newText);
 							newcell.setAttribute("id", id);
 							newcell.appendChild(newText);
 							id++;
@@ -301,18 +298,29 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 				if(choose == "doughnut"){
 					var bar_chart = document.getElementById('my_bar_chart');
 					bar_chart.style.display = "none";
+					var rader_chart = document.getElementById('my_radar_chart');
+					rader_chart.style.display = "none";
 					ctx.style.display = "block";
 					dataArray = [data[1][6], data[1][7], data[1][8], data[1][9]];
 				} else{
+					if(choose == "bar"){
 					var donut_chart = document.getElementById('my_donut_chart');
 					donut_chart.style.display = "none";
+					var rader_chart = document.getElementById('my_radar_chart');
+					rader_chart.style.display = "none";
 					ctx.style.display = "block";
 					dataArray = [data[1][6], data[1][7], data[1][8], data[1][9] , 0];
+				} else {
+					var donut_chart = document.getElementById('my_donut_chart');
+					donut_chart.style.display = "none";
+					var bar_chart = document.getElementById('my_bar_chart');
+					bar_chart.style.display = "none";
+					ctx.style.display = "block";
+				}
 				}
 				// ctx.style.display = 'none';
-				Chart.defaults.global.defaultFontSize = 20;
-				let myChart = new Chart(ctx, {
 
+				let myChart = new Chart(ctx, {
 					title: {
 						verticalAlign: "center"
 					},
@@ -337,8 +345,6 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 								// 'rgba(255, 159, 64, 0.2)'
 							],
 							borderWidth: 5,
-
-
 						}]
 					},
 					options: {
@@ -347,12 +353,20 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							y: {
 								beginAtZero: true
 							},
+							pointLabels: {
+							fontSize: 16
+							},
 						},
 						tooltips: {
 							callbacks: {
 								label: function(tooltipItem, data) {
 									return data['labels'][tooltipItem['index']] + ': ' + data['datasets'][0]['data'][tooltipItem['index']] + '%';
 								}
+							}
+						},
+						legend: {
+							labels: {
+								fontSize: 20
 							}
 						},
 					}
@@ -364,15 +378,18 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 				var choose = "";
 				var id = "";
 				var choose_value = document.getElementById("list");
-				console.log(choose_value.value);
 				if(choose_value.value == "donut_chart"){
 					choose = 'doughnut';
 					id = "my_donut_chart";
 				} else {
+					if(choose_value.value == "bar_chart"){
 					choose = 'bar';
 					id = "my_bar_chart";
+				} else{
+					choose = 'radar';
+					id = "my_radar_chart";
 				}
-				console.log(choose);
+			}
 				if(choose !='choose'){
 				displayChart(data_global,choose,id);
 				}

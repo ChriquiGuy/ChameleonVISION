@@ -283,7 +283,7 @@ class UI_Game(object):
         _translate = QtCore.QCoreApplication.translate
         Game.setWindowTitle(_translate("Game", "Game"))
         self.game_view.setText(_translate("MainWindow", "Game View"))
-        self.logo.setText(_translate("MainWindow", "Chameleovision"))
+        self.logo.setText(_translate("MainWindow", "ChameleonVISION"))
         self.blue_points.setText(_translate("MainWindow", "0"))
         self.red_points.setText(_translate("MainWindow", "0"))
         self.blue_name.setText(_translate("MainWindow", "Team Blue"))

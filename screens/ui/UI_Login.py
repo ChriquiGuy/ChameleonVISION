@@ -30,16 +30,16 @@ class UI_Login(object):
         self.l_title.setObjectName("l_title")
         self.btn_Submit = QtWidgets.QPushButton(Outsecure)
         self.btn_Submit.setGeometry(QtCore.QRect(180, 200, 161, 31))
-        self.btn_Submit.setStyleSheet("color: rgb(250, 255, 255);\n"
-                                      "background-color: rgb(73, 199, 41);\n"
+        self.btn_Submit.setStyleSheet("color: rgb(0, 0, 0);\n"
+                                      "background-color: rgb(255, 255, 0);\n"
                                       "border-style:outset;\n"
                                       "border-radius:10px;\n"
                                       "font: 14pt \"Arial\";")
         self.btn_Submit.setObjectName("btn_Submit")
         self.btn_newuser = QtWidgets.QPushButton(Outsecure)
         self.btn_newuser.setGeometry(QtCore.QRect(180, 240, 161, 31))
-        self.btn_newuser.setStyleSheet("color: rgb(250, 255, 255);\n"
-                                       "background-color: rgb(73, 199, 41);\n"
+        self.btn_newuser.setStyleSheet("color: rgb(0, 0, 0);\n"
+                                       "background-color: rgb(255, 255, 0);\n"
                                        "border-style:outset;\n"
                                        "border-radius:10px;\n"
                                        "font: 14pt \"Arial\";")

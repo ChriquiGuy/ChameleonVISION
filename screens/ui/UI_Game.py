@@ -16,7 +16,7 @@ class UI_Game(object):
         Game.setMinimumSize(QtCore.QSize(1920, 1080))
         Game.setMaximumSize(QtCore.QSize(1920, 1080))
         Game.setStyleSheet("background-color: rgb(50, 50, 50);")
-        Game.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        # Game.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.game_view = QtWidgets.QLabel(Game)
         self.game_view.setGeometry(QtCore.QRect(490, 200, 1280, 720))
         self.game_view.setStyleSheet("background-color: rgb(250, 250, 250);\n"
@@ -26,6 +26,22 @@ class UI_Game(object):
 "font: 14pt;")
         self.game_view.setAlignment(QtCore.Qt.AlignCenter)
         self.game_view.setObjectName("game_view")
+        
+        
+        self.replay_view = QtWidgets.QLabel(Game)
+        self.replay_view.setGeometry(QtCore.QRect(490, 200, 1280, 720))
+        self.replay_view.setStyleSheet("background-color: rgb(250, 250, 250);\n"
+"border-style:outset;\n"
+"border-radius:10px;\n"
+"color: rgb(10, 10, 10);\n"
+"font: 14pt;")
+        self.replay_view.setAlignment(QtCore.Qt.AlignCenter)
+        self.replay_view.setObjectName("replay_view")
+        
+        
+        
+        
+        
         self.logo = QtWidgets.QLabel(Game)
         self.logo.setGeometry(QtCore.QRect(40, 30, 301, 71))
         self.logo.setStyleSheet("background-color: rgb(20, 20, 20);\n"
@@ -138,6 +154,19 @@ class UI_Game(object):
 "font: 14pt;")
         self.gamma_slider.setOrientation(QtCore.Qt.Horizontal)
         self.gamma_slider.setObjectName("gamma_slider")
+        
+        
+        self.replay_slider = QtWidgets.QSlider(Game)
+        self.replay_slider.setGeometry(QtCore.QRect(930, 220, 401, 51))
+        self.replay_slider.setStyleSheet("background-color: rgba(20, 20, 20, 90);\n"
+"border-style:outset;\n"
+"border-radius:10px;\n"
+"color: rgb(10, 10, 10);\n"
+"font: 14pt;")
+        self.replay_slider.setOrientation(QtCore.Qt.Horizontal)
+        self.replay_slider.setObjectName("replay_slider")
+        
+        
         self.play_btn = QtWidgets.QPushButton(Game)
         self.play_btn.setGeometry(QtCore.QRect(1020, 970, 61, 61))
         self.play_btn.setStyleSheet("background-color: rgb(50, 200, 50);\n"
@@ -259,6 +288,7 @@ class UI_Game(object):
         self.events_background.raise_()
         self.top_bar.raise_()
         self.game_view.raise_()
+        self.replay_view.raise_()
         self.logo.raise_()
         self.blue_points.raise_()
         self.red_points.raise_()
@@ -269,6 +299,7 @@ class UI_Game(object):
         self.debug_btn.raise_()
         self.switch_btn.raise_()
         self.gamma_slider.raise_()
+        self.replay_slider.raise_()
         self.play_btn.raise_()
         self.stop_btn.raise_()
         self.verticalLayoutWidget.raise_()
@@ -283,6 +314,7 @@ class UI_Game(object):
         _translate = QtCore.QCoreApplication.translate
         Game.setWindowTitle(_translate("Game", "Game"))
         self.game_view.setText(_translate("MainWindow", "Game View"))
+        self.replay_view.setText(_translate("MainWindow", "Replay View"))
         self.logo.setText(_translate("MainWindow", "ChameleonVISION"))
         self.blue_points.setText(_translate("MainWindow", "0"))
         self.red_points.setText(_translate("MainWindow", "0"))

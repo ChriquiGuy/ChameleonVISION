@@ -112,7 +112,7 @@ class EventDetection:
 
     def get_object_side(self, obj_point, field_center):
 
-        if field_center and obj_point[0] < field_center:
+        if field_center and obj_point and obj_point[0] < field_center:
             return 0
         else:
             return 1
@@ -180,3 +180,15 @@ class EventDetection:
         elif net_slop > 75:
             cv2.line(frame, (NetLine[0], NetLine[1]), (NetLine[2], NetLine[3]),
                      (0, 0, 255), 8, cv2.LINE_AA)
+            
+            
+            
+    def reset_data(self):
+        self.current_ball = None
+        self.prev_ball = None
+        self.pre_prev_ball = None
+        self.current_slop = None
+        self.prev_slop = None
+        self.found_last_frame = False
+        self.last_player_touch = None
+        self.current_player_touch = None

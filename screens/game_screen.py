@@ -38,6 +38,9 @@ class Game(QWidget, UI_Game):
     def hide_none_start_items(self):
         self.alert.hide()
         self.gamma_slider.hide()
+        self.replay_slider.hide()
+        self.replay_view.hide()
+
         
     def init_gamma_bar(self):
         self.gamma_slider.setMinimum(0)
@@ -59,10 +62,12 @@ class Game(QWidget, UI_Game):
         self.stop_btn.clicked.connect(self.on_stop_btn_click)
         self.game_btn.clicked.connect(self.on_game_btn_click)
         self.switch_btn.clicked.connect(self.on_switch_btn_click)
-        
+        self.replay_slider.sliderReleased.connect(self.detector.replayManager.replay_slider_released)
+        self.replay_slider.sliderPressed.connect(self.detector.replayManager.replay_slider_pressed)
         self.gamma_slider.valueChanged.connect(self.gamma_value_changed)
         self.alert_true_btn.clicked.connect(self.on_true_alert_btn_click)
         self.alert_false_btn.clicked.connect(self.on_false_alert_btn_click)
+        self.alert_replay_btn.clicked.connect(self.on_replay_btn_click)
         
         
 
@@ -108,8 +113,6 @@ class Game(QWidget, UI_Game):
             self.current_alert_time = self.game_time.text()
             self.alert.show()
 
-            
-  
   
               
     def on_game_btn_click(self):
@@ -156,10 +159,26 @@ class Game(QWidget, UI_Game):
         self.update_score()
         self.update_event_logs()
         self.alert.hide()
+        self.detector.replayManager.stop()
+        self.detector.replayManager.quit()
+        self.detector.replayManager.wait()
+        self.detector.replay_flag = False
+        self.timer.start(1000)
+        self.replay_slider.hide()
+        self.replay_view.hide()
+        
         
     def on_false_alert_btn_click(self):
-        self.alert.hide()
         self.lastAlertTime = None
+        self.alert.hide()
+        self.detector.replayManager.stop()
+        self.detector.replayManager.quit()
+        self.detector.replayManager.wait()
+        self.detector.replay_flag = False
+        self.timer.start(1000)
+        self.replay_slider.hide()
+        self.replay_view.hide()
+        
         
     def update_score(self):
         if self.current_alert_team == 1:
@@ -168,13 +187,11 @@ class Game(QWidget, UI_Game):
             self.blue_points.setText(str(int(self.blue_points.text()) + 1))
             
     def update_event_logs(self):
-        
         event_element = EventElement(self.verticalLayoutWidget, self.current_alert_team, self.alert_event_name.text(), self.current_alert_time)
         self.events_holder.addWidget(event_element)
         
     def allow_alerts(self):
         self.is_alert_allowed = True
-        
             
         
     def on_switch_btn_click(self):
@@ -192,8 +209,14 @@ class Game(QWidget, UI_Game):
         self.detector.o_detection.switch_sides()
         self.detector.switch_flag = not self.detector.switch_flag
         
-        
-        
+
+    def on_replay_btn_click(self):
+        self.timer.stop()
+        self.replay_view.show()
+        self.replay_slider.show()
+        self.alert.show()
+        self.detector.replay_flag = True
+        self.detector.replayManager.start_replay(self.detector.cap, self.replay_view, self.replay_slider)        
         
   
   

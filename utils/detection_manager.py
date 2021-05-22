@@ -6,6 +6,8 @@ from PyQt5.QtCore import pyqtSignal, QThread, QObject
 from utils.object_detection import ObjectDetection
 from utils.field_detection import FieldDetection
 from utils.event_detection import EventDetection
+from utils.replay_manager import ReplayManager
+
 # from utils.stream_stabilizer import StreamStabilizer
 
 
@@ -21,15 +23,19 @@ class Detector(QThread):
         self.calibration_flag = False
         self.play_flag = False
         self.switch_flag = False
+        self.replay_flag = False
 
         self.field_detector = None
         self.o_detection = None
         self.event_detector = None
         self.stabilizer = None
+        self.replayManager = None
+        self.cap = None
 
     def run(self):
 
         # self.stabilizer = StreamStabilizer()
+        self.replayManager = ReplayManager()
 
         # Init object detection method
         self.o_detection = ObjectDetection()
@@ -46,14 +52,24 @@ class Detector(QThread):
         # cap = cv2.VideoCapture('rtmp://127.0.0.1:1935/ChameleonVISION/1234')
 
         # Load video
-        cap = cv2.VideoCapture("./videos/volley.mp4")
+        self.cap = cv2.VideoCapture("./videos/volley.mp4")
+        
+        # Jump to first alert
+        # self.cap.set(cv2.CAP_PROP_POS_FRAMES, 500)
 
         while self._run_flag:
-
+            
+            if self.replay_flag:
+                continue
+            elif self.replayManager.replay_end_frame:
+                self.cap.set(cv2.CAP_PROP_POS_FRAMES, self.replayManager.replay_end_frame)
+                self.replayManager.replay_end_frame = None
+                self.event_detector.reset_data()
+            
             if not self.play_flag:
                 continue
 
-            ret, current_frame = cap.read()
+            ret, current_frame = self.cap.read()
 
             # current_frame = self.stabilizer.stabilizer_frame(current_frame)
 
@@ -114,7 +130,7 @@ class Detector(QThread):
                 print("RTMP IS NOT CONNECTED")
 
         # shut down capture system
-        cap.release()
+        self.cap.release()
 
     def stop(self):
         """Sets run flag to False and waits for thread to finish"""

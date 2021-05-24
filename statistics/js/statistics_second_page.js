@@ -24,9 +24,12 @@ $(document).ready(function(){
 function show_db_info(){
 var game_name = document.getElementById("teams_name").value;
 var date = document.getElementById("date").value;
+var date_two = document.getElementById("date_two").value;
+
   $("#myTable").load("../php/get_user_info.php", {
       name_of_game: game_name,
-      game_date: date
+      game_date: date,
+      game_date_two: date_two,
   });
   var table = document.getElementById("myTable");
   while(table==null){
@@ -75,6 +78,10 @@ function close_popUp(){
       let data_for_x_axis = [];
       let data_for_y_axis = [];
       if(size_arr != 0){
+        // change dates fotmat
+        // for(k = 0; k<size_arr; k++){
+        //   data_from_db[k][4] = date_format_change(data_from_db[k][4]);
+        // }
         for(i = 0; i<size_arr;++i){
           data_for_x_axis.push(data_from_db[i][4]);
         }
@@ -88,6 +95,7 @@ function close_popUp(){
          console.log(data_for_y_axis);
         }
       }
+        console.log(data_from_db);
     }
       // ctx.style.display = block;
       var myChart = new Chart(ctx, {
@@ -119,3 +127,10 @@ function close_popUp(){
             }
       });
     }
+
+    // function date_format_change($date){
+    //   console.log("in date_format_change function");
+    //   var dateObj = str2date($date, "yyyy-mm-dd");
+    //   var newDate = date2str(dateObj, "dd/MM/yyyy");
+    //   return newDate;
+    // }

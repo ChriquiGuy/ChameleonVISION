@@ -19,13 +19,14 @@ $TeamA = $_POST['TeamA'];
 $TeamB = $_POST['TeamB'];
 $where_gamed_play = $_POST['where_gamed_play'];
 $date_of_game = $_POST['date_of_game'];
+$newDate = date("Y-d-m", strtotime($date_of_game));
 $Weather = $_POST['Weather'];
 $ball_in_acc_team_a = $_POST['ball_in_acc_team_a'];
 $ball_in_acc_team_b = $_POST['ball_in_acc_team_b'];
 $ball_out_acc_team_a = $_POST['ball_out_acc_team_a'];
 $ball_out_acc_team_b = $_POST['ball_out_acc_team_b'];
 
-$sql= "INSERT INTO statistics(GameName, TeamA, TeamB,WhereGamePlayed,DateOfGame,Weather,AccuracyPercentageOfBallInForTeamA,AccuracyPercentageOfBallInForTeamB, AccuracyPercentageOfBallOutForTeamA,AccuracyPercentageOfBallOutForTeamB) VALUES ('$GameName','$TeamA','$TeamB','$where_gamed_play','$date_of_game','$Weather','$ball_in_acc_team_a','$ball_in_acc_team_b','$ball_out_acc_team_a','$ball_out_acc_team_b')";
+$sql= "INSERT INTO statistics(GameName, TeamA, TeamB,WhereGamePlayed,DateOfGame,Weather,AccuracyPercentageOfBallInForTeamA,AccuracyPercentageOfBallInForTeamB, AccuracyPercentageOfBallOutForTeamA,AccuracyPercentageOfBallOutForTeamB) VALUES ('$GameName','$TeamA','$TeamB','$where_gamed_play','$newDate','$Weather','$ball_in_acc_team_a','$ball_in_acc_team_b','$ball_out_acc_team_a','$ball_out_acc_team_b')";
 
 $run = mysqli_query($conn ,$sql);
 if($run == True){
@@ -71,7 +72,10 @@ mysqli_close($conn);
           <input id ="teams_name" type="text" class="form-control" placeholder="Team's name">
         </div>
         <div class="col">
-          <input id ="date" type="text" class="form-control" placeholder="Date">
+          <input id ="date" type="text" class="form-control" placeholder="Date (format yyyy-mm-dd)">
+        </div>
+        <div class="col">
+          <input id ="date_two" type="text" class="form-control" placeholder="Date (format yyyy-mm-dd)">
         </div>
          <button type="submit" class="btn btn-primary" onclick="show_db_info()" id ="Search">Search</button>
       </div>

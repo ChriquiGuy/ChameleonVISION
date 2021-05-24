@@ -54,20 +54,22 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 					 // Create an label for game name
 					 var label_game_name = document.createElement("label");
 					 label_game_name.style.fontSize = "x-large";
-					 var text_for_game_name_label = document.createTextNode("Name of the game:");
+					 var text_for_game_name_label = document.createTextNode("Game name:");
 					 label_game_name.appendChild(text_for_game_name_label);
 
 					 // Create an input for game name
 					 var game_name = document.createElement("input");
 					 game_name.setAttribute("type", "text");
 					 game_name.setAttribute("name", "GameName");
-					 game_name.setAttribute("class", "form-control")
+					 game_name.setAttribute("class", "form-control");
+					 game_name.setAttribute("id", "game_name");
+					 game_name.setAttribute("onchange" , "form_validate(this.value)");
 					 game_name.value= data[1][0];
 
 					 // Create an label for teamA name
 					 var label_teamA_name = document.createElement("label");
 					 label_teamA_name.style.fontSize = "x-large";
-					 var text_for_teamA_name_label = document.createTextNode("Name of Team A:");
+					 var text_for_teamA_name_label = document.createTextNode("Team A:");
 					 label_teamA_name.appendChild(text_for_teamA_name_label);
 
 					 // Create an input for teamA name
@@ -81,7 +83,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 					 // Create an label for teamB name
  					 var label_teamB_name = document.createElement("label");
  					 label_teamB_name.style.fontSize = "x-large";
- 					 var text_for_teamB_name_label = document.createTextNode("Name of Team B:");
+ 					 var text_for_teamB_name_label = document.createTextNode("Team B:");
  					 label_teamB_name.appendChild(text_for_teamB_name_label);
 
 
@@ -126,7 +128,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							// Create an label for game weather
 							 var label_game_weather = document.createElement("label");
 							 label_game_weather.style.fontSize = "x-large";
-							 var text_for_game_weather_label = document.createTextNode("weather:");
+							 var text_for_game_weather_label = document.createTextNode("Weather:");
 							 label_game_weather.appendChild(text_for_game_weather_label);
 
 							// Create an input element for Weather
@@ -139,7 +141,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							// Create an label for teamA ball in
 							 var label_ball_in_acc_team_a = document.createElement("label");
 							 label_ball_in_acc_team_a.style.fontSize = "x-large";
-							 var text_for_label_ball_in_acc_team_a = document.createTextNode("team A ball in (%):");
+							 var text_for_label_ball_in_acc_team_a = document.createTextNode("Team A ball in (%):");
 							 label_ball_in_acc_team_a.appendChild(text_for_label_ball_in_acc_team_a);
 
 							 // Create an input for teamA ball in
@@ -152,7 +154,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							// Create an label for teamB ball in
 							 var label_ball_in_acc_team_b = document.createElement("label");
 							 label_ball_in_acc_team_b.style.fontSize = "x-large";
-							 var text_for_label_ball_in_acc_team_b = document.createTextNode("team B ball in (%):");
+							 var text_for_label_ball_in_acc_team_b = document.createTextNode("Team B ball in (%):");
 							 label_ball_in_acc_team_b.appendChild(text_for_label_ball_in_acc_team_b);
 
 							// Create an input element for retype-password
@@ -165,7 +167,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							// Create an label for teamA ball in
 							 var label_ball_out_acc_team_a = document.createElement("label");
 							 label_ball_out_acc_team_a.style.fontSize = "x-large";
-							 var text_for_label_ball_out_acc_team_a = document.createTextNode("team A ball out (%):");
+							 var text_for_label_ball_out_acc_team_a = document.createTextNode("Team A ball out (%):");
 							 label_ball_out_acc_team_a.appendChild(text_for_label_ball_out_acc_team_a);
 
 							var ball_out_acc_team_a = document.createElement("input");
@@ -178,7 +180,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							// Create an label for teamB ball in
 							 var label_ball_out_acc_team_b = document.createElement("label");
 							 label_ball_out_acc_team_b.style.fontSize = "x-large";
-							 var text_for_label_ball_out_acc_team_b = document.createTextNode("team B ball in (%):");
+							 var text_for_label_ball_out_acc_team_b = document.createTextNode("Team B ball out (%):");
 							 label_ball_out_acc_team_b.appendChild(text_for_label_ball_out_acc_team_b);
 
 							var ball_out_acc_team_b = document.createElement("input");
@@ -289,6 +291,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							create_db_form_flag++;
 						}
 					});
+					// form_validate();
 				}
 
 				function show_pop_up(){
@@ -486,7 +489,6 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							},
 						}
 					})
-
 			}
 
 				function getChoosenValue(){
@@ -508,4 +510,15 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 					if(choose !='choose'){
 					displayChart(data_global,choose,id);
 					}
+				}
+
+
+				function form_validate($value){
+					// var form = document.getElementById("db_form");
+					// if(typeof(element) != 'undefined' && element != null){
+			    //   bootstrapValidate('#game_name','min:5:Enter at least 5 characters')
+			    // } else{
+			    //     alert('Element does not exist!');
+			    // }
+				alert("The input value has changed. The new value is: " + val);
 				}

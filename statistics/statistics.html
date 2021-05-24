@@ -25,6 +25,7 @@
  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
  <link rel="stylesheet" href="css/style.css">
  <script src="js/statistics.js"></script>
+ <script src="bootstrap-validate.js"></script>
   <title></title>
 </head>
 
@@ -67,7 +68,7 @@
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h1 class="modal-title">Before we save the game, please check your values again and then push submit button.</h1>
+        <h1 class="modal-title">Before we save the game, please check your values again and then push submit button:</h1>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       <!-- Modal body -->
@@ -104,6 +105,9 @@
   <!-- the name of the second team -->
   <h1 id="h1_second_team"></h1>
 
+  <script type="text/javascript">
+    // bootstrapValidate('#game_name','min:5:Enter at least 5 characters!');
+  </script>
   <!-- create the Squares of the statistics -->
   <div id="projectFacts" class="sectionClass">
     <div class="fullWidth eight columns">

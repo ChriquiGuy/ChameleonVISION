@@ -47,39 +47,75 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 					 var form = document.createElement("form");
 					 form.setAttribute("method", "post");
 					 form.setAttribute("action", "php/save.php");
-					 // form.setAttribute("class", "save.php");
+					 form.setAttribute("class", "was-validated");
 					 form.setAttribute("id", "db_form");
 
 
-					 // Create an input element for Full Name
+					 // Create an label for game name
+					 var label_game_name = document.createElement("label");
+					 label_game_name.style.fontSize = "x-large";
+					 var text_for_game_name_label = document.createTextNode("Name of the game:");
+					 label_game_name.appendChild(text_for_game_name_label);
+
+					 // Create an input for game name
 					 var game_name = document.createElement("input");
 					 game_name.setAttribute("type", "text");
 					 game_name.setAttribute("name", "GameName");
 					 game_name.setAttribute("class", "form-control")
 					 game_name.value= data[1][0];
 
-						// Create an input element for date of birth
+					 // Create an label for teamA name
+					 var label_teamA_name = document.createElement("label");
+					 label_teamA_name.style.fontSize = "x-large";
+					 var text_for_teamA_name_label = document.createTextNode("Name of Team A:");
+					 label_teamA_name.appendChild(text_for_teamA_name_label);
+
+					 // Create an input for teamA name
 						var team_A = document.createElement("input");
 						team_A.setAttribute("type", "text");
 						team_A.setAttribute("name", "TeamA");
 						team_A.setAttribute("class", "form-control");
 						team_A.value= data[1][1];
 
-						// Create an input element for emailID
+
+					 // Create an label for teamB name
+ 					 var label_teamB_name = document.createElement("label");
+ 					 label_teamB_name.style.fontSize = "x-large";
+ 					 var text_for_teamB_name_label = document.createTextNode("Name of Team B:");
+ 					 label_teamB_name.appendChild(text_for_teamB_name_label);
+
+
+						// Create an input for teamB name
 						var team_B = document.createElement("input");
 						team_B.setAttribute("type", "text");
 						team_B.setAttribute("name", "TeamB");
 						team_B.setAttribute("class", "form-control");
 						team_B.value= data[1][2];
 
-						 // Create an input element for password
+
+						// Game location
+
+						// Create an label for game location
+  					 var label_game_location = document.createElement("label");
+  					 label_game_location.style.fontSize = "x-large";
+  					 var text_for_game_location_label = document.createTextNode("Game Location:");
+  					 label_game_location.appendChild(text_for_game_location_label);
+
+						 // Create an input for game location
 						 var where_gamed_play = document.createElement("input");
 						 where_gamed_play.setAttribute("type", "text");
 						 where_gamed_play.setAttribute("name", "where_gamed_play");
 						 where_gamed_play.setAttribute("class", "form-control");
 						 where_gamed_play.value= data[1][3];
 
-							// Create an input element for retype-password
+						 // Create an label for game Date
+							var label_game_date = document.createElement("label");
+							label_game_date.style.fontSize = "x-large";
+							var text_for_game_date_label = document.createTextNode("Game date:");
+							label_game_date.appendChild(text_for_game_date_label);
+
+
+							// Create an input for game Date
 							var date_of_game = document.createElement("input");
 							date_of_game.setAttribute("type", "text");
 							date_of_game.setAttribute("name", "date_of_game");
@@ -87,19 +123,37 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							date_of_game.value= data[1][4];
 
 
-							// Create an input element for retype-password
+							// Create an label for game weather
+							 var label_game_weather = document.createElement("label");
+							 label_game_weather.style.fontSize = "x-large";
+							 var text_for_game_weather_label = document.createTextNode("weather:");
+							 label_game_weather.appendChild(text_for_game_weather_label);
+
+							// Create an input element for Weather
 							var weather = document.createElement("input");
 							weather.setAttribute("type", "text");
 							weather.setAttribute("name", "Weather");
 							weather.setAttribute("class", "form-control");
 							weather.value= data[1][5];
 
-							// Create an input element for retype-password
+							// Create an label for teamA ball in
+							 var label_ball_in_acc_team_a = document.createElement("label");
+							 label_ball_in_acc_team_a.style.fontSize = "x-large";
+							 var text_for_label_ball_in_acc_team_a = document.createTextNode("team A ball in (%):");
+							 label_ball_in_acc_team_a.appendChild(text_for_label_ball_in_acc_team_a);
+
+							 // Create an input for teamA ball in
 							var ball_in_acc_team_a = document.createElement("input");
 							ball_in_acc_team_a.setAttribute("type", "text");
 							ball_in_acc_team_a.setAttribute("name", "ball_in_acc_team_a");
 							ball_in_acc_team_a.setAttribute("class", "form-control");
 							ball_in_acc_team_a.value= data[1][6];
+
+							// Create an label for teamB ball in
+							 var label_ball_in_acc_team_b = document.createElement("label");
+							 label_ball_in_acc_team_b.style.fontSize = "x-large";
+							 var text_for_label_ball_in_acc_team_b = document.createTextNode("team B ball in (%):");
+							 label_ball_in_acc_team_b.appendChild(text_for_label_ball_in_acc_team_b);
 
 							// Create an input element for retype-password
 							var ball_in_acc_team_b = document.createElement("input");
@@ -108,12 +162,24 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							ball_in_acc_team_b.setAttribute("class", "form-control");
 							ball_in_acc_team_b.value= data[1][7];
 
+							// Create an label for teamA ball in
+							 var label_ball_out_acc_team_a = document.createElement("label");
+							 label_ball_out_acc_team_a.style.fontSize = "x-large";
+							 var text_for_label_ball_out_acc_team_a = document.createTextNode("team A ball out (%):");
+							 label_ball_out_acc_team_a.appendChild(text_for_label_ball_out_acc_team_a);
+
 							var ball_out_acc_team_a = document.createElement("input");
 							ball_out_acc_team_a.setAttribute("type", "text");
 							ball_out_acc_team_a.setAttribute("name", "ball_out_acc_team_a");
 							ball_out_acc_team_a.setAttribute("class", "form-control");
 							ball_out_acc_team_a.value= data[1][8];
 
+
+							// Create an label for teamB ball in
+							 var label_ball_out_acc_team_b = document.createElement("label");
+							 label_ball_out_acc_team_b.style.fontSize = "x-large";
+							 var text_for_label_ball_out_acc_team_b = document.createTextNode("team B ball in (%):");
+							 label_ball_out_acc_team_b.appendChild(text_for_label_ball_out_acc_team_b);
 
 							var ball_out_acc_team_b = document.createElement("input");
 							ball_out_acc_team_b.setAttribute("type", "text");
@@ -127,45 +193,93 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							 s.setAttribute("class", "btn btn-primary");
 							 s.setAttribute("onclick", "show_pop_up()")
 
-							 // Append the full name input to the form
-							 form.appendChild(game_name);
-
-							 // Inserting a line break
+							 // Append the full game name label to the form
+							 form.appendChild(label_game_name);
 							 form.appendChild(br.cloneNode());
 
-							 // Append the DOB to the form
+
+							 // Append the full game name input to the form
+							 form.appendChild(game_name);
+							 form.appendChild(br.cloneNode());
+
+
+							 // Append the teamA label name to the form
+							 form.appendChild(label_teamA_name);
+							 form.appendChild(br.cloneNode());
+
+							 // Append the teamA input name to the form
 							 form.appendChild(team_A);
 							 form.appendChild(br.cloneNode());
 
-							 // Append the emailID to the form
+
+							// Append the teamB label name to the form
+							form.appendChild(label_teamB_name);
+							form.appendChild(br.cloneNode());
+
+							// Append the teamB input name to the form
 							 form.appendChild(team_B);
 							 form.appendChild(br.cloneNode());
 
-							 // Append the Password to the form
+							 // Append the game location label to the form
+							 form.appendChild(label_game_location);
+ 							 form.appendChild(br.cloneNode());
+
+							 // Append the game location input to the form
 							 form.appendChild(where_gamed_play);
 							 form.appendChild(br.cloneNode());
 
-							 // Append the ReEnterPassword to the form
+
+							 // Append the game date label to the form
+							 form.appendChild(label_game_date);
+ 							 form.appendChild(br.cloneNode());
+
+							 // Append the game date input to the form
 							 form.appendChild(date_of_game);
 							 form.appendChild(br.cloneNode());
 
-							 // Append the ReEnterPassword to the form
+							 // Append the game weather label to the form
+							 form.appendChild(label_game_weather);
+ 							 form.appendChild(br.cloneNode());
+
+							 // Append the game weather label to the form
 							 form.appendChild(weather);
 							 form.appendChild(br.cloneNode());
 
-							 // Append the ReEnterPassword to the form
+
+
+							// Append the team A  ball in label to the form
+							form.appendChild(label_ball_in_acc_team_a);
+							form.appendChild(br.cloneNode());
+
+
+							 // Append the team A ball in input to the form
 							 form.appendChild(ball_in_acc_team_a);
 							 form.appendChild(br.cloneNode());
 
-							 // Append the ReEnterPassword to the form
+
+							 // Append the team B  ball in label to the form
+							 form.appendChild(label_ball_in_acc_team_b);
+							 form.appendChild(br.cloneNode());
+
+							 // Append the team B  ball in input to the form
 							 form.appendChild(ball_in_acc_team_b);
 							 form.appendChild(br.cloneNode());
 
-							 // Append the ReEnterPassword to the form
+
+							 // Append the team A ball out label to the form
+							 form.appendChild(label_ball_out_acc_team_a);
+							 form.appendChild(br.cloneNode());
+
+
+							  // Append the team A ball out label to the form
 							 form.appendChild(ball_out_acc_team_a);
 							 form.appendChild(br.cloneNode());
 
-							 // Append the ReEnterPassword to the form
+							 // Append the team B ball out label to the form
+							form.appendChild(label_ball_out_acc_team_b);
+							form.appendChild(br.cloneNode());
+
+							// Append the team B ball out input to the form
 							form.appendChild(ball_out_acc_team_b);
 							form.appendChild(br.cloneNode());
 

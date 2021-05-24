@@ -14,29 +14,49 @@ die("Connection failed: " . $conn->connect_error);
 echo "Connected successfully";
 }
 
-$sql = "SELECT * FROM statistics where TeamA = '{$_POST["name_of_game"]}' or TeamB = '{$_POST["name_of_game"]}'";
-$res = mysqli_query($conn ,$sql);
- // print_r($res);
+$GameName = $_POST['GameName'];
+$TeamA = $_POST['TeamA'];
+$TeamB = $_POST['TeamB'];
+$where_gamed_play = $_POST['where_gamed_play'];
+$date_of_game = $_POST['date_of_game'];
+$Weather = $_POST['Weather'];
+$ball_in_acc_team_a = $_POST['ball_in_acc_team_a'];
+$ball_in_acc_team_b = $_POST['ball_in_acc_team_b'];
+$ball_out_acc_team_a = $_POST['ball_out_acc_team_a'];
+$ball_out_acc_team_b = $_POST['ball_out_acc_team_b'];
+
+$sql= "INSERT INTO statistics(GameName, TeamA, TeamB,WhereGamePlayed,DateOfGame,Weather,AccuracyPercentageOfBallInForTeamA,AccuracyPercentageOfBallInForTeamB, AccuracyPercentageOfBallOutForTeamA,AccuracyPercentageOfBallOutForTeamB) VALUES ('$GameName','$TeamA','$TeamB','$where_gamed_play','$date_of_game','$Weather','$ball_in_acc_team_a','$ball_in_acc_team_b','$ball_out_acc_team_a','$ball_out_acc_team_b')";
+
+$run = mysqli_query($conn ,$sql);
+if($run == True){
+  echo "inserted";
+} else {
+  echo "error in insert row";
+}
+
+
 $nameOfGame = $_POST['name_of_game'];
 $date = $_POST['name_Of_date'];
-print_r($nameOfGame);
-print_r($date);
+if(empty($date)){
+$sql = "SELECT * FROM statistics where TeamA = '{$_POST["name_of_game"]}' or TeamB = '{$_POST["name_of_game"]}' ORDER BY DateOfGame DESC";
+} else{
+  $sql = "SELECT * FROM statistics where TeamA = '{$_POST["name_of_game"]}' or TeamB = '{$_POST["name_of_game"]}' And DateOfGame > '{$_POST["name_Of_date"]}'  ORDER BY DateOfGame DESC";
+}
+$res = mysqli_query($conn ,$sql);
+ // print_r($res);
+
 $arr_of_info_after_query = [];
 $new_row = [];
 $flag = 0;
  if($res->num_rows > 0){
-   // echo "<table>";
    $id_for_table = "table_for_show_query";
    $id_for_first_row = 10;
    $table_design = "table table-striped";
-   // echo "<table id='".$id_for_table."' class='table table-striped'>";
-   // echo "<tr id='".$id_for_first_row."' class='bg-info'><th>GameName</th><th>TeamA</th><th>TeamB</th><th>WhereGamePlayed</th><th>DateOfGame</th><th>Weather</th><th>AccuracyPercentageOfBallInForTeamA</th><th>AccuracyPercentageOfBallInForTeamB</th><th>AccuracyPercentageOfBallOutForTeamA</th><th>AccuracyPercentageOfBallOutForTeamB</th></tr>";
    while ($row = $res->fetch_assoc()) {
      $id_for_first_row++;
      echo "<tr id='".$id_for_first_row."'><th>".$row['GameName']."</th><th>".$row['TeamA']."</th><th>".$row['TeamB']."</th><th>".$row['WhereGamePlayed']."</th><th>".$row['DateOfGame']."</th><th>".$row['Weather']."</th><th>".$row['AccuracyPercentageOfBallInForTeamA']."</th>
      <th>".$row['AccuracyPercentageOfBallInForTeamB']."</th><th>".$row['AccuracyPercentageOfBallOutForTeamA']."</th><th>".$row['AccuracyPercentageOfBallOutForTeamA']."</th></tr>";
   }
-  // echo "</table>";
   echo json_encode($new_row);
  } else{
    print_r("error");

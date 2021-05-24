@@ -1,3 +1,41 @@
+<?php
+error_reporting(E_ALL & ~E_WARNING & ~E_NOTICE);
+$servername = "localhost";
+$database = "chameleonvisiondatabase";
+$username = "root";
+$password = "root";
+
+$conn = mysqli_connect($servername, $username, $password, $database);
+//Check connection
+// if ($conn->connect_error) {
+// print_r("Connected failed");
+// die("Connection failed: " . $conn->connect_error);
+// } else{
+// print_r("Connected successfully");
+// }
+
+$GameName = $_POST['GameName'];
+$TeamA = $_POST['TeamA'];
+$TeamB = $_POST['TeamB'];
+$where_gamed_play = $_POST['where_gamed_play'];
+$date_of_game = $_POST['date_of_game'];
+$Weather = $_POST['Weather'];
+$ball_in_acc_team_a = $_POST['ball_in_acc_team_a'];
+$ball_in_acc_team_b = $_POST['ball_in_acc_team_b'];
+$ball_out_acc_team_a = $_POST['ball_out_acc_team_a'];
+$ball_out_acc_team_b = $_POST['ball_out_acc_team_b'];
+
+$sql= "INSERT INTO statistics(GameName, TeamA, TeamB,WhereGamePlayed,DateOfGame,Weather,AccuracyPercentageOfBallInForTeamA,AccuracyPercentageOfBallInForTeamB, AccuracyPercentageOfBallOutForTeamA,AccuracyPercentageOfBallOutForTeamB) VALUES ('$GameName','$TeamA','$TeamB','$where_gamed_play','$date_of_game','$Weather','$ball_in_acc_team_a','$ball_in_acc_team_b','$ball_out_acc_team_a','$ball_out_acc_team_b')";
+
+$run = mysqli_query($conn ,$sql);
+if($run == True){
+  echo "inserted";
+} else {
+  echo "error in insert row";
+}
+mysqli_close($conn);
+?>
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -23,7 +61,7 @@
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
    <link rel="stylesheet" href="../css/statistic_page_two.css">
-   <script src="../js/statistics.js"></script>
+   <script src="../js/statistics_second_page.js"></script>
     <title></title>
   </head>
   <body>
@@ -67,13 +105,12 @@
     </div>
         <!-- The Modal -->
     <div id="myModal" class="modal">
-
       <!-- Modal content -->
       <div class="modal-content">
         <h1>Game log uploaded successfully</h1>
         <button type="submit" class="btn btn-primary" onclick="close_popUp()" id ="ok">OK</button>
       </div>
-
     </div>
+    <canvas id="my_line_chart" width="400" height="150"></canvas>
   </body>
 </html>

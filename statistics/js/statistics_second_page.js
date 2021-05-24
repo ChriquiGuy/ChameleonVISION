@@ -1,3 +1,5 @@
+var data_from_db = [];
+
 $(document).ready(function(){
   $(function() {
         $('.pop-up').hide();
@@ -15,8 +17,8 @@ $(document).ready(function(){
         e.stopPropagation();
         });
   });
-  var table = document.getElementById("table_for_show_query");
-  console.log(table);
+  var line_chart = document.getElementById("my_line_chart");
+  line_chart.style.display = none;
 });
 
 function show_db_info(){
@@ -43,7 +45,6 @@ function close_popUp(){
   var table = document.getElementById("myTable");
   var tableInfo = tableToArray(table);
   data_from_db = tableInfo;
-  console.log(tableInfo);
 }
 
   function tableToArray(table) {
@@ -66,5 +67,55 @@ function close_popUp(){
     }
 
     function show_graph(){
-
+      let ctx = document.getElementById("my_line_chart");
+      let team_name = document.getElementById("teams_name").value;
+      console.log(data_from_db[0][1]);
+      console.log(team_name);
+      let size_arr = data_from_db.length;
+      let data_for_x_axis = [];
+      let data_for_y_axis = [];
+      if(size_arr != 0){
+        for(i = 0; i<size_arr;++i){
+          data_for_x_axis.push(data_from_db[i][4]);
+        }
+        for(j = 0; j<size_arr;++j){
+          if(data_from_db[j][1] == team_name){ // team_A
+          data_for_y_axis.push(data_from_db[j][6]);
+          console.log(data_for_y_axis);
+        }
+        if(data_from_db[j][2] == team_name){ // team_B
+         data_for_y_axis.push(data_from_db[j][7]);
+         console.log(data_for_y_axis);
+        }
+      }
+    }
+      // ctx.style.display = block;
+      var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: data_for_x_axis,
+              datasets: [
+                {
+                  label: "my first dataset",
+                  fill: false,
+                  lineTension: 0.1,
+                  backgroundColor: "rgba(75,192,192,0.4)",
+                  borderColor: "rgba(75,192,192,1)",
+                  borderCapStyle: 'butt',
+                  borderDash: [],
+                  borderDashOffset: 0.0,
+                  borderJoinStyle: 'miter',
+                  pointBorderColor: "rgba(75,192,192,1)",
+                  pointBackgroundColor: "#fff",
+                  pointBorderWidth: 1,
+                  pointHoverRadius: 5,
+                  pointHoverBackgroundColor: "rgba(220,220,220,1)",
+                  pointHoverBorderWidth: 2,
+                  pointRadius: 1,
+                  pointHitRadius: 10,
+                  data: data_for_y_axis,
+                }
+              ]
+            }
+      });
     }

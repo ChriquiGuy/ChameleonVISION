@@ -1,0 +1,173 @@
+.row {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+  max-width: 62.5rem;
+ }
+
+  .small-6 {
+    width: 50%;
+  }
+
+button, .button {
+  border-style: solid;
+  border-width: 0px;
+  cursor: pointer;
+  font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  line-height: normal;
+  margin: 0 0 1.25rem;
+  position: relative;
+  text-decoration: none;
+  text-align: center;
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+  display: inline-block;
+  padding-top: 1rem;
+  padding-right: 2rem;
+  padding-bottom: 1.0625rem;
+  padding-left: 2rem;
+  font-size: 1rem;
+  background-color: #008cba;
+  border-color: #007095;
+  color: white;
+  transition: background-color 300ms ease-out;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+  padding: 0; }
+
+@media only screen and (min-width: 40.063em) {
+  button, .button {
+    display: inline-block; } }
+meta.foundation-mq-topbar {
+  font-family: "/only screen and (min-width:40.063em)/";
+  width: 40.063em; }
+
+.content {
+    width: 650px;
+    margin: 0 auto;
+    padding-top: 100px;
+}
+
+span {
+    color: dimgray;
+}
+
+.pop-up {
+    position: fixed;
+    margin: 5% auto;
+    left: 0;
+    right: 0;
+    z-index: 2;
+}
+
+.box {
+    background-color: whitesmoke;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+    position: relative;
+    -webkit-box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
+    box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
+}
+
+.button {
+    margin 0 auto;
+  background-color: #07a5e7;
+    margin-bottom: 33px;
+}
+
+.button:hover {
+    background-color: #ef4b4b;
+    -webkit-box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
+    box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
+}
+
+.close-button {
+    transition: all 0.5s ease;
+    position: absolute;
+    background-color: #07a5e7;
+    padding: 1.5px 7px;
+    left: 0;
+    margin-left: -10px;
+    margin-top: -9px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    color: white;
+    -webkit-box-shadow: -4px -2px 6px 0px rgba(0,0,0,0.1);
+    -moz-box-shadow: -4px -2px 6px 0px rgba(0,0,0,0.1);
+    box-shadow: -3px 1px 6px 0px rgba(0,0,0,0.1);
+}
+
+.close-button:hover {
+    background-color: tomato;
+    color: #fff;
+}
+
+h3 {
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    color: #fff;
+    background-color: #07a5e7;
+}
+
+p {
+    padding: 20px 65px 10px 65px;
+    color: dimgray;
+}
+
+h1 {
+    color: dimgray;
+    font-family: Garamond, Baskerville, "Baskerville Old Face", "Hoefler Text", "Times New Roman", serif;
+    font-size: 2.4rem;
+    padding-top: 1.12em;
+}
+
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 17.5em;
+  top: 20em;
+  width: 100%; /* Full width */
+  height: 20%; /* Full height */
+  max-width: 564px;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}

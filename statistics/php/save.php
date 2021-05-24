@@ -97,7 +97,12 @@ mysqli_close($conn);
 
       </tbody>
     </table>
-    <button type="submit" class="btn btn-primary" onclick="show_graph()" id ="ok">Show graph</button>
+    <button type="submit" class="btn btn-primary" onclick="show_graph('ball_in')" id ="ok">Show graph</button>
+    <select class="custom-select mr-sm-2" id="ball_status_list" onchange="getChoosenValue()">
+    <option selected>Choose...</option>
+    <option value="ball_in">ball in</option>
+    <option value="ball_out">ball out</option>
+    </select>
     <div class="row pop-up">
       <div class="box small-6 large-centered">
         <a href="#" class="close-button">&#10006;</a>

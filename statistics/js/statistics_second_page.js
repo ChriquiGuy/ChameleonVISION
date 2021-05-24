@@ -17,9 +17,13 @@ $(document).ready(function(){
         e.stopPropagation();
         });
   });
-  var line_chart = document.getElementById("my_line_chart");
-  line_chart.style.display = none;
 });
+window.onload=function(){
+var line_chart = document.getElementById("my_line_chart");
+line_chart.style.display = none;
+var ball_list = document.getElementById("ball_status_list");
+ball_list.style.display = none;
+}
 
 function show_db_info(){
 var game_name = document.getElementById("teams_name").value;
@@ -38,8 +42,6 @@ var date_two = document.getElementById("date_two").value;
   var modal = document.getElementById("myModal");
   modal.style.display = "block";
 
-  // var tableInfo = tableToArray(table);
-  // console.log(tableInfo);
 };
 
 function close_popUp(){
@@ -69,7 +71,7 @@ function close_popUp(){
       return result;
     }
 
-    function show_graph(){
+    function show_graph($choose){
       let ctx = document.getElementById("my_line_chart");
       let team_name = document.getElementById("teams_name").value;
       console.log(data_from_db[0][1]);
@@ -77,21 +79,29 @@ function close_popUp(){
       let size_arr = data_from_db.length;
       let data_for_x_axis = [];
       let data_for_y_axis = [];
+      let x = 0;
+      let y = 0;
       if(size_arr != 0){
-        // change dates fotmat
-        // for(k = 0; k<size_arr; k++){
-        //   data_from_db[k][4] = date_format_change(data_from_db[k][4]);
-        // }
         for(i = 0; i<size_arr;++i){
           data_for_x_axis.push(data_from_db[i][4]);
         }
+        if($choose == "ball_in"){
+           x = 6;
+           y = 7;
+           color = "rgba(75,192,192,1)";
+        }
+        if($choose == "ball_out"){
+          x = 8;
+          y = 9;
+          color = "#962d2d";
+        }
         for(j = 0; j<size_arr;++j){
           if(data_from_db[j][1] == team_name){ // team_A
-          data_for_y_axis.push(data_from_db[j][6]);
+          data_for_y_axis.push(data_from_db[j][x]);
           console.log(data_for_y_axis);
         }
         if(data_from_db[j][2] == team_name){ // team_B
-         data_for_y_axis.push(data_from_db[j][7]);
+         data_for_y_axis.push(data_from_db[j][y]);
          console.log(data_for_y_axis);
         }
       }
@@ -108,7 +118,7 @@ function close_popUp(){
                   fill: false,
                   lineTension: 0.1,
                   backgroundColor: "rgba(75,192,192,0.4)",
-                  borderColor: "rgba(75,192,192,1)",
+                  borderColor: color,
                   borderCapStyle: 'butt',
                   borderDash: [],
                   borderDashOffset: 0.0,
@@ -127,10 +137,9 @@ function close_popUp(){
             }
       });
     }
+    function getChoosenValue(){
+      var choose = document.getElementById("ball_status_list");
+      choose_value = choose.value;
+      show_graph(choose_value);
 
-    // function date_format_change($date){
-    //   console.log("in date_format_change function");
-    //   var dateObj = str2date($date, "yyyy-mm-dd");
-    //   var newDate = date2str(dateObj, "dd/MM/yyyy");
-    //   return newDate;
-    // }
+    }

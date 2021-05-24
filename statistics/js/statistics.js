@@ -511,14 +511,3 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 					displayChart(data_global,choose,id);
 					}
 				}
-
-
-				function form_validate($value){
-					// var form = document.getElementById("db_form");
-					// if(typeof(element) != 'undefined' && element != null){
-			    //   bootstrapValidate('#game_name','min:5:Enter at least 5 characters')
-			    // } else{
-			    //     alert('Element does not exist!');
-			    // }
-				alert("The input value has changed. The new value is: " + val);
-				}

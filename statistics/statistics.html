@@ -25,13 +25,12 @@
  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
  <link rel="stylesheet" href="css/style.css">
  <script src="js/statistics.js"></script>
- <script src="bootstrap-validate.js"></script>
   <title></title>
 </head>
 
 <body>
   <!-- create the input of the excel file -->
-  <div class="input-group mb-3">
+  <div class="input-group mb-3" id="input_csv">
     <div class="custom-file">
       <input type="file" class="custom-file-input" id="inputGroupFile01">
       <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
@@ -39,28 +38,30 @@
   </div>
 
   <!-- create the table info from excel file -->
-  <table class="table table-striped" id="tbl-data">
+<div class="table-responsive">
+  <table colspan="9" class="table table-striped" id="tbl-data">
     <tr class="bg-info">
-      <th>Game Name</th>
+      <th>Game name</th>
       <th>Team A</th>
       <th>Team B</th>
-      <th>Where the Game Played</th>
-      <th>Date Of Game</th>
+      <th>Game Location</th>
+      <th>Game date</th>
       <th>Weather</th>
-      <th>Accuracy percent age Of ball in for team A</th>
-      <th>Accuracy percent age of ball in for Team B</th>
-      <th>Accuracy percent age Of ball out for team A</th>
-      <th>Accuracy percent age of ball out for Team B</th>
+      <th>Team A ball in (%)</th>
+      <th>Team B ball in (%)</th>
+      <th>Team A ball out (%)</th>
+      <th>Team B ball out (%)</th>
+      <th>System Accurecy</th>
     </tr>
     <tbody id="myTable">
 
     </tbody>
   </table>
+</div>
 
 
   <!-- create the sava data button -->
 <button id="save_data" type="button" class="btn btn-success popup" onclick="myFunction()" href="#popup1" data-toggle="modal" data-target="#myModal">Save Data <span class="popuptext" id="myPopup">Game Data dosesn't saved.</span></button>
-
 
 <div class="modal fade" id="myModal">
   <div class="modal-dialog">
@@ -108,6 +109,18 @@
   <script type="text/javascript">
     // bootstrapValidate('#game_name','min:5:Enter at least 5 characters!');
   </script>
+
+  <section>
+  <svg class="circle-chart" id="circle_chart" viewbox="0 0 33.83098862 33.83098862" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+    <circle class="circle-chart__background" stroke="#efefef" stroke-width="2" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
+    <circle class="circle-chart__circle" stroke="#00acc1" stroke-width="2" stroke-dasharray="93,100" stroke-linecap="round" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
+    <g class="circle-chart__info">
+      <text class="circle-chart__percent" x="16.91549431" y="15.5" alignment-baseline="central" text-anchor="middle" font-size="8">93%</text>
+      <text class="circle-chart__subline" x="16.91549431" y="20.5" alignment-baseline="central" text-anchor="middle" font-size="2">System accuracy</text>
+    </g>
+  </svg>
+</section>
+
   <!-- create the Squares of the statistics -->
   <div id="projectFacts" class="sectionClass">
     <div class="fullWidth eight columns">

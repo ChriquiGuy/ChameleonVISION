@@ -1,5 +1,8 @@
 body{
 background-color: #c0fefc;
+width:100%;
+padding:0;
+margin:0;
 }
 .mb-3, .my-3 {
     margin-bottom: 0rem!important;
@@ -20,24 +23,35 @@ body {
   box-sizing: border-box;
 }
 
-body, div, dl, dt, dd, ul, ol, li, h2, h3, h4, h5, h6, pre, form, p, blockquote, th, td {
+body, div, dl, dt, dd, ul, ol, li, h2, h3, h4, h5, h6, pre, form, p, blockquote{
   margin: 0;
   padding: 0;
-  font-size: 13px;
+  font-size: 1em;
   direction: ltr;
+}
+section{
+  width: 10%;
+  margin: auto;
+}
+
+@media screen and (min-width: 1920px) {
+  table {
+  width: 100%;
+ }
 }
 /* ids */
 
 #tbl-data{
   width: 100% !important;
-  font: 100px;
+  font-size:1.4em;
+  overflow-x: auto;
   display: none;
+  table-layout:fixed;
 }
 
 #save_data{
   display:none;
   float: right;
-  margin-top: -1em;
 }
 
 #h1_first_team{
@@ -59,6 +73,9 @@ body, div, dl, dt, dd, ul, ol, li, h2, h3, h4, h5, h6, pre, form, p, blockquote,
 
 #projectFacts{
   display: none;
+}
+.bg-info{
+  font: 1000px;
 }
 .item{
   visibility: visible;
@@ -85,6 +102,10 @@ body, div, dl, dt, dd, ul, ol, li, h2, h3, h4, h5, h6, pre, form, p, blockquote,
   margin: 30px 0 0px;
   text-align: center;
   min-height: 20px;
+}
+
+.table-responsive{
+  font-size: 1em;
 }
 
 .sectiontitle h2 {
@@ -331,5 +352,27 @@ footer p strong {
 .custom-select {
     width: 20%;
     display: none;
-    margin-top: -1em;
   }
+
+.circle-chart__circle {
+  animation: circle-chart-fill 5s reverse; /* 1 */
+  transform: rotate(-90deg); /* 2, 3 */
+  transform-origin: center; /* 4 */
+}
+
+.circle-chart__info {
+  animation: circle-chart-appear 5s forwards;
+  opacity: 1;
+  transform: translateY(0.93em);
+}
+
+@keyframes circle-chart-fill {
+  to { stroke-dasharray: 5 600; }
+}
+
+@keyframes circle-chart-appear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

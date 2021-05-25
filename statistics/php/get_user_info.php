@@ -29,7 +29,7 @@ $flag = 0;
    $id_for_table = "table_for_show_query";
    $id_for_first_row = 10;
    $table_design = "table table-striped";
-   while ($row = $res->fetch_assoc()) {
+   while ($row = $res->fetch_assoc()){
      $id_for_first_row++;
      echo "<tr id='".$id_for_first_row."'><th>".$row['GameName']."</th><th>".$row['TeamA']."</th><th>".$row['TeamB']."</th><th>".$row['WhereGamePlayed']."</th><th>".$row['DateOfGame']."</th><th>".$row['Weather']."</th><th>".$row['AccuracyPercentageOfBallInForTeamA']."</th>
      <th>".$row['AccuracyPercentageOfBallInForTeamB']."</th><th>".$row['AccuracyPercentageOfBallOutForTeamA']."</th><th>".$row['AccuracyPercentageOfBallOutForTeamA']."</th></tr>";

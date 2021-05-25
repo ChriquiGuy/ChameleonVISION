@@ -39,6 +39,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
         });
 
 			function myFunction() {
+
 					var br = document.createElement("br");
 					var input = document.getElementById('inputGroupFile01');
 					readXlsxFile(input.files[0]).then(function(data) {
@@ -303,6 +304,8 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 				}
 
 				window.onload=function(){
+					var circle_chart = document.getElementById("circle_chart");
+					circle_chart.style.display = "none";
 					var input = document.getElementById('inputGroupFile01');
 					input.addEventListener('change', function() {
 						readXlsxFile(input.files[0]).then(function(data) {
@@ -375,6 +378,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 								newcell.appendChild(newText);
 								id++;
 							}
+							console.log(data);
 							let canvas = document.getElementById("my_bar_chart");
 							if(choose == 'doughnut'){
 							 canvas = document.getElementById("my_donut_chart");
@@ -382,12 +386,19 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							canvas.style.display = "block";
 							let stats = document.getElementById("projectFacts");
 							stats.style.display = "block";
-							let excel_file_table = document.getElementById("tbl-data");
-							excel_file_table.style.display = "block";
+							// let excel_file_table = document.getElementById("tbl-data");
+							// excel_file_table.style.display = "block";
 							let save_data_button = document.getElementById("save_data");
 							save_data_button.style.display = "block";
+
 							let list = document.getElementById("list");
 							list.style.display = "block";
+
+							let input_csv = document.getElementById("input_csv");
+							input_csv.style.display = "none";
+
+							var circle_chart = document.getElementById("circle_chart");
+							circle_chart.style.display = "block";
 						});
 					}
 

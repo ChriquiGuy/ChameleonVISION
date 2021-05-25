@@ -89,11 +89,17 @@ function close_popUp(){
            x = 6;
            y = 7;
            color = "rgba(75,192,192,1)";
+           backgroundColor = "rgba(75,192,192,0.4)";
+           pointBorderColor = "rgba(75,192,192,1)";
+           label = "ball in";
         }
         if($choose == "ball_out"){
           x = 8;
           y = 9;
-          color = "#962d2d";
+          color = "rgba(255, 99, 132, 1)";
+          backgroundColor = "rgba(255, 99, 132, 0.4)";
+          pointBorderColor = "rgba(255, 99, 132, 1)";
+          label = "ball out";
         }
         for(j = 0; j<size_arr;++j){
           if(data_from_db[j][1] == team_name){ // team_A
@@ -105,25 +111,39 @@ function close_popUp(){
          console.log(data_for_y_axis);
         }
       }
-        console.log(data_from_db);
+      var chart_type = document.getElementById("chart_type");
+      console.log(chart_type.value);
+        if(chart_type.value == "line_chart"){ // line_chart
+          var bar_chart =  document.getElementById("my_bar_chart");
+          bar_chart.style.display = "none";
+          ctx.style.display = "block";
+          var type = 'line';
+        }
+        if(chart_type.value == "bar_chart"){ // line_chart
+          ctx.style.display = "none";
+          ctx = document.getElementById("my_bar_chart");
+          ctx.style.display = "block";
+          var type = 'bar';
+        }
     }
+
       // ctx.style.display = block;
       var myChart = new Chart(ctx, {
-            type: 'line',
+            type: type,
             data: {
               labels: data_for_x_axis,
               datasets: [
                 {
-                  label: "my first dataset",
+                  label: label,
                   fill: false,
                   lineTension: 0.1,
-                  backgroundColor: "rgba(75,192,192,0.4)",
+                  backgroundColor: backgroundColor,
                   borderColor: color,
                   borderCapStyle: 'butt',
                   borderDash: [],
                   borderDashOffset: 0.0,
                   borderJoinStyle: 'miter',
-                  pointBorderColor: "rgba(75,192,192,1)",
+                  pointBorderColor: pointBorderColor,
                   pointBackgroundColor: "#fff",
                   pointBorderWidth: 1,
                   pointHoverRadius: 5,
@@ -133,7 +153,32 @@ function close_popUp(){
                   pointHitRadius: 10,
                   data: data_for_y_axis,
                 }
-              ]
+              ],
+              options: {
+                ticks: {
+                    min: 0,
+                    max: 5,
+                    stepSize: 1,
+                    suggestedMin: 0.5,
+                    suggestedMax: 5.5,
+                    callback: function(label, index, labels) {
+                        switch (label) {
+                            case 0:
+                                return 'ZERO';
+                            case 1:
+                                return 'ONE';
+                            case 2:
+                                return 'TWO';
+                            case 3:
+                                return 'THREE';
+                            case 4:
+                                return 'FOUR';
+                            case 5:
+                                return 'FIVE';
+                        }
+                    }
+                }
+              }
             }
       });
     }
@@ -141,5 +186,4 @@ function close_popUp(){
       var choose = document.getElementById("ball_status_list");
       choose_value = choose.value;
       show_graph(choose_value);
-
     }

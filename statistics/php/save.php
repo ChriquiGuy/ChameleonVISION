@@ -29,11 +29,11 @@ $ball_out_acc_team_b = $_POST['ball_out_acc_team_b'];
 $sql= "INSERT INTO statistics(GameName, TeamA, TeamB,WhereGamePlayed,DateOfGame,Weather,AccuracyPercentageOfBallInForTeamA,AccuracyPercentageOfBallInForTeamB, AccuracyPercentageOfBallOutForTeamA,AccuracyPercentageOfBallOutForTeamB) VALUES ('$GameName','$TeamA','$TeamB','$where_gamed_play','$newDate','$Weather','$ball_in_acc_team_a','$ball_in_acc_team_b','$ball_out_acc_team_a','$ball_out_acc_team_b')";
 
 $run = mysqli_query($conn ,$sql);
-if($run == True){
-  echo "inserted";
-} else {
-  echo "error in insert row";
-}
+// if($run == True){
+//   echo "inserted";
+// } else {
+//   echo "error in insert row";
+// }
 mysqli_close($conn);
 ?>
 
@@ -80,25 +80,30 @@ mysqli_close($conn);
          <button type="submit" class="btn btn-primary" onclick="show_db_info()" id ="Search">Search</button>
       </div>
     </form>
-    <table class="table table-striped" id="tbl-data">
+    <table class="table table-striped" id="tbl-data-db">
       <tr class="bg-info">
-        <th>Game Name</th>
+        <th>Game name</th>
         <th>Team A</th>
         <th>Team B</th>
-        <th>Where the Game Played</th>
-        <th>Date Of Game</th>
+        <th>Game Location</th>
+        <th>Game date</th>
         <th>Weather</th>
-        <th>Accuracy percent age Of ball in for team A</th>
-        <th>Accuracy percent age of ball in for Team B</th>
-        <th>Accuracy percent age Of ball out for team A</th>
-        <th>Accuracy percent age of ball out for Team B</th>
+        <th>Team A ball in (%)</th>
+        <th>Team B ball in (%)</th>
+        <th>Team A ball out (%)</th>
+        <th>Team B ball out (%)</th>
       </tr>
       <tbody id="myTable">
 
       </tbody>
     </table>
-    <button type="submit" class="btn btn-primary" onclick="show_graph('ball_in')" id ="ok">Show graph</button>
-    <select class="custom-select mr-sm-2" id="ball_status_list" onchange="getChoosenValue()">
+    <button type="submit" class="btn btn-primary" onclick="show_graph('ball_in')">Show graph</button>
+    <select class="custom-select mr-sm-2" id="chart_type" onchange="getChoosenValue('Line Chart')">
+    <option selected>Choose...</option>
+    <option value="line_chart">Line Chart</option>
+    <option value="bar_chart">Bar chart</option>
+    </select>
+    <select class="custom-select mr-sm-2" id="ball_status_list" onchange="getChoosenValue('ball_in')">
     <option selected>Choose...</option>
     <option value="ball_in">ball in</option>
     <option value="ball_out">ball out</option>
@@ -121,5 +126,7 @@ mysqli_close($conn);
       </div>
     </div>
     <canvas id="my_line_chart" width="400" height="150"></canvas>
+    <!-- create the Bar chart of the statistics -->
+    <canvas id="my_bar_chart" width="400" height="150"></canvas>
   </body>
 </html>

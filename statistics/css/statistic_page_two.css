@@ -131,7 +131,6 @@ h1 {
     padding-top: 1.12em;
 }
 
-
 /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
@@ -176,3 +175,15 @@ h1 {
   width: 20%;
   margin-top: -1.1em;
 }
+
+/* #tbl-data-db{
+  display: none;
+}
+
+#ok{
+  display: none;
+}
+
+#ball_status_list{
+  display: none;
+} */

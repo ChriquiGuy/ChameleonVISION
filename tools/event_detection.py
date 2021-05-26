@@ -1,40 +1,66 @@
 import cv2
 import numpy as np
 from .helper import *
-from .object_tracker import ObjectTracker
 
 
 class EventDetection:
-    tracker = ObjectTracker()
+
+    ball_position_flag = False
+    ball_slope_flag = False
 
     current_ball = None
     prev_ball = None
     pre_prev_ball = None
+
     current_slop = None
     prev_slop = None
-    found_last_frame = False
+
+    slope_difference = None
+
     last_player_touch = None
     current_player_touch = None
+    ball_center = None
+    field_contour = None
 
-    def check_ball_event(self, frame, classes, boxes, LeftUp, LeftDown, RightDown, RightUp, field_center):
+    counter_draw_slope_diff = 90
+
+    # Variable to check if the ball is inside a player's BOX
+    ball_inside_player = False
+
+    # Draw slope diff event variables
+    slopeDiff = None
+    ball = None
+
+    def check_ball_event(self, result_frame, classes, detection_boxes, field_contour, ball_box, field_center):
+
+        # Field
+        if len(field_contour) != 0:
+            self.field_contour = field_contour
+
+        if self.field_contour is None:
+            return result_frame, None, None
 
         # Ball
-        ball_index = [index for index, object_class in enumerate(classes) if object_class == 1]
-        ball = boxes[ball_index]
+        if len(ball_box) != 0:
+            self.ball_center = get_box_center(ball_box)
+        else:
+            # Draw slope difference event for 3.6s
+            self.counter_draw_slope_diff += 1
+            self.draw_slope_diff(result_frame, self.slope_difference, self.current_ball)
+            return result_frame, None, None
 
-        # Player
-        player_index = [index for index, object_class in enumerate(classes) if object_class == 0]
-        playersBoxes = boxes[player_index]
+        # Players
+        if len(detection_boxes) != 0:
+            player_index = [index for index, object_class in enumerate(classes) if object_class == 0]
+            playersBoxes = detection_boxes[player_index]
+        else:
+            return result_frame, None, None
 
-        playersBoxes_ids = self.tracker.update(playersBoxes)
-
-        # Variable to check if the ball is inside a player's BOX
-        ball_inside_player = False
         self.current_player_touch = None
 
-        for playerBox in playersBoxes_ids:
+        for playerBox in playersBoxes:
 
-            x, y, w, h, _ = playerBox
+            x, y, w, h = playerBox
 
             playerLeftUp = (x, y)
             playerLeftDown = (x, y + h)
@@ -43,55 +69,91 @@ class EventDetection:
 
             playerContour = np.array([playerLeftUp, playerLeftDown, playerRightDown, playerRightUp])
             playerContour.reshape((-1, 1, 2))
-            ballInOut_playerBox = int(cv2.pointPolygonTest(playerContour, self.current_ball, True))
+            ballInOut_playerBox = int(cv2.pointPolygonTest(playerContour, self.ball_center, True))
 
             # Check if ball inside the boundingBoxes of the players
             if ballInOut_playerBox >= 0:
                 self.last_player_touch = (x, y, w, h)
                 self.current_player_touch = self.last_player_touch
-                ball_inside_player = True
+                self.ball_inside_player = True
+
+                self.current_ball = None
+                self.prev_ball = None
 
                 self.current_slop = None
                 self.prev_slop = None
                 self.prev_ball = None
                 self.pre_prev_ball = None
 
-                return None, None
+                # Draw slope difference event for 3.6s
+                self.counter_draw_slope_diff += 1
+                self.draw_slope_diff(result_frame, self.slope_difference, self.current_ball)
+
+                return result_frame, None, None
+            else:
+                self.ball_inside_player = False
+
+        # Draw slope difference event for 3.6s
+        self.counter_draw_slope_diff += 1
+        self.draw_slope_diff(result_frame, self.slope_difference, self.current_ball)
 
         # If ball was found
-        if len(ball) == 1:
-            self.found_last_frame = not self.found_last_frame
-            ball_center = get_box_center(ball[0])
-            if self.found_last_frame:
-                self.pre_prev_ball = self.prev_ball
-                self.prev_ball = self.current_ball
-            self.current_ball = ball_center
+        if len(ball_box) != 0:
 
-        # Check if ball was found before
-        if self.current_ball is None or self.prev_ball is None or self.pre_prev_ball is None:
-            return None, None
+            # inverse position flag
+            self.ball_position_flag = not self.ball_position_flag
 
-        self.current_slop = self.claculate_slope(self.prev_ball, self.current_ball)
-        self.prev_slop = self.claculate_slope(self.pre_prev_ball, self.prev_ball)
+            if self.ball_position_flag:
+                self.current_ball = self.ball_center
+            else:
+                self.prev_ball = self.ball_center
 
-        FieldContour = np.array([LeftUp, LeftDown, RightDown, RightUp])
-        FieldContour.reshape((-1, 1, 2))
+            if self.current_ball is None or self.prev_ball is None:
+                return result_frame, None, None
+
+            # inverse slope flag
+            self.ball_slope_flag = not self.ball_slope_flag
+
+            if self.ball_slope_flag:
+                self.current_slop = self.claculate_slope(self.prev_ball, self.current_ball)
+            else:
+                self.prev_slop = self.claculate_slope(self.current_ball, self.prev_ball)
+
+        # Check if ball slope was found before
+        if self.current_slop is None or self.prev_slop is None:
+            return result_frame, None, None
 
         # Check change direction and if the ball is inside a player's BOX
-        if (abs(self.current_slop) - abs(self.prev_slop) > 30) and not ball_inside_player:
+        self.slope_difference = abs(abs(self.current_slop) - abs(self.prev_slop))
 
-            BallInOut = int(cv2.pointPolygonTest(FieldContour, self.current_ball, True))
+        if self.slope_difference > 90:
+            # Draw slope difference event for 3.6s
+            self.counter_draw_slope_diff = 0
+            self.draw_slope_diff(result_frame, self.slope_difference, self.current_ball)
+
+            BallInOut = int(cv2.pointPolygonTest(field_contour, self.current_ball, True))
 
             if BallInOut >= 0:
                 # Ball In
                 team = self.check_event_side(field_center, True)
-                return False, team
+                return result_frame, False, team
             else:
                 # Ball Out
                 team = self.check_event_side(field_center, False)
-                return True, team
+                return result_frame, True, team
         # No ball event
-        return None, None
+        return result_frame, None, None
+
+    def draw_slope_diff(self, result_frame, slope_difference, current_ball):
+        if self.counter_draw_slope_diff == 0:
+            self.slopeDiff = slope_difference
+            self.ball = current_ball
+
+        if self.ball and self.slopeDiff and self.counter_draw_slope_diff < 200:
+            cv2.putText(result_frame, f'{self.slopeDiff} -> slope difference',
+                        (self.ball[0] + 20, self.ball[1] + 20),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+            cv2.circle(result_frame, self.ball, 5, (0, 0, 0), -1)
 
     def claculate_slope(self, pointA, pointB):
         slope_line = (pointA[0], pointA[1], pointB[0], pointB[1])
@@ -119,12 +181,17 @@ class EventDetection:
 
     def draw_event(self, frame, field_center):
 
-        if self.current_ball and self.pre_prev_ball and self.pre_prev_ball:
-            cv2.line(frame, (self.current_ball[0], self.current_ball[1]),
-                     (self.pre_prev_ball[0], self.pre_prev_ball[1]),
-                     (0, 255, 0), 4, cv2.LINE_AA)
+        # if self.current_ball and self.pre_prev_ball and self.pre_prev_ball:
+        #     cv2.line(frame, (self.current_ball[0], self.current_ball[1]),
+        #              (self.pre_prev_ball[0], self.pre_prev_ball[1]),
+        #              (0, 255, 0), 4, cv2.LINE_AA)
 
-            cv2.putText(frame, f'slop = {abs(self.current_slop) - abs(self.prev_slop)}',
+        if self.current_ball and self.prev_ball:
+            cv2.line(frame, (self.current_ball[0], self.current_ball[1]),
+                     (self.prev_ball[0], self.prev_ball[1]),
+                     (0, 255, 0), 4, cv2.LINE_AA)
+        if self.current_slop and self.prev_slop:
+            cv2.putText(frame, f' slope difference = {self.slope_difference}',
                         (self.current_ball[0], self.current_ball[1]),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
 
@@ -150,7 +217,7 @@ class EventDetection:
         if _int == 0:
             return "Left"
         else:
-            return "Rigth"
+            return "Right"
 
     def is_in_serve_position(self, left, rigth):
 

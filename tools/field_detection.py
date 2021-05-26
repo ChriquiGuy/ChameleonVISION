@@ -38,6 +38,8 @@ class FieldDetection:
     LeftDown = None
     RightUp = None
     RightDown = None
+
+    field_contour = None
     Gamma_Min = 51
 
     def init_frame(self, frame):
@@ -81,11 +83,15 @@ class FieldDetection:
             if self.UpLine is not None and self.RightLine is not None:
                 # Right up corner
                 self.RightUp = self.line_intersection(self.UpLine, self.RightLine)
-            
+
             if self.NetLine:
                 self.field_center = (self.NetLine[0] + self.NetLine[2]) // 2
 
-            return self.LeftUp, self.LeftDown, self.RightDown, self.RightUp, self.NetLine, self.field_center
+            if self.LeftUp is not None and self.LeftDown is not None and self.RightDown and self.RightUp is not None:
+                self.field_contour = self.get_field_contour(self.LeftUp, self.LeftDown, self.RightDown, self.RightUp)
+
+            return self.LeftUp, self.LeftDown, self.RightDown, \
+                   self.RightUp, self.NetLine, self.field_center, self.field_contour
 
         except NameError:
             print("FieldDetection.detect_field: error occurred")
@@ -125,10 +131,10 @@ class FieldDetection:
 
         if isVertical:
             slopeLines = slopeLines[slopeLines[..., 4] > 70]  # slope
-            
+
         elif isVertical is None:
             slopeLines = slopeLines[slopeLines[..., 4] > 50]  # slope
-            
+
         else:
             slopeLines = slopeLines[slopeLines[..., 4] < 5]  # slope
 
@@ -161,7 +167,6 @@ class FieldDetection:
         cv2.addWeighted(overlay, 0.2, frame, 1, 0, frame)
         return frame
 
-
     def draw_field_lines(self, frame):
         if self.NetLine is not None:
             cv2.line(frame, (self.NetLine[0], self.NetLine[1]), (self.NetLine[2], self.NetLine[3]),
@@ -183,6 +188,10 @@ class FieldDetection:
             cv2.line(frame, (self.RightLine[0], self.RightLine[1]), (self.RightLine[2], self.RightLine[3]),
                      (255, 128, 128), 8, cv2.LINE_AA)
 
+    def get_field_contour(self, LeftUp, LeftDown, RightDown, RightUp):
+        FieldContour = np.array([self.LeftUp, self.LeftDown, self.RightDown, self.RightUp])
+        FieldContour.reshape((-1, 1, 2))
+        return FieldContour
 
     def calibration(self, frame):
 
@@ -195,10 +204,10 @@ class FieldDetection:
 
         # Edges frame
         edges = cv2.Canny(binary, 1, 255)
-       
+
         # draw lines
         self.draw_field_lines(frame_copy)
-        
+
         field = self.draw_field(frame)
 
         imgStack = stackImages(0.5, ([field, frame_copy], [binary, edges]))

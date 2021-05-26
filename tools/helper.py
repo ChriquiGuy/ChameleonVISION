@@ -6,7 +6,7 @@ from PyQt5.QtGui import QPixmap
 
 
 def get_box_center(box):
-    return (box[0] + int(box[2] / 2), box[1] + int(box[3] / 2))
+    return box[0] + int(box[2] / 2), box[1] + int(box[3] / 2)
 
 
 def get_roi_by_delta(center, delta):

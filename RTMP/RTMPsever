@@ -1,10 +1,14 @@
-Check:
+Commands:
 service nginx start
 service nginx stop
 service --status-all
 
 Start:
 service nginx start
+service --status-all
+
+Stop:
+service nginx stop
 service --status-all
 
 Recive:

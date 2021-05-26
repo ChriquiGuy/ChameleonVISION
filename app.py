@@ -17,6 +17,10 @@ class GUIController:
         self.login.switch_window1.connect(self.show_game_window)
         self.login.show()
 
+        self.game = game_window.Game()
+        self.login.close()
+        self.game.show()
+
     def show_game_window(self):
         self.game = game_window.Game()
         self.login.close()

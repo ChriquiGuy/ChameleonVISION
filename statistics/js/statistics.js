@@ -51,6 +51,11 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 					 form.setAttribute("action", "php/save.php");
 					 form.setAttribute("class", "was-validated");
 					 form.setAttribute("id", "db_form");
+					 form.setAttribute("onsubmit", " return submit_form()");
+
+					 // form.addEventListener('change', form_validation);
+					 // form.addEventListener('onsubmit', form_validation);
+
 
 
 					 // Create an label for game name
@@ -65,7 +70,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 					 game_name.setAttribute("name", "GameName");
 					 game_name.setAttribute("class", "form-control");
 					 game_name.setAttribute("id", "game_name");
-					 game_name.setAttribute("onchange" , "form_validate(this.value)");
+					 // game_name.setAttribute("onchange" , "form_validate(this.value)");
 					 game_name.value= data[1][0];
 
 					 // Create an label for teamA name
@@ -109,6 +114,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 
 						 // Create an input for game location
 						 var where_gamed_play = document.createElement("input");
+						 where_gamed_play.required;
 						 where_gamed_play.setAttribute("type", "text");
 						 where_gamed_play.setAttribute("name", "where_gamed_play");
 						 where_gamed_play.setAttribute("class", "form-control");
@@ -224,7 +230,9 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							 s.setAttribute("type", "submit");
 							 s.setAttribute("value", "Submit");
 							 s.setAttribute("class", "btn btn-primary");
-							 s.setAttribute("onclick", "show_pop_up()")
+							 s.setAttribute("id", "submit_btn");
+							 // s.addEventListener('click', return submit_form);
+
 
 							 // Append the full game name label to the form
 							 form.appendChild(label_game_name);
@@ -421,8 +429,6 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							canvas.style.display = "block";
 							let stats = document.getElementById("projectFacts");
 							stats.style.display = "block";
-							// let excel_file_table = document.getElementById("tbl-data");
-							// excel_file_table.style.display = "block";
 							let save_data_button = document.getElementById("save_data");
 							save_data_button.style.display = "block";
 
@@ -461,27 +467,112 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 					}
 				}
 
+				function submit_form(){
+			    let formValid = form_validation()
+			    return formValid;
+				}
+
+				function form_validation(){
+						let if_form_valid = true;
+					  if_form_valid = valdiate_input_string(document.getElementById("game_name").value,"Game Name ");
+						if(if_form_valid == false) return false;
+						if_form_valid = valdiate_input_string(document.getElementById("team_a").value,"Team A ");
+						if(if_form_valid == false) return false;
+						if_form_valid =valdiate_input_string(document.getElementById("team_b").value,"Team B ");
+						if(if_form_valid == false) return false;
+						if_form_valid =valdiate_input_string(document.getElementById("where_gamed_play").value,"Game Location ");
+						if(if_form_valid == false) return false;
+						if_form_valid =valdiate_input_string(document.getElementById("date_of_game").value,"Game date");
+						if(if_form_valid == false)  return false;
+						if_form_valid =valdiate_input_string(document.getElementById("weather").value,"Weather");
+						if(if_form_valid == false)  return false;
+ 				  	if_form_valid =valdiate_input_number(document.getElementById("ball_in_acc_team_a").value,"Team A ball in ");
+						if(if_form_valid == false) return false;
+						if_form_valid =valdiate_input_number(document.getElementById("ball_in_acc_team_b").value,"Team B ball in ");
+						if(if_form_valid == false) return false;
+						if_form_valid =valdiate_input_number(document.getElementById("ball_out_acc_team_a").value,"Team A ball out ");
+						if(if_form_valid == false) return false;
+						if_form_valid = valdiate_input_number(document.getElementById("ball_out_acc_team_b").value,"Team B ball out ");
+						if(if_form_valid == false){
+							return false;
+						}
+						else{
+							return true;
+						}
+				}
+
+				function valdiate_input_string(value,msg){
+					if(value == ""){
+						alert(msg + " must be filled out");
+						return false;
+					}
+					if(!isNaN(value) && !isNaN(parseFloat(value)) && !isNaN(parseInt(value))){
+						alert(msg +" must be word, can't be a number");
+						return false;
+					}
+					return true;
+				}
+
+				function valdiate_input_number(value,msg){
+					if(value == ""){
+						alert(msg + " must be filled out");
+						return false;
+					}
+					if(isNaN(value) && isNaN(parseFloat(value)) && isNaN(parseInt(value))){
+						alert(msg +" must be Number!");
+							return false;
+					}
+					return true;
+				}
+
+				function stop_submit(){
+					$('form').submit(function(e) {
+						e.preventDefault();
+					});
+					return false;
+				}
+
+				function start_submit(){
+					return true;
+				}
+
 				function ball_in_a_input_change(e){
+					if(e.target.value >= 0 && e.target.value <= 100){
 						var teamA_ball_out_obj = document.getElementById("ball_out_acc_team_a");
 						var a = 100-e.target.value;
 						teamA_ball_out_obj.value = a;
+					} else{
+						alert("Value of Ball in Team A must be between 0 to 100");
+					}
 				}
 
 				function ball_in_b_input_change(e){
+					if(e.target.value >= 0 && e.target.value <= 100){
 					var teamB_ball_out_obj = document.getElementById("ball_out_acc_team_b");
 					var b = 100-e.target.value;
 					teamB_ball_out_obj.value = b;
-				}
+				  } else {
+					alert("Value of Ball in Team B must be between 0 to 100");
+			  	}
+		  	}
 				function ball_out_a_input_change(e){
+					if(e.target.value >= 0 && e.target.value <= 100){
 					var teamA_ball_out_obj = document.getElementById("ball_in_acc_team_a");
 					var a = 100-e.target.value;
 					teamA_ball_out_obj.value = a;
+				}else {
+					alert("Value of Ball Out Team A must be between 0 to 100");
 				}
+			}
 				function ball_out_b_input_change(e){
+					if(e.target.value >= 0 && e.target.value <= 100){
 					var teamB_ball_out_obj = document.getElementById("ball_in_acc_team_b");
 					var b = 100-e.target.value;
 					teamB_ball_out_obj.value = b;
+				 }else{
+					 alert("Value of Ball Out Team B must be between 0 to 100");
 				}
+			}
 
 				function update_percentage(){
 					console.log(data_global);

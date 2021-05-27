@@ -19,7 +19,7 @@ class ObjectDetection:
         with open('./model/volley.names', 'r') as f:
             self.class_names = [cname.strip() for cname in f.readlines()]
 
-        net = cv2.dnn.readNet('/home/chameleonvision/Desktop/FinalProject/ChameleonVISION/model/volley.weights',
+        net = cv2.dnn.readNet('/home/chameleonvision/Desktop/ChameleonVISION/models/volley.weights',
                               './model/volley.cfg')
 
         net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
@@ -31,36 +31,40 @@ class ObjectDetection:
         self.classes, scores, boxes = self.model.detect(frame, CONFIDENCE_THRESHOLD, NMS_THRESHOLD)
         return self.classes, scores, boxes
 
-    def draw_tracking(self, result_frame, objects_bbs_ids, ball_box):
+    def draw_tracking(self, result_frame, players_trackerInsideField_boxes, ball_box):
 
-        if objects_bbs_ids is not None:
-            for object in objects_bbs_ids:
-                x, y, w, h, index = object
-                # cv2.rectangle(result_frame, (x, y), (x + w, y + h), (200, 200, 200), 1)
-                # cv2.putText(result_frame, str(index), (x-10, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+        if players_trackerInsideField_boxes is not None:
+            for player_insideField_box in players_trackerInsideField_boxes:
+                x, y, w, h, index = player_insideField_box
+                cx = (x + x + w) // 2
+                cy = (y + y + h) // 2
+
+                cv2.rectangle(result_frame, (x, y), (x + w, y + h), (200, 200, 200), 1)
+                cv2.circle(result_frame, (cx, cy), 1, (200, 200, 200), 1)
+                cv2.putText(result_frame, f'ID: {index}', (x-40, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
 
         return result_frame
 
-    def draw_objects(self, frame, classes, scores, boxes, field_center, LeftUp, LeftDown, RightDown, RightUp):
+    def draw_objects(self, frame, classes, scores, boxes, field_center, field_contour):
 
         for (classid, score, box) in zip(classes, scores, boxes):
+
+            # Box center
+            x, y = get_box_center(box)[0], get_box_center(box)[1]
 
             color = COLORS[2]
             if classid[0] == 0:
 
-                # Check if player inside the field
-                playerContour = np.array([LeftUp, LeftDown, RightDown, RightUp])
-                playerContour.reshape((-1, 1, 2))
-                player_inside_field = int(cv2.pointPolygonTest(playerContour, get_box_center(box), True))
+                player_inside_field = int(cv2.pointPolygonTest(field_contour, (x, y), True))
                 if player_inside_field >= 0:
                     # Left side
-                    if field_center and get_box_center(box)[0] < field_center:
+                    if field_center and x < field_center:
                         color = COLORS[0]
                     # Right side
                     else:
                         color = COLORS[1]
 
-            label = "(%d, %d)" % (get_box_center(box)[0], get_box_center(box)[1])
+            label = "(%d, %d)" % (x, y)
             overlay = frame.copy()
 
             # Draw player
@@ -72,16 +76,6 @@ class ObjectDetection:
             # Draw ball
             if classid[0] == 1:
                 ballMidpoint = (get_box_center(box)[0], get_box_center(box)[1])
-                # self.ball_flag = not self.ball_flag
-                # if self.ball_flag:
-                #     self.current_ball = ballMidpoint
-                # else:
-                #     self.prev_ball = ballMidpoint
-                # try:
-                #     cv2.line(overlay, self.current_ball, self.prev_ball, (0, 0, 255), 4, cv2.LINE_AA)
-                # except NameError:
-                #     print("cannot print ball line")
-
                 cv2.circle(overlay, ballMidpoint, int(box[2] / 2), COLORS[3], 2)
                 cv2.addWeighted(overlay, 0.5, frame, 0.5, 0, frame)
                 cv2.putText(frame, label, (box[0], box[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)

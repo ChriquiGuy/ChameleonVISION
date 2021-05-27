@@ -211,5 +211,7 @@ class FieldDetection:
         field = self.draw_field(frame)
 
         imgStack = stackImages(0.5, ([field, frame_copy], [binary, edges]))
+        cv2.putText(imgStack, f'-> Gamma = {self.Gamma_Min}', (320, 700),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
 
         return imgStack

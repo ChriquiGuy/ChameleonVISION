@@ -5,20 +5,25 @@ from .helper import *
 
 class EventDetection:
 
+    # Switching flags for calculate slopes
     ball_position_flag = False
     ball_slope_flag = False
 
+    # Ball coordinates
     current_ball = None
     prev_ball = None
-    pre_prev_ball = None
 
+    # Ball slopes
     current_slop = None
     prev_slop = None
 
+    # Calc different slope
     slope_difference = None
+
 
     last_player_touch = None
     current_player_touch = None
+
     ball_center = None
     field_contour = None
 
@@ -29,7 +34,7 @@ class EventDetection:
 
     # Draw slope diff event variables
     slopeDiff = None
-    ball = None
+    ball_point_event = None
 
     def check_ball_event(self, result_frame, classes, detection_boxes, field_contour, ball_box, field_center):
 
@@ -83,7 +88,6 @@ class EventDetection:
                 self.current_slop = None
                 self.prev_slop = None
                 self.prev_ball = None
-                self.pre_prev_ball = None
 
                 # Draw slope difference event for 3.6s
                 self.counter_draw_slope_diff += 1
@@ -147,13 +151,13 @@ class EventDetection:
     def draw_slope_diff(self, result_frame, slope_difference, current_ball):
         if self.counter_draw_slope_diff == 0:
             self.slopeDiff = slope_difference
-            self.ball = current_ball
+            self.ball_point_event = current_ball
 
-        if self.ball and self.slopeDiff and self.counter_draw_slope_diff < 200:
-            cv2.putText(result_frame, f'{self.slopeDiff} -> slope difference',
-                        (self.ball[0] + 20, self.ball[1] + 20),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
-            cv2.circle(result_frame, self.ball, 5, (0, 0, 0), -1)
+        # if self.ball_point_event and self.slopeDiff and self.counter_draw_slope_diff < 200:
+        #     cv2.putText(result_frame, f'{self.slopeDiff} -> slope difference',
+        #                 (self.ball[0] + 20, self.ball[1] + 20),
+        #                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+        #     cv2.circle(result_frame, self.ball_point_event, 5, (0, 0, 0), -1)
 
     def claculate_slope(self, pointA, pointB):
         slope_line = (pointA[0], pointA[1], pointB[0], pointB[1])
@@ -179,12 +183,16 @@ class EventDetection:
         else:
             return 1
 
-    def draw_event(self, frame, field_center):
+    # def draw_slope_diff_event(self, result_frame):
+    #
+    #     if self.ball_point_event and self.slopeDiff and self.counter_draw_slope_diff < 200:
+    #         cv2.putText(result_frame, f'{self.slopeDiff} -> slope difference',
+    #                     (self.ball[0] + 20, self.ball[1] + 20),
+    #                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+    #         cv2.circle(result_frame, self.ball_point_event, 5, (0, 0, 0), -1)
+    #         return result_frame
 
-        # if self.current_ball and self.pre_prev_ball and self.pre_prev_ball:
-        #     cv2.line(frame, (self.current_ball[0], self.current_ball[1]),
-        #              (self.pre_prev_ball[0], self.pre_prev_ball[1]),
-        #              (0, 255, 0), 4, cv2.LINE_AA)
+    def draw_event(self, frame, field_center):
 
         if self.current_ball and self.prev_ball:
             cv2.line(frame, (self.current_ball[0], self.current_ball[1]),
@@ -210,6 +218,13 @@ class EventDetection:
 
             cv2.putText(frame, f'last_player_side = {self.int_to_side(last_player_side)}', (640, 50),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+
+            # Draw slope diff event
+            if self.ball_point_event and self.slopeDiff and self.counter_draw_slope_diff < 200:
+                cv2.putText(frame, f'{self.slopeDiff} -> slope difference',
+                            (self.ball_point_event[0] + 20, self.ball_point_event[1] + 20),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+                cv2.circle(frame, self.ball_point_event, 5, (0, 0, 0), -1)
 
         return frame
 
@@ -253,7 +268,6 @@ class EventDetection:
     def reset_data(self):
         self.current_ball = None
         self.prev_ball = None
-        self.pre_prev_ball = None
         self.current_slop = None
         self.prev_slop = None
         self.found_last_frame = False

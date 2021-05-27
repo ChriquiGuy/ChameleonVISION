@@ -8,7 +8,7 @@ from tools.object_detection import ObjectDetection
 from tools.field_detection import FieldDetection
 from tools.event_detection import EventDetection
 from tools.replay_manager import ReplayManager
-from tools.object_tracker import ObjectTracker
+from tools.players_tracker import PlayersTracker
 from tools.ball_tracker import BallTracker
 # from utils.stream_stabilizer import StreamStabilizer
 
@@ -20,7 +20,9 @@ class Detector(QThread):
 
     def __init__(self):
         super().__init__()
-        self.tracker = ObjectTracker()
+
+        # Init trackers
+        self.playersTracker = PlayersTracker()
         self.ballTracker = BallTracker()
 
         self._run_flag = True
@@ -52,7 +54,7 @@ class Detector(QThread):
         # cap = cv2.VideoCapture('rtmp://127.0.0.1:1935/ChameleonVISION/1234')
 
         # Load video
-        self.cap = cv2.VideoCapture("./videos/volley.mp4")
+        self.cap = cv2.VideoCapture("/home/chameleonvision/Desktop/ChameleonVISION/Videos/volley.mp4")
 
         # Jump to first alert
         # self.cap.set(cv2.CAP_PROP_POS_FRAMES, 500)
@@ -71,10 +73,9 @@ class Detector(QThread):
 
             ret, current_frame = self.cap.read()
 
-            # current_frame = self.stabilizer.stabilizer_frame(current_frame)
-
             if ret:
 
+                # current_frame = self.stabilizer.stabilizer_frame(current_frame)
                 # time.sleep(0.01)
 
                 # Detect objects
@@ -87,52 +88,48 @@ class Detector(QThread):
                 # Debug draw detections
                 result_frame = current_frame.copy()
 
-                # Ball tracker
+                # Ball tracker filter
                 ball_box = self.ballTracker.track_inside_field(classes, detection_boxes, field_contour)
 
-                # Players tracker
-                # if field_contour is not None:
-                #     objects_bbs_ids = self.tracker.track_inside_field(result_frame, classes,
-                #                                                       scores, detection_boxes,
-                #                                                       field_contour)
+                if field_contour is not None:
+                    # Players tracker
+                    players_trackerInsideField_boxes = self.playersTracker.track_inside_field(classes, detection_boxes,
+                                                                                              field_contour)
+                    # Detect Events
+                    result_frame, ball_out_event, team = self.event_detector.check_ball_event(result_frame,
+                                                                                              classes, detection_boxes,
+                                                                                              field_contour, ball_box,
+                                                                                              field_center)
+                    if self.switch_flag:
+                        team = not team
 
-                # Detect Events
-                result_frame, ball_out_event, team = self.event_detector.check_ball_event(result_frame,
-                                                                                          classes, detection_boxes,
-                                                                                          field_contour, ball_box,
-                                                                                          field_center)
-                if self.switch_flag:
-                    team = not team
+                    serve_event = None
+                    if LeftUp and RightUp:
+                        serve_event = self.event_detector.is_in_serve_position(LeftUp[0], RightUp[0])
 
-                serve_event = None
-                if LeftUp and RightUp:
-                    serve_event = self.event_detector.is_in_serve_position(LeftUp[0], RightUp[0])
+                    # Debug screen
+                    if self.debug_flag:
+                        # Draw field
+                        result_frame = self.field_detector.draw_field(result_frame)
+                        # Draw objects
+                        result_frame = self.o_detection.draw_objects(result_frame, classes, scores, detection_boxes,
+                                                                     field_center, field_contour)
+                        # Draw tracking
+                        result_frame = self.o_detection.draw_tracking(result_frame, players_trackerInsideField_boxes,
+                                                                      ball_box)
+                        # Draw ball slop
+                        result_frame = self.event_detector.draw_event(result_frame, field_center)
 
-                # Main screen
-                if self.debug_flag:
-                    # Draw field
-                    result_frame = self.field_detector.draw_field(result_frame)
+                    # Calibration screen
+                    if self.calibration_flag:
+                        result_frame = self.field_detector.calibration(result_frame)
 
-                    # Draw objects
-                    result_frame = self.o_detection.draw_objects(result_frame, classes, scores, detection_boxes,
-                                                                 field_center, LeftUp, LeftDown, RightDown, RightUp)
+                    # Draw events (GUI)
+                    if ball_out_event is not None and team is not None:
+                        self.ball_event_signal.emit(ball_out_event, team)
 
-                    # # Draw tracking
-                    # result_frame = self.o_detection.draw_tracking(result_frame, objects_bbs_ids, ball_box)
-
-                    # Draw ball slop
-                    result_frame = self.event_detector.draw_event(result_frame, field_center)
-
-                # Calibration screen
-                if self.calibration_flag:
-                    result_frame = self.field_detector.calibration(result_frame)
-
-                # Draw events (GUI)
-                if ball_out_event is not None and team is not None:
-                    self.ball_event_signal.emit(ball_out_event, team)
-
-                if serve_event:
-                    self.in_serve_position.emit()
+                    if serve_event:
+                        self.in_serve_position.emit()
 
                 # self.event_detector.check_net_touch(result_frame, NetLine)
 

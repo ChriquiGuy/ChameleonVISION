@@ -78,6 +78,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 						var team_A = document.createElement("input");
 						team_A.setAttribute("type", "text");
 						team_A.setAttribute("name", "TeamA");
+						team_A.setAttribute("id", "team_a");
 						team_A.setAttribute("class", "form-control");
 						team_A.value= data[1][1];
 
@@ -93,6 +94,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 						var team_B = document.createElement("input");
 						team_B.setAttribute("type", "text");
 						team_B.setAttribute("name", "TeamB");
+						team_B.setAttribute("id", "team_b");
 						team_B.setAttribute("class", "form-control");
 						team_B.value= data[1][2];
 
@@ -110,6 +112,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 						 where_gamed_play.setAttribute("type", "text");
 						 where_gamed_play.setAttribute("name", "where_gamed_play");
 						 where_gamed_play.setAttribute("class", "form-control");
+						 where_gamed_play.setAttribute("id", "where_gamed_play");
 						 where_gamed_play.value= data[1][3];
 
 						 // Create an label for game Date
@@ -124,6 +127,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							date_of_game.setAttribute("type", "text");
 							date_of_game.setAttribute("name", "date_of_game");
 							date_of_game.setAttribute("class", "form-control");
+							date_of_game.setAttribute("id", "date_of_game");
 							date_of_game.value= data[1][4];
 
 
@@ -138,6 +142,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							weather.setAttribute("type", "text");
 							weather.setAttribute("name", "Weather");
 							weather.setAttribute("class", "form-control");
+							weather.setAttribute("id", "weather");
 							weather.value= data[1][5];
 
 							// Create an label for teamA ball in
@@ -151,6 +156,8 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							ball_in_acc_team_a.setAttribute("type", "text");
 							ball_in_acc_team_a.setAttribute("name", "ball_in_acc_team_a");
 							ball_in_acc_team_a.setAttribute("class", "form-control");
+							ball_in_acc_team_a.addEventListener('change', ball_in_a_input_change);
+							ball_in_acc_team_a.setAttribute("id", "ball_in_acc_team_a");
 							ball_in_acc_team_a.value= data[1][6];
 
 							// Create an label for teamB ball in
@@ -163,7 +170,9 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							var ball_in_acc_team_b = document.createElement("input");
 							ball_in_acc_team_b.setAttribute("type", "text");
 							ball_in_acc_team_b.setAttribute("name", "ball_in_acc_team_b");
+							ball_in_acc_team_b.addEventListener('change', ball_in_b_input_change);
 							ball_in_acc_team_b.setAttribute("class", "form-control");
+							ball_in_acc_team_b.setAttribute("id", "ball_in_acc_team_b");
 							ball_in_acc_team_b.value= data[1][7];
 
 							// Create an label for teamA ball in
@@ -176,6 +185,8 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							ball_out_acc_team_a.setAttribute("type", "text");
 							ball_out_acc_team_a.setAttribute("name", "ball_out_acc_team_a");
 							ball_out_acc_team_a.setAttribute("class", "form-control");
+							ball_out_acc_team_a.setAttribute("id", "ball_out_acc_team_a");
+							ball_out_acc_team_a.addEventListener('change', ball_out_a_input_change);
 							ball_out_acc_team_a.value= data[1][8];
 
 
@@ -184,11 +195,12 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							 label_ball_out_acc_team_b.style.fontSize = "x-large";
 							 var text_for_label_ball_out_acc_team_b = document.createTextNode("Team B ball out (%):");
 							 label_ball_out_acc_team_b.appendChild(text_for_label_ball_out_acc_team_b);
-
 							var ball_out_acc_team_b = document.createElement("input");
 							ball_out_acc_team_b.setAttribute("type", "text");
 							ball_out_acc_team_b.setAttribute("name", "ball_out_acc_team_b");
 							ball_out_acc_team_b.setAttribute("class", "form-control");
+							ball_out_acc_team_b.setAttribute("id", "ball_out_acc_team_b");
+							ball_out_acc_team_b.addEventListener('change', ball_out_b_input_change);
 							ball_out_acc_team_b.value= data[1][9];
 
 							// Create an label for game weather
@@ -203,6 +215,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							system_accuracy_percentage_input.setAttribute("type", "text");
 							system_accuracy_percentage_input.setAttribute("name", "system_accuracy");
 							system_accuracy_percentage_input.setAttribute("class", "form-control");
+							system_accuracy_percentage_input.setAttribute("id", "system_accuracy_percentage_input");
 							system_accuracy_percentage_input.value= data[1][10];
 
 
@@ -264,8 +277,6 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							 // Append the game weather label to the form
 							 form.appendChild(weather);
 							 form.appendChild(br.cloneNode());
-
-
 
 							// Append the team A  ball in label to the form
 							form.appendChild(label_ball_in_acc_team_a);
@@ -385,7 +396,6 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							let h1_second_team = document.getElementById("h1_second_team");
 							h1_second_team.innerHTML = data[1][2];
 							h1_second_team.style.display = "block";
-
 						});
 					});
 
@@ -449,6 +459,28 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							return false;
 						}
 					}
+				}
+
+				function ball_in_a_input_change(e){
+						var teamA_ball_out_obj = document.getElementById("ball_out_acc_team_a");
+						var a = 100-e.target.value;
+						teamA_ball_out_obj.value = a;
+				}
+
+				function ball_in_b_input_change(e){
+					var teamB_ball_out_obj = document.getElementById("ball_out_acc_team_b");
+					var b = 100-e.target.value;
+					teamB_ball_out_obj.value = b;
+				}
+				function ball_out_a_input_change(e){
+					var teamA_ball_out_obj = document.getElementById("ball_in_acc_team_a");
+					var a = 100-e.target.value;
+					teamA_ball_out_obj.value = a;
+				}
+				function ball_out_b_input_change(e){
+					var teamB_ball_out_obj = document.getElementById("ball_in_acc_team_b");
+					var b = 100-e.target.value;
+					teamB_ball_out_obj.value = b;
 				}
 
 				function update_percentage(){

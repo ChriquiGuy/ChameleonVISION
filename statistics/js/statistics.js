@@ -115,7 +115,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 						 // Create an label for game Date
 							var label_game_date = document.createElement("label");
 							label_game_date.style.fontSize = "x-large";
-							var text_for_game_date_label = document.createTextNode("Game date: (format: yyyy-dd-mm)");
+							var text_for_game_date_label = document.createTextNode("Game date: (format: yyyy-mm-dd)");
 							label_game_date.appendChild(text_for_game_date_label);
 
 
@@ -190,6 +190,22 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							ball_out_acc_team_b.setAttribute("name", "ball_out_acc_team_b");
 							ball_out_acc_team_b.setAttribute("class", "form-control");
 							ball_out_acc_team_b.value= data[1][9];
+
+							// Create an label for game weather
+							 var system_accuracy_percentage_label = document.createElement("label");
+							 system_accuracy_percentage_label.style.fontSize = "x-large";
+							 var system_accuracy_percentage_text = document.createTextNode("system accurecy (%):");
+							 system_accuracy_percentage_label.appendChild(system_accuracy_percentage_text);
+
+							// Create an input element for Weather
+							var system_accuracy_percentage_input = document.createElement("input");
+							system_accuracy_percentage_input.readOnly = true;
+							system_accuracy_percentage_input.setAttribute("type", "text");
+							system_accuracy_percentage_input.setAttribute("name", "system_accuracy");
+							system_accuracy_percentage_input.setAttribute("class", "form-control");
+							system_accuracy_percentage_input.value= data[1][10];
+
+
 								 // create a submit button
 							 var s = document.createElement("input");
 							 s.setAttribute("type", "submit");
@@ -286,6 +302,14 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							// Append the team B ball out input to the form
 							form.appendChild(ball_out_acc_team_b);
 							form.appendChild(br.cloneNode());
+
+							// Append the team B ball out label to the form
+						  form.appendChild(system_accuracy_percentage_label);
+						  form.appendChild(br.cloneNode());
+
+						  // Append the team B ball out input to the form
+						  form.appendChild(system_accuracy_percentage_input);
+						  form.appendChild(br.cloneNode());
 
 							 // Append the submit button to the form
 							form.appendChild(s);

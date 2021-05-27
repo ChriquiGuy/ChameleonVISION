@@ -6,13 +6,7 @@ $username = "root";
 $password = "root";
 
 $conn = mysqli_connect($servername, $username, $password, $database);
-//Check connection
-// if ($conn->connect_error) {
-// print_r("Connected failed");
-// die("Connection failed: " . $conn->connect_error);
-// } else{
-// print_r("Connected successfully");
-// }
+
 
 $GameName = $_POST['GameName'];
 $TeamA = $_POST['TeamA'];
@@ -25,15 +19,9 @@ $ball_in_acc_team_a = $_POST['ball_in_acc_team_a'];
 $ball_in_acc_team_b = $_POST['ball_in_acc_team_b'];
 $ball_out_acc_team_a = $_POST['ball_out_acc_team_a'];
 $ball_out_acc_team_b = $_POST['ball_out_acc_team_b'];
-
-$sql= "INSERT INTO statistics(GameName, TeamA, TeamB,WhereGamePlayed,DateOfGame,Weather,AccuracyPercentageOfBallInForTeamA,AccuracyPercentageOfBallInForTeamB, AccuracyPercentageOfBallOutForTeamA,AccuracyPercentageOfBallOutForTeamB) VALUES ('$GameName','$TeamA','$TeamB','$where_gamed_play','$newDate','$Weather','$ball_in_acc_team_a','$ball_in_acc_team_b','$ball_out_acc_team_a','$ball_out_acc_team_b')";
-
+$system_accurecy = $_POST['system_accuracy'];
+$sql= "INSERT INTO statistics(GameName, TeamA, TeamB,WhereGamePlayed,DateOfGame,Weather,AccuracyPercentageOfBallInForTeamA,AccuracyPercentageOfBallInForTeamB, AccuracyPercentageOfBallOutForTeamA,AccuracyPercentageOfBallOutForTeamB,SystemAccuracy) VALUES ('$GameName','$TeamA','$TeamB','$where_gamed_play','$newDate','$Weather','$ball_in_acc_team_a','$ball_in_acc_team_b','$ball_out_acc_team_a','$ball_out_acc_team_b','$system_accurecy')";
 $run = mysqli_query($conn ,$sql);
-// if($run == True){
-//   echo "inserted";
-// } else {
-//   echo "error in insert row";
-// }
 mysqli_close($conn);
 ?>
 
@@ -55,7 +43,6 @@ mysqli_close($conn);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
     <meta charset="utf-8">
-   <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>

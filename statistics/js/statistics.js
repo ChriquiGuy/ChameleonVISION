@@ -49,7 +49,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 					 var form = document.createElement("form");
 					 form.setAttribute("method", "post");
 					 form.setAttribute("action", "php/save.php");
-					 form.setAttribute("class", "was-validated");
+					 // form.setAttribute("class", "was-validated");
 					 form.setAttribute("id", "db_form");
 					 form.setAttribute("onsubmit", " return submit_form()");
 
@@ -474,25 +474,25 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 
 				function form_validation(){
 						let if_form_valid = true;
-					  if_form_valid = valdiate_input_string(document.getElementById("game_name").value,"Game Name ");
+					  if_form_valid = valdiate_input_string(document.getElementById("game_name"),"Game Name ");
 						if(if_form_valid == false) return false;
-						if_form_valid = valdiate_input_string(document.getElementById("team_a").value,"Team A ");
+						if_form_valid = valdiate_input_string(document.getElementById("team_a"),"Team A ");
 						if(if_form_valid == false) return false;
-						if_form_valid =valdiate_input_string(document.getElementById("team_b").value,"Team B ");
+						if_form_valid =valdiate_input_string(document.getElementById("team_b"),"Team B ");
 						if(if_form_valid == false) return false;
-						if_form_valid =valdiate_input_string(document.getElementById("where_gamed_play").value,"Game Location ");
+						if_form_valid =valdiate_input_string(document.getElementById("where_gamed_play"),"Game Location ");
 						if(if_form_valid == false) return false;
-						if_form_valid =valdiate_input_string(document.getElementById("date_of_game").value,"Game date");
+						if_form_valid =valdiate_input_string(document.getElementById("date_of_game"),"Game date");
 						if(if_form_valid == false)  return false;
-						if_form_valid =valdiate_input_string(document.getElementById("weather").value,"Weather");
+						if_form_valid =valdiate_input_string(document.getElementById("weather"),"Weather");
 						if(if_form_valid == false)  return false;
- 				  	if_form_valid =valdiate_input_number(document.getElementById("ball_in_acc_team_a").value,"Team A ball in ");
+ 				  	if_form_valid =valdiate_input_number(document.getElementById("ball_in_acc_team_a"),"Team A ball in ");
 						if(if_form_valid == false) return false;
-						if_form_valid =valdiate_input_number(document.getElementById("ball_in_acc_team_b").value,"Team B ball in ");
+						if_form_valid =valdiate_input_number(document.getElementById("ball_in_acc_team_b"),"Team B ball in ");
 						if(if_form_valid == false) return false;
-						if_form_valid =valdiate_input_number(document.getElementById("ball_out_acc_team_a").value,"Team A ball out ");
+						if_form_valid =valdiate_input_number(document.getElementById("ball_out_acc_team_a"),"Team A ball out ");
 						if(if_form_valid == false) return false;
-						if_form_valid = valdiate_input_number(document.getElementById("ball_out_acc_team_b").value,"Team B ball out ");
+						if_form_valid = valdiate_input_number(document.getElementById("ball_out_acc_team_b"),"Team B ball out ");
 						if(if_form_valid == false){
 							return false;
 						}
@@ -501,30 +501,44 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 						}
 				}
 
-				function valdiate_input_string(value,msg){
+				function valdiate_input_string(element,msg){
+					value = element.value;
 					if(value == ""){
 						alert(msg + " must be filled out");
+						element.setAttribute("class", "form-control is-invalid");
 						return false;
 					}
 					if(!isNaN(value) && !isNaN(parseFloat(value)) && !isNaN(parseInt(value))){
 						alert(msg +" must be word, can't be a number");
+						element.setAttribute("class", "form-control is-invalid");
 						return false;
 					}
+					element.setAttribute("class", "form-control is-valid");
 					return true;
 				}
 
-				function valdiate_input_number(value,msg){
+				function valdiate_input_number(element,msg){
+					value = element.value;
 					if(value == ""){
 						alert(msg + " must be filled out");
+						element.setAttribute("class", "form-control is-invalid");
+
 						return false;
 					}
 					if(isNaN(value) && isNaN(parseFloat(value)) && isNaN(parseInt(value))){
 						alert(msg +" must be Number!");
-							return false;
+						element.setAttribute("class", "form-control is-invalid");
+						return false;
 					}
+					if(value >= 0 && value <= 100){
+					element.setAttribute("class", "form-control is-valid");
 					return true;
+				} else {
+					alert(msg +" must be between 0 to 100!");
+					element.setAttribute("class", "form-control is-invalid");
+					return false;
 				}
-
+			}
 				function stop_submit(){
 					$('form').submit(function(e) {
 						e.preventDefault();
@@ -543,6 +557,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 						teamA_ball_out_obj.value = a;
 					} else{
 						alert("Value of Ball in Team A must be between 0 to 100");
+						// submit_form();
 					}
 				}
 

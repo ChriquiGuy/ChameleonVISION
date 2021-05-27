@@ -355,13 +355,13 @@ footer p strong {
   }
 
 .circle-chart__circle {
-  animation: circle-chart-fill 5s reverse; /* 1 */
+  animation: circle-chart-fill 1s reverse; /* 1 */
   transform: rotate(-90deg); /* 2, 3 */
   transform-origin: center; /* 4 */
 }
 
 .circle-chart__info {
-  animation: circle-chart-appear 5s forwards;
+  animation: circle-chart-appear 1s forwards;
   opacity: 1;
   transform: translateY(0.93em);
 }

@@ -1,6 +1,7 @@
 	var data_global = 0;
 	var donut_chart = 0;
 	var create_db_form_flag = 0;
+	let flag_of_percentage = 0;
 	$.fn.jQuerySimpleCounter = function( options ) {
 	    var settings = $.extend({
 	        start:  0,
@@ -114,7 +115,7 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 						 // Create an label for game Date
 							var label_game_date = document.createElement("label");
 							label_game_date.style.fontSize = "x-large";
-							var text_for_game_date_label = document.createTextNode("Game date:");
+							var text_for_game_date_label = document.createTextNode("Game date: (format: yyyy-dd-mm)");
 							label_game_date.appendChild(text_for_game_date_label);
 
 
@@ -373,12 +374,12 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							if (i != 0) {
 								let newcell = newRow.insertCell();
 								let newText = document.createTextNode(row)
-								console.log(newText);
+								// console.log(newText);
 								newcell.setAttribute("id", id);
 								newcell.appendChild(newText);
 								id++;
 							}
-							console.log(data);
+							// console.log(data);
 							let canvas = document.getElementById("my_bar_chart");
 							if(choose == 'doughnut'){
 							 canvas = document.getElementById("my_donut_chart");
@@ -399,6 +400,10 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 
 							var circle_chart = document.getElementById("circle_chart");
 							circle_chart.style.display = "block";
+							if(flag_of_percentage == 0){
+								update_percentage();
+								flag_of_percentage = 1;
+							}
 						});
 					}
 
@@ -420,6 +425,16 @@ $('#number4').jQuerySimpleCounter({end: 246,duration: 2500});
 							return false;
 						}
 					}
+				}
+
+				function update_percentage(){
+					console.log(data_global);
+					let system_accuracy_percentage = document.getElementById("system_accuracy_percentage");
+					system_accuracy_percentage.innerHTML = "";
+					var y = document.createTextNode(data_global[1][10].toString() +'%');
+					system_accuracy_percentage.appendChild(y);
+					let fill = document.getElementById("circle-chart_fill");
+					fill.setAttribute("stroke-dasharray" , data_global[1][10].toString() + ', 100');
 				}
 
 				function displayChart(data,choose,id){

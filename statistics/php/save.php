@@ -97,7 +97,7 @@ mysqli_close($conn);
 
       </tbody>
     </table>
-    <button type="submit" class="btn btn-primary" onclick="show_graph('ball_in')">Show graph</button>
+    <button type="submit" id="show_graph_btn" class="btn btn-primary" onclick="show_graph('ball_in')">Show graph</button>
     <select class="custom-select mr-sm-2" id="chart_type" onchange="getChoosenValue('Line Chart')">
     <option selected>Choose...</option>
     <option value="line_chart">Line Chart</option>

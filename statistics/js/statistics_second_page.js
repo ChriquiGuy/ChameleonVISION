@@ -26,6 +26,14 @@ ball_list.style.display = none;
 }
 
 function show_db_info(){
+var tbl_data_db = document.getElementById("tbl-data-db");
+tbl_data_db.style.display = "block";
+var show_graph_btn = document.getElementById("show_graph_btn");
+show_graph_btn.style.display = "inline-block";
+var chart_type = document.getElementById("chart_type");
+chart_type.style.display = "inline-block";
+var ball_status_list = document.getElementById("ball_status_list");
+ball_status_list.style.display = "inline-block";
 var game_name = document.getElementById("teams_name").value;
 var date = document.getElementById("date").value;
 var date_two = document.getElementById("date_two").value;

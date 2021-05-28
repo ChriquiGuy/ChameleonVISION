@@ -92,7 +92,7 @@ class Detector(QThread):
 
                 if field_contour is not None:
 
-                    # Ball tracker filter
+                    # Ball tracker and priority filter
                     ball_box = self.ballTracker.track_inside_field(classes, detection_boxes, field_contour)
 
                     # Measure ball velocity

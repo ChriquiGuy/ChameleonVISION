@@ -31,7 +31,7 @@ class ObjectDetection:
         self.classes, scores, boxes = self.model.detect(frame, CONFIDENCE_THRESHOLD, NMS_THRESHOLD)
         return self.classes, scores, boxes
 
-    def draw_tracking(self, result_frame, players_trackerInsideField_boxes, ball_box):
+    def draw_tracking(self, result_frame, players_trackerInsideField_boxes,):
 
         if players_trackerInsideField_boxes is not None:
             for player_insideField_box in players_trackerInsideField_boxes:
@@ -42,6 +42,8 @@ class ObjectDetection:
                 cv2.rectangle(result_frame, (x, y), (x + w, y + h), (200, 200, 200), 1)
                 cv2.circle(result_frame, (cx, cy), 1, (200, 200, 200), 1)
                 cv2.putText(result_frame, f'ID: {index}', (x-40, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+
+
 
         return result_frame
 

@@ -10,6 +10,7 @@ from tools.event_detection import EventDetection
 from tools.replay_manager import ReplayManager
 from tools.players_tracker import PlayersTracker
 from tools.ball_tracker import BallTracker
+from tools.velocity_measure import VelocityMeasure
 # from utils.stream_stabilizer import StreamStabilizer
 
 
@@ -21,9 +22,10 @@ class Detector(QThread):
     def __init__(self):
         super().__init__()
 
-        # Init trackers
+        # Init methods
         self.playersTracker = PlayersTracker()
         self.ballTracker = BallTracker()
+        self.velocity = VelocityMeasure()
 
         self._run_flag = True
         self.debug_flag = False
@@ -88,10 +90,14 @@ class Detector(QThread):
                 # Debug draw detections
                 result_frame = current_frame.copy()
 
-                # Ball tracker filter
-                ball_box = self.ballTracker.track_inside_field(classes, detection_boxes, field_contour)
-
                 if field_contour is not None:
+
+                    # Ball tracker filter
+                    ball_box = self.ballTracker.track_inside_field(classes, detection_boxes, field_contour)
+
+                    # Measure ball velocity
+                    ball_velocity_cm_sec = self.velocity.get_velocity(ball_box, field_contour)
+
                     # Players tracker
                     players_trackerInsideField_boxes = self.playersTracker.track_inside_field(classes, detection_boxes,
                                                                                               field_contour)
@@ -114,11 +120,12 @@ class Detector(QThread):
                         # Draw objects
                         result_frame = self.o_detection.draw_objects(result_frame, classes, scores, detection_boxes,
                                                                      field_center, field_contour)
-                        # Draw tracking
-                        result_frame = self.o_detection.draw_tracking(result_frame, players_trackerInsideField_boxes,
-                                                                      ball_box)
+                        # Draw players tracking
+                        result_frame = self.o_detection.draw_tracking(result_frame, players_trackerInsideField_boxes)
                         # Draw ball slop
                         result_frame = self.event_detector.draw_event(result_frame, field_center)
+                        # Draw velocity ball
+                        result_frame = self.velocity.draw_velocity(result_frame, ball_velocity_cm_sec)
 
                     # Calibration screen
                     if self.calibration_flag:

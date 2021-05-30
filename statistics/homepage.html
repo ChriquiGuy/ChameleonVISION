@@ -1,37 +1,61 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <script type="text/javascript" src = "js\homepage.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="css\homepage_style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title></title>
-  </head>
-  <body class="bg-black">
-    <!-- Just an image -->
-    <!-- Image and text -->
-    <nav class="navbar navbar-light" style="background-color: #393e46;">
-      <a class="navbar-brand" href="#">
-        <img src="photos/LOGO-No Background.png" width="30" height="30" class="d-inline-block align-top" alt="">
-        ChameleonVISION
-      </a>
-    </nav>
-    <!-- <h1 class ="rounded mx-auto d-block">Welcome to ChameleonVISION</h1> -->
-    <img src="photos/LOGO - BLACK.png" class ="rounded mx-auto d-block" width="40%" height="40%" class="d-inline-block align-top" alt="">
-    <div class="container">
-      <div class="box">
-        <h2 class = "upload_game_h2"">upload game</h2>
-        <a href="statistics.html"><img src="photos/upload_photo.jpg" class="upload_photo"></a>
-      </div>
-      <div class="box">
-        <h2 class="statistics_h2">show statistics</h2>
-        <a href="php/save.php"><img src="photos/show_statistics.jpeg" class="rounded float-right show_statistics" width="37%" height="37%"></a>
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript" src="js\homepage.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="css\homepage_style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title></title>
+</head>
+
+<body class="bg-black">
+  <!-- Just an image -->
+  <!-- Image and text -->
+  <nav class="navbar navbar-light" style="background-color: #393e46;">
+    <a class="navbar-brand" href="#">
+      <img src="photos/LOGO-No Background.png" width="30" height="30" class="d-inline-block align-top" alt="">
+      ChameleonVISION
+    </a>
+  </nav>
+  <!-- <h1 class ="rounded mx-auto d-block">Welcome to ChameleonVISION</h1> -->
+  <img src="photos/LOGO - BLACK.png" class="rounded mx-auto d-block" width="40%" height="40%" class="d-inline-block align-top" alt="">
+  <div class="container">
+    <div class="box">
+      <img src="photos/upload_photo.jpg" width="108%" height="108%" class="rounded float-left ">
+      <div class="image_overlay">
+        <a href="statistics.html">
+          <div class="image_title"> Upload game </div>
+        </a>
+        <a href="statistics.html">
+          <p class="image_description">Upload your XL file game</p>
+        </a>
       </div>
     </div>
-    </body
+    <div class="box">
+      <img src="photos/show_statistics.jpeg" width="108%" height="108%" class="rounded float-right ">
+      <div class="image_overlay_statistics">
+        <a href="php/save.php">
+          <div class="image_title"> Show statistics</div>
+        </a>
+        <a href="php/save.php">
+          <p class="image_description">show all statistics <br> of specific team</p>
+        </a>
+      </div>
+    </div>
+  </div>
+    <footer>
+      <p>About us</p>
+    </footer>
+</body>
+
 </html>

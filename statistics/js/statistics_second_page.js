@@ -79,6 +79,7 @@ function close_popUp(){
       return result;
     }
 
+
     function show_graph($choose){
       let ctx = document.getElementById("my_line_chart");
       let team_name = document.getElementById("teams_name").value;

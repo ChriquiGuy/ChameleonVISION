@@ -1,21 +1,24 @@
-<script type="text/javascript">
-$(document).ready(function(){
-    //initially hide second h1
-    $("h1:nth-child(2)").hide();
-
-    function show_second_h1(){
-        $("h1:nth-child(1)").hide();
-        $("h1:nth-child(2)").show();
-        setTimeout(show_first_h1,8000);
-    }
 
 
-    function show_first_h1(){
-        $("h1:nth-child(1)").show();
-        $("h1:nth-child(2)").hide();
-        setTimeout(show_second_h1,3000);
-    }
+let settings = {
+    //Model Popup
+    objModalPopupBtn: ".modalButton",
+    objModalCloseBtn: ".overlay, .closeBtn",
+    objModalDataAttr: "data-popup"
+}
+  settings.objModalPopupBtn.bind("click", function () {
+        if ($(this).attr(settings.objModalDataAttr)) {
 
-    setTimeout(show_second_h1,3000);
-});
-</script>
+            var strDataPopupName = $(this).attr(settings.objModalDataAttr);
+
+
+            //Fade In Modal Pop Up
+            $(".overlay, #" + strDataPopupName).fadeIn();
+
+        }
+    });
+
+    //On clicking the modal background
+    $(settings.objModalCloseBtn).bind("click", function () {
+        $(".modal").fadeOut();
+    });

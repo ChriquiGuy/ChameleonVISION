@@ -2,9 +2,11 @@ import cv2
 import numpy as np
 from .helper import *
 import time
+# import keyboard
 
 WEIGHT_OF_SCREEN = 1274
 HEIGHT_OF_SCREEN = 720
+threshold_jump = 10
 
 
 class FieldDetection:
@@ -25,25 +27,25 @@ class FieldDetection:
     y_click = 0
     mode = None
 
-    # Net Line
-    NTL = WEIGHT_OF_SCREEN * 0.35  # left threshold of net
-    NTR = WEIGHT_OF_SCREEN * 0.65  # right threshold of net
-
     # Left line
-    LTL = WEIGHT_OF_SCREEN * 0.1  # left threshold of left line
-    LTR = WEIGHT_OF_SCREEN * 0.3  # right threshold of left line
+    LL = int(WEIGHT_OF_SCREEN * 0.1)  # left threshold of left line
+    RL = int(WEIGHT_OF_SCREEN * 0.3)  # right threshold of left line
+
+    # Net Line
+    LN = int(WEIGHT_OF_SCREEN * 0.35)  # left threshold of net
+    RN = int(WEIGHT_OF_SCREEN * 0.65)  # right threshold of net
 
     # Right line
-    RTL = WEIGHT_OF_SCREEN * 0.8  # left threshold of right line
-    RTR = WEIGHT_OF_SCREEN * 0.95  # right threshold of right line
+    LR = int(WEIGHT_OF_SCREEN * 0.8)  # left threshold of right line
+    RR = int(WEIGHT_OF_SCREEN * 0.95)  # right threshold of right line
 
     # Up line
-    UTT = HEIGHT_OF_SCREEN * 0.1  # up threshold of top line
-    DTT = HEIGHT_OF_SCREEN * 0.35  # down threshold of top line
+    UT = int(HEIGHT_OF_SCREEN * 0.1)  # up threshold of top line
+    DT = int(HEIGHT_OF_SCREEN * 0.35)  # down threshold of top line
 
     # Bottom Line
-    UTB = HEIGHT_OF_SCREEN * 0.7  # up threshold of Bottom line
-    DTB = HEIGHT_OF_SCREEN * 0.95  # down threshold of Bottom line
+    UB = int(HEIGHT_OF_SCREEN * 0.7)  # up threshold of Bottom line
+    DB = int(HEIGHT_OF_SCREEN * 0.95)  # down threshold of Bottom line
 
     UpLine = None
     LeftLine = None
@@ -75,11 +77,11 @@ class FieldDetection:
 
         if lines is not None:
             slopeLines = self.SlopeCalc(lines)
-            self.NetLine = self.LinesFilter(slopeLines, self.NTL, self.NTR, 0, 2, None)
-            self.UpLine = self.LinesFilter(slopeLines, self.UTT, self.DTT, 1, 3, False)
-            self.LeftLine = self.LinesFilter(slopeLines, self.LTL, self.LTR, 0, 2, True)
-            self.DownLine = self.LinesFilter(slopeLines, self.UTB, self.DTB, 1, 3, False)
-            self.RightLine = self.LinesFilter(slopeLines, self.RTL, self.RTR, 0, 2, True)
+            self.NetLine = self.LinesFilter(slopeLines, self.LN, self.RN, 0, 2, None)
+            self.UpLine = self.LinesFilter(slopeLines, self.UT, self.DT, 1, 3, False)
+            self.LeftLine = self.LinesFilter(slopeLines, self.LL, self.RL, 0, 2, True)
+            self.DownLine = self.LinesFilter(slopeLines, self.UB, self.DB, 1, 3, False)
+            self.RightLine = self.LinesFilter(slopeLines, self.LR, self.RR, 0, 2, True)
 
             # print(f'NTL = {self.NTL}')
             # print(f'NTR = {self.NTR}')
@@ -214,6 +216,10 @@ class FieldDetection:
         FieldContour.reshape((-1, 1, 2))
         return FieldContour
 
+    # ***********************
+    # Calibration screen
+    # ***********************
+
     def calibration(self, frame):
 
         # Current frame
@@ -236,6 +242,10 @@ class FieldDetection:
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
 
         return imgStack
+
+    # ***********************
+    # Field thresholds screen
+    # ***********************
 
     def dynamic_field_thresholds(self, result_frame):
 
@@ -310,6 +320,19 @@ class FieldDetection:
             #             (self.x_click + 10, self.y_click - 10), font, 3, (0, 0, 0))
             self.mode = "DB"
 
+        else:
+            self.mode = None
+
+        # give me threshold line
+        f_point, s_point, threshold_name, line_color = self.give_me_line()
+
+        # Draw threshold line
+        if f_point is not None:
+            result_frame = cv2.line(result_frame, f_point, s_point, line_color, 2)
+        else:
+            cv2.putText(result_frame, f'Please, select the threshold line.',
+                        (10, HEIGHT_OF_SCREEN // 2), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 0), 5)
+
         cv2.imshow("# Field thresholds calibration screen", result_frame)
 
         return result_frame
@@ -324,6 +347,81 @@ class FieldDetection:
 
     def reset_click(self):
         self.x_click, self.y_click = 0, 0
+
+    def give_me_line(self):
+
+        colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
+
+        if self.mode == "LL":
+
+            # if keyboard.is_pressed('left'):
+            #     print("left")
+            #
+            # elif keyboard.is_pressed('right'):
+            #     print("left")
+
+            f_point = (self.LL, 0)
+            s_point = (self.LL, HEIGHT_OF_SCREEN)
+            threshold_name = "LL"
+            return f_point, s_point, threshold_name, colors[2]
+
+        elif self.mode == "RL":
+            f_point = (self.RL, 0)
+            s_point = (self.RL, HEIGHT_OF_SCREEN)
+            threshold_name = "RL"
+            return f_point, s_point, threshold_name, colors[2]
+
+        elif self.mode == "LN":
+            f_point = (self.LN, 0)
+            s_point = (self.LN, HEIGHT_OF_SCREEN)
+            threshold_name = "LN"
+            return f_point, s_point, threshold_name, colors[0]
+
+        elif self.mode == "RN":
+            f_point = (self.RN, 0)
+            s_point = (self.RN, HEIGHT_OF_SCREEN)
+            threshold_name = "RN"
+            return f_point, s_point, threshold_name, colors[0]
+
+        elif self.mode == "LR":
+            f_point = (self.LR, 0)
+            s_point = (self.LR, HEIGHT_OF_SCREEN)
+            threshold_name = "LR"
+            return f_point, s_point, threshold_name, colors[2]
+
+        elif self.mode == "RR":
+            f_point = (self.RR, 0)
+            s_point = (self.RR, HEIGHT_OF_SCREEN)
+            threshold_name = "RR"
+            return f_point, s_point, threshold_name, colors[2]
+
+        elif self.mode == "UT":
+            f_point = (0, self.UT)
+            s_point = (WEIGHT_OF_SCREEN, self.UT)
+            threshold_name = "UT"
+            return f_point, s_point, threshold_name, colors[1]
+
+        elif self.mode == "DT":
+            f_point = (0, self.DT)
+            s_point = (WEIGHT_OF_SCREEN, self.DT)
+            threshold_name = "DT"
+            return f_point, s_point, threshold_name, colors[1]
+
+        elif self.mode == "UB":
+            f_point = (0, self.UB)
+            s_point = (WEIGHT_OF_SCREEN, self.UB)
+            threshold_name = "UB"
+            return f_point, s_point, threshold_name, colors[1]
+
+        elif self.mode == "DB":
+            f_point = (0, self.DB)
+            s_point = (WEIGHT_OF_SCREEN, self.DB)
+            threshold_name = "DB"
+            return f_point, s_point, threshold_name, colors[1]
+
+        elif self.mode is None:
+            return None, None, None, (0, 0, 0)
+
 
 
 

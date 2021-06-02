@@ -19,7 +19,7 @@ class ObjectDetection:
         with open('./model/volley.names', 'r') as f:
             self.class_names = [cname.strip() for cname in f.readlines()]
 
-        net = cv2.dnn.readNet('/home/chameleonvision/Desktop/ChameleonVISION/models/volley.weights',
+        net = cv2.dnn.readNet('/home/chameleonvision/Desktop/ChameleonVISION/models/volley_best.weights',
                               './model/volley.cfg')
 
         net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)

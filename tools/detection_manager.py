@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-# import time
+import time
 
 # includes
 from PyQt5.QtCore import pyqtSignal, QThread, QObject
@@ -27,12 +27,16 @@ class Detector(QThread):
         self.ballTracker = BallTracker()
         self.velocity = VelocityMeasure()
 
-        self._run_flag = True
+        # GUI right side buttons
         self.debug_flag = False
         self.calibration_flag = False
+        self.fieldThresholds_flag = False
+
+        self._run_flag = True
         self.play_flag = False
         self.switch_flag = False
         self.replay_flag = False
+
 
         self.field_detector = None
         self.o_detection = None
@@ -130,6 +134,10 @@ class Detector(QThread):
                     # Calibration screen
                     if self.calibration_flag:
                         result_frame = self.field_detector.calibration(result_frame)
+
+                    # Field thresholds calibration screen
+                    if self.fieldThresholds_flag:
+                        result_frame = self.field_detector.dynamic_field_thresholds(result_frame)
 
                     # Draw events (GUI)
                     if ball_out_event is not None and team is not None:

@@ -4,7 +4,6 @@ from .helper import *
 
 
 class EventDetection:
-
     # Switching flags for calculate slopes
     ball_position_flag = False
     ball_slope_flag = False
@@ -19,7 +18,6 @@ class EventDetection:
 
     # Calc different slope
     slope_difference = None
-
 
     last_player_touch = None
     current_player_touch = None
@@ -183,15 +181,6 @@ class EventDetection:
         else:
             return 1
 
-    # def draw_slope_diff_event(self, result_frame):
-    #
-    #     if self.ball_point_event and self.slopeDiff and self.counter_draw_slope_diff < 200:
-    #         cv2.putText(result_frame, f'{self.slopeDiff} -> slope difference',
-    #                     (self.ball[0] + 20, self.ball[1] + 20),
-    #                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
-    #         cv2.circle(result_frame, self.ball_point_event, 5, (0, 0, 0), -1)
-    #         return result_frame
-
     def draw_event(self, frame, field_center):
 
         if self.current_ball and self.prev_ball:
@@ -236,7 +225,9 @@ class EventDetection:
 
     def is_in_serve_position(self, left, rigth):
 
-        if not self.last_player_touch or left == None or rigth == None: return False
+        if not self.last_player_touch or left is None or rigth is None:
+            return False
+
         x, y, w, h = self.last_player_touch
         playerLeftUp = (x, y)
         playerLeftDown = (x, y + h)

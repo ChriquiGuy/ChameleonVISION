@@ -12,7 +12,6 @@ class VelocityMeasure:
         # Calculate how much pixels in 16 meters
         # field_pixels_length = 1600cm
         field_pixels_length = max(field_contour[:, 0]) - min(field_contour[:, 0])
-        print(field_pixels_length)
 
         pixel_to_cm = field_pixels_length / 1600
         distance = self.distance(ball_box)
@@ -46,7 +45,7 @@ class VelocityMeasure:
 
         if self.current_ball and ball_velocity_cm_sec is not None:
             x, y, _, _, _ = self.current_ball
-            cv2.putText(result_frame, f'V: {round(ball_velocity_cm_sec, 2)} cm/s', (x-40, y-40),
+            cv2.putText(result_frame, f'V: {round(ball_velocity_cm_sec, 2)} cm/s', (x+25, y+25),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
 
         return result_frame

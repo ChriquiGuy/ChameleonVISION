@@ -1,32 +1,50 @@
 import cv2
 import numpy as np
 from .helper import *
+import time
 
 WEIGHT_OF_SCREEN = 1274
 HEIGHT_OF_SCREEN = 720
 
-# Net Line
-NTL = WEIGHT_OF_SCREEN * 0.35  # left threshold of net
-NTR = WEIGHT_OF_SCREEN * 0.65  # right threshold of net
-
-# Left line
-LTL = WEIGHT_OF_SCREEN * 0.1  # left threshold of left line
-LTR = WEIGHT_OF_SCREEN * 0.3  # right threshold of left line
-
-# Right line
-RTL = WEIGHT_OF_SCREEN * 0.8  # left threshold of right line
-RTR = WEIGHT_OF_SCREEN * 0.95  # right threshold of right line
-
-# Up line
-UTT = HEIGHT_OF_SCREEN * 0.1  # up threshold of top line
-DTT = HEIGHT_OF_SCREEN * 0.35  # down threshold of top line
-
-# Bottom Line
-UTB = HEIGHT_OF_SCREEN * 0.7  # up threshold of Bottom line
-DTB = HEIGHT_OF_SCREEN * 0.95  # down threshold of Bottom line
-
 
 class FieldDetection:
+
+    #   *** Dynamic field thresholds ***    #
+    img_flag = True
+
+    # img thresholds field
+    img_path = '/home/chameleonvision/Desktop/FinalProject/ChameleonVISION/assets/threshhold_field.jpeg'
+    field_img = cv2.imread(img_path)
+    img = np.zeros((1274, 720, 3), dtype=np.uint8)
+    field_img = cv2.resize(field_img, (int(field_img.shape[1] / 2), int(field_img.shape[0] / 2)),
+                           interpolation=cv2.INTER_AREA)
+    img[0:360, 0:655] = field_img
+
+    circles = []
+    x_click = 0
+    y_click = 0
+    mode = None
+
+    # Net Line
+    NTL = WEIGHT_OF_SCREEN * 0.35  # left threshold of net
+    NTR = WEIGHT_OF_SCREEN * 0.65  # right threshold of net
+
+    # Left line
+    LTL = WEIGHT_OF_SCREEN * 0.1  # left threshold of left line
+    LTR = WEIGHT_OF_SCREEN * 0.3  # right threshold of left line
+
+    # Right line
+    RTL = WEIGHT_OF_SCREEN * 0.8  # left threshold of right line
+    RTR = WEIGHT_OF_SCREEN * 0.95  # right threshold of right line
+
+    # Up line
+    UTT = HEIGHT_OF_SCREEN * 0.1  # up threshold of top line
+    DTT = HEIGHT_OF_SCREEN * 0.35  # down threshold of top line
+
+    # Bottom Line
+    UTB = HEIGHT_OF_SCREEN * 0.7  # up threshold of Bottom line
+    DTB = HEIGHT_OF_SCREEN * 0.95  # down threshold of Bottom line
+
     UpLine = None
     LeftLine = None
     DownLine = None
@@ -57,11 +75,14 @@ class FieldDetection:
 
         if lines is not None:
             slopeLines = self.SlopeCalc(lines)
-            self.NetLine = self.LinesFilter(slopeLines, NTL, NTR, 0, 2, None)
-            self.UpLine = self.LinesFilter(slopeLines, UTT, DTT, 1, 3, False)
-            self.LeftLine = self.LinesFilter(slopeLines, LTL, LTR, 0, 2, True)
-            self.DownLine = self.LinesFilter(slopeLines, UTB, DTB, 1, 3, False)
-            self.RightLine = self.LinesFilter(slopeLines, RTL, RTR, 0, 2, True)
+            self.NetLine = self.LinesFilter(slopeLines, self.NTL, self.NTR, 0, 2, None)
+            self.UpLine = self.LinesFilter(slopeLines, self.UTT, self.DTT, 1, 3, False)
+            self.LeftLine = self.LinesFilter(slopeLines, self.LTL, self.LTR, 0, 2, True)
+            self.DownLine = self.LinesFilter(slopeLines, self.UTB, self.DTB, 1, 3, False)
+            self.RightLine = self.LinesFilter(slopeLines, self.RTL, self.RTR, 0, 2, True)
+
+            # print(f'NTL = {self.NTL}')
+            # print(f'NTR = {self.NTR}')
 
     def detect_field(self, frame):
         edges = self.init_frame(frame)
@@ -215,3 +236,94 @@ class FieldDetection:
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
 
         return imgStack
+
+    def dynamic_field_thresholds(self, result_frame):
+
+        # Draw field
+        result_frame = self.draw_field(result_frame)
+
+        copy = result_frame.copy()
+
+        # config thresholds
+        copy[360:720, 0:655] = self.field_img
+        result_frame = cv2.addWeighted(result_frame, 0.5, copy, 0.5, 0)
+
+        # mouse_click event
+        cv2.namedWindow("# Field thresholds calibration screen")
+        cv2.setMouseCallback("# Field thresholds calibration screen", self.printCoordinate)
+        print(self.mode)
+
+        point = self.x_click, self.y_click
+
+        # Draw click
+        cv2.circle(result_frame, point, 9, (0, 0, 0), 2)
+        if 38 < self.x_click < 53 and 390 < self.y_click < 402:
+            # Draw click
+            cv2.circle(result_frame, point, 9, (0, 0, 255), 2)
+            self.mode = "LL"
+
+        elif 189 < self.x_click < 207 and 388 < self.y_click < 403:
+            # Draw click
+            cv2.circle(result_frame, point, 9, (0, 0, 255), 2)
+            self.mode = "RL"
+
+        elif 283 < self.x_click < 300 and 391 < self.y_click < 404:
+            # Draw click
+            cv2.circle(result_frame, point, 9, (255, 0, 0), 2)
+            self.mode = "LN"
+
+        elif 395 < self.x_click < 415 and 388 < self.y_click < 407:
+            # Draw click
+            cv2.circle(result_frame, point, 9, (255, 0, 0), 2)
+            self.mode = "RN"
+
+        elif 482 < self.x_click < 498 and 390 < self.y_click < 407:
+            # Draw click
+            cv2.circle(result_frame, point, 9, (0, 0, 255), 2)
+            self.mode = "LR"
+
+        elif 626 < self.x_click < 644 and 392 < self.y_click < 405:
+            # Draw click
+            cv2.circle(result_frame, point, 9, (0, 0, 255), 2)
+            self.mode = "RR"
+
+        elif 589 < self.x_click < 610 and 415 < self.y_click < 433:
+            # Draw click
+            cv2.circle(result_frame, point, 9, (0, 255, 0), 2)
+            self.mode = "UT"
+
+        elif 592 < self.x_click < 610 and 490 < self.y_click < 503:
+            # Draw click
+            cv2.circle(result_frame, point, 9, (0, 255, 0), 2)
+            self.mode = "DT"
+
+        elif 589 < self.x_click < 610 and 599 < self.y_click < 611:
+            # Draw click
+            cv2.circle(result_frame, point, 9, (0, 255, 0), 2)
+            self.mode = "UB"
+
+        elif 589 < self.x_click < 610 and 668 < self.y_click < 685:
+            # Draw click
+            cv2.circle(result_frame, point, 9, (0, 255, 0), 2)
+            # font = cv2.FONT_HERSHEY_PLAIN
+            # cv2.putText(result_frame, f'({point})',
+            #             (self.x_click + 10, self.y_click - 10), font, 3, (0, 0, 0))
+            self.mode = "DB"
+
+        cv2.imshow("# Field thresholds calibration screen", result_frame)
+
+        return result_frame
+
+    def printCoordinate(self, event, x, y, flags, params):
+        try:
+            if event == cv2.EVENT_LBUTTONDOWN:
+                self.x_click, self.y_click = int(x), int(y)
+
+        except NameError:
+            print("Field dynamic thresholds error")
+
+    def reset_click(self):
+        self.x_click, self.y_click = 0, 0
+
+
+

@@ -8,6 +8,7 @@ from tools.helper import *
 from tools.detection_manager import Detector
 from screens.ui.UI_Game import EventElement, UI_Game
 from tools.statistics import Statistics
+import cv2
 
 
 class Game(QWidget, UI_Game):
@@ -57,11 +58,15 @@ class Game(QWidget, UI_Game):
         self.detector.change_pixmap_signal.connect(self.update_image_slot)
         self.detector.ball_event_signal.connect(self.update_alert_slot)
         self.detector.in_serve_position.connect(self.allow_alerts)
-        self.debug_btn.clicked.connect(self.on_debug_btn_click)
-        self.calibration_btn.clicked.connect(self.on_calibration_btn_click)
         self.play_btn.clicked.connect(self.on_play_btn_click)
         self.stop_btn.clicked.connect(self.on_stop_btn_click)
+
+        # Right side buttons
         self.game_btn.clicked.connect(self.on_game_btn_click)
+        self.thresholds_btn.clicked.connect(self.on_thresholds_btn_click)
+        self.debug_btn.clicked.connect(self.on_debug_btn_click)
+        self.calibration_btn.clicked.connect(self.on_calibration_btn_click)
+
         self.switch_btn.clicked.connect(self.on_switch_btn_click)
         try:
             self.replay_slider.sliderReleased.connect(self.detector.replayManager.replay_slider_released)
@@ -94,7 +99,8 @@ class Game(QWidget, UI_Game):
         if not self.is_alert_allowed: return
 
         team_color = "rgb(50, 50, 200)"
-        if team == 1: team_color = "rgb(200, 50, 50)"
+        if team == 1:
+            team_color = "rgb(200, 50, 50)"
         self.alert_team_color.setStyleSheet(f"background-color:{team_color};\n"
                                             "border-style:outset;\n"
                                             "border-radius:10px;\n"
@@ -115,20 +121,47 @@ class Game(QWidget, UI_Game):
             self.alert.show()
 
     def on_game_btn_click(self):
+
+        try:
+            cv2.destroyWindow('# Field thresholds calibration screen')
+        except:
+            pass
+
         self.detector.debug_flag = False
         self.detector.calibration_flag = False
+        self.detector.fieldThresholds_flag = False
         self.gamma_slider.hide()
 
     def on_debug_btn_click(self):
+
+        try:
+            cv2.destroyWindow('# Field thresholds calibration screen')
+        except:
+            pass
+
         self.detector.debug_flag = True
         self.detector.calibration_flag = False
+        self.detector.fieldThresholds_flag = False
         self.gamma_slider.hide()
 
     def on_calibration_btn_click(self):
+
+        try:
+            cv2.destroyWindow('# Field thresholds calibration screen')
+        except:
+            pass
+
         self.detector.calibration_flag = True
         self.detector.debug_flag = False
+        self.detector.fieldThresholds_flag = False
         self.gamma_slider.setValue(self.detector.field_detector.Gamma_Min)
         self.gamma_slider.show()
+
+    def on_thresholds_btn_click(self):
+        self.detector.fieldThresholds_flag = True
+        self.detector.debug_flag = False
+        self.detector.calibration_flag = False
+        self.gamma_slider.hide()
 
     def on_play_btn_click(self):
         self.detector.play_flag = True

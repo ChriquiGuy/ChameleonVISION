@@ -60,6 +60,8 @@ class Game(QWidget, UI_Game):
         self.detector.in_serve_position.connect(self.allow_alerts)
         self.play_btn.clicked.connect(self.on_play_btn_click)
         self.stop_btn.clicked.connect(self.on_stop_btn_click)
+        # replay
+        self.play_btn.clicked.connect(self.on_play_btn_click)
 
         # Right side buttons
         self.game_btn.clicked.connect(self.on_game_btn_click)
@@ -70,13 +72,13 @@ class Game(QWidget, UI_Game):
         self.switch_btn.clicked.connect(self.on_switch_btn_click)
         try:
             self.replay_slider.sliderReleased.connect(self.detector.replayManager.replay_slider_released)
-        except NameError:
+        except:
             print("replay problem")
         self.replay_slider.sliderPressed.connect(self.detector.replayManager.replay_slider_pressed)
         self.gamma_slider.valueChanged.connect(self.gamma_value_changed)
         self.alert_true_btn.clicked.connect(self.on_true_alert_btn_click)
         self.alert_false_btn.clicked.connect(self.on_false_alert_btn_click)
-        self.alert_replay_btn.clicked.connect(self.on_replay_btn_click)
+        self.replay_btn.clicked.connect(self.on_replay_btn_click)
 
     # SLOTS
 

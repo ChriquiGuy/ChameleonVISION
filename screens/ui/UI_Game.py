@@ -162,6 +162,7 @@ class UI_Game(object):
         self.replay_slider.setOrientation(QtCore.Qt.Horizontal)
         self.replay_slider.setObjectName("replay_slider")
 
+        # play button
         self.play_btn = QtWidgets.QPushButton(Game)
         self.play_btn.setGeometry(QtCore.QRect(1020, 930, 61, 61))
         self.play_btn.setStyleSheet("background-color: rgb(50, 200, 50);\n"
@@ -170,6 +171,17 @@ class UI_Game(object):
                                     "color: rgb(250, 255, 255);\n"
                                     "font: 14pt;")
         self.play_btn.setObjectName("play_btn")
+
+        # replay button
+        self.replay_btn = QtWidgets.QPushButton(Game)
+        self.replay_btn.setGeometry(QtCore.QRect(920, 930, 61, 61))
+        self.replay_btn.setStyleSheet("background-color: rgb(50, 20, 50);\n"
+                                      "border-style:outset;\n"
+                                      "border-radius:20px;\n"
+                                      "color: rgb(250, 255, 255);\n"
+                                      "font: 14pt;")
+        self.replay_btn.setObjectName("alert_replay_btn")
+
         self.stop_btn = QtWidgets.QPushButton(Game)
         self.stop_btn.setGeometry(QtCore.QRect(1100, 930, 61, 61))
         self.stop_btn.setStyleSheet("background-color: rgb(150, 150, 150);\n"
@@ -311,6 +323,7 @@ class UI_Game(object):
         self.gamma_slider.raise_()
         self.replay_slider.raise_()
         self.play_btn.raise_()
+        self.replay_btn.raise_()
         self.stop_btn.raise_()
         self.verticalLayoutWidget.raise_()
         self.game_btn.raise_()
@@ -335,6 +348,7 @@ class UI_Game(object):
         self.debug_btn.setText(_translate("MainWindow", "Debug"))
         self.switch_btn.setText(_translate("MainWindow", "←\n→"))
         self.play_btn.setText(_translate("MainWindow", "Play"))
+        self.replay_btn.setText(_translate("MainWindow", "Replay"))
         self.stop_btn.setText(_translate("MainWindow", "| |"))
         self.game_btn.setText(_translate("MainWindow", "Game"))
         self.thresholds_btn.setText(_translate("MainWindow", "Field"))
